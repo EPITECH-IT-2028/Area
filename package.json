@@ -4,6 +4,8 @@
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev",
+    "hasura:console": "cd hasura && hasura metadata apply && hasura console",
+    "hasura:setup": "cd hasura && hasura migrate apply --database-name Area && hasura metadata apply && cd ..",
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "check-types": "turbo run check-types"
