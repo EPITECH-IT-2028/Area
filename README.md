@@ -1,3 +1,20 @@
+## Launch the database
+
+To launch the database, follow these steps:
+```bash
+docker compose up -d
+```
+
+Then setup hasura:
+```bash
+pnpm hasura:setup
+```
+
+Then start hasura:
+```bash
+pnpm hasura:console
+```
+
 ## Launch the project
 
 To launch the project, follow these steps:
