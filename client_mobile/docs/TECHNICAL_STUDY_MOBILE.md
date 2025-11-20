@@ -51,6 +51,8 @@ Investing heavily in SwiftUI ties your codebase to Apple's ecosystem, making fut
 **Still Evolving**
 Some features still require falling back to UIKit (the older framework), and certain APIs change between iOS versions, requiring code updates.
 
+Source : [Link to pros and cons (Shareitsolutions.com)](https://www.shareitsolutions.com/blog/swift-pros-cons/)
+
 ---
 
 ## 2. Kotlin (for Android)
@@ -97,6 +99,8 @@ Android builds typically take longer than iOS builds, especially for large proje
 
 **Compatibility Management**
 Supporting older Android versions while using modern features requires careful API level management and additional compatibility code.
+
+Source : [Link to pros and cons (Pangea.ai)](https://pangea.ai/resources/top-kotlin-pros-and-cons-you-need-to-know-about)
 
 ---
 
@@ -154,6 +158,8 @@ New iOS or Android features require React Native updates or custom native module
 **Version Update Challenges**
 Updating React Native versions can be difficult, sometimes requiring significant code changes and careful dependency management.
 
+
+Source : [Link to pros and cons (Netguru.com)](https://www.netguru.com/blog/react-native-pros-and-cons)
 ---
 
 ## 4. Flutter
@@ -218,6 +224,8 @@ While Flutter supports web, it's not as optimized as frameworks specifically bui
 
 **Platform Updates Lag**
 New iOS or Android design guidelines and components require Flutter framework updates, creating a delay before you can adopt the latest platform aesthetics.
+
+Source : [Link to pros and cons (Geeksforgeeks.org)](https://www.geeksforgeeks.org/flutter/flutter-advantages-disadvantages-and-future-scopes/)
 
 ---
 
