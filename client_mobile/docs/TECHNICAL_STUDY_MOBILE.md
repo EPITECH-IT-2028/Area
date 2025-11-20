@@ -51,7 +51,10 @@ Investing heavily in SwiftUI ties your codebase to Apple's ecosystem, making fut
 **Still Evolving**
 Some features still require falling back to UIKit (the older framework), and certain APIs change between iOS versions, requiring code updates.
 
-Source : [Link to pros and cons (Shareitsolutions.com)](https://www.shareitsolutions.com/blog/swift-pros-cons/)
+Source : 
+[Shareitsolutions.com](https://www.shareitsolutions.com/blog/swift-pros-cons/)
+[Aalpha.net](https://www.aalpha.net/articles/swift-application-development-advantages-disadvantages/?utm_source=chatgpt.com)
+[Isyncevolution.com](https://www.isyncevolution.com/blog/kotlin-vs-swift-comparison-2025)
 
 ---
 
@@ -100,7 +103,10 @@ Android builds typically take longer than iOS builds, especially for large proje
 **Compatibility Management**
 Supporting older Android versions while using modern features requires careful API level management and additional compatibility code.
 
-Source : [Link to pros and cons (Pangea.ai)](https://pangea.ai/resources/top-kotlin-pros-and-cons-you-need-to-know-about)
+Source : 
+[Pangea.ai](https://pangea.ai/resources/top-kotlin-pros-and-cons-you-need-to-know-about)
+[Isyncevolution.com](https://www.isyncevolution.com/blog/kotlin-vs-swift-comparison-2025)
+[Medium.com](https://medium.com/@mrunaltakur1/swift-vs-kotlin-a-comparative-analysis-for-ios-and-android-a76855db7a86)
 
 ---
 
@@ -159,7 +165,10 @@ New iOS or Android features require React Native updates or custom native module
 Updating React Native versions can be difficult, sometimes requiring significant code changes and careful dependency management.
 
 
-Source : [Link to pros and cons (Netguru.com)](https://www.netguru.com/blog/react-native-pros-and-cons)
+Source :
+[Netguru.com](https://www.netguru.com/blog/react-native-pros-and-cons)
+[Apiko.com](https://apiko.com/blog/react-native-limitations/)
+
 ---
 
 ## 4. Flutter
@@ -225,7 +234,9 @@ While Flutter supports web, it's not as optimized as frameworks specifically bui
 **Platform Updates Lag**
 New iOS or Android design guidelines and components require Flutter framework updates, creating a delay before you can adopt the latest platform aesthetics.
 
-Source : [Link to pros and cons (Geeksforgeeks.org)](https://www.geeksforgeeks.org/flutter/flutter-advantages-disadvantages-and-future-scopes/)
+Source : 
+[Geeksforgeeks.org](https://www.geeksforgeeks.org/flutter/flutter-advantages-disadvantages-and-future-scopes/)
+[Pangea.ai](https://pangea.ai/resources/key-disadvantages-of-flutter)
 
 ---
 
