@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { DocumentNode } from 'graphql';
 import { GraphQLClient } from 'graphql-request';
 
 @Injectable()
@@ -23,11 +24,14 @@ export class GraphQLService {
     });
   }
 
-  async query<T>(query: string, variables?: object): Promise<T> {
+  async query<T>(query: string | DocumentNode, variables?: object): Promise<T> {
     return this.client.request<T>(query, variables);
   }
 
-  async mutation<T>(mutation: string, variables?: object): Promise<T> {
+  async mutation<T>(
+    mutation: string | DocumentNode,
+    variables?: object,
+  ): Promise<T> {
     return this.client.request<T>(mutation, variables);
   }
 }

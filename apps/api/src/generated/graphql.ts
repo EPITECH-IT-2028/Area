@@ -420,6 +420,7 @@ export type GetUsersQuery = {
     __typename?: 'users';
     id: string;
     email: string;
+    name?: string | null;
     created_at: string;
   }>;
 };
@@ -434,6 +435,7 @@ export type GetUserQuery = {
     __typename?: 'users';
     id: string;
     email: string;
+    name?: string | null;
     created_at: string;
   } | null;
 };
@@ -441,11 +443,18 @@ export type GetUserQuery = {
 export type CreateUserMutationVariables = Exact<{
   email: Scalars['String']['input'];
   name: Scalars['String']['input'];
+  password: Scalars['String']['input'];
 }>;
 
 export type CreateUserMutation = {
   __typename?: 'mutation_root';
-  insert_users_one?: { __typename?: 'users'; id: string; email: string } | null;
+  insert_users_one?: {
+    __typename?: 'users';
+    id: string;
+    name?: string | null;
+    password: string;
+    email: string;
+  } | null;
 };
 
 export type UpdateUserMutationVariables = Exact<{
@@ -458,8 +467,18 @@ export type UpdateUserMutation = {
   update_users_by_pk?: {
     __typename?: 'users';
     id: string;
+    name?: string | null;
     email: string;
   } | null;
+};
+
+export type DeleteUserMutationVariables = Exact<{
+  id: Scalars['uuid']['input'];
+}>;
+
+export type DeleteUserMutation = {
+  __typename?: 'mutation_root';
+  delete_users_by_pk?: { __typename?: 'users'; id: string } | null;
 };
 
 export const GetUsersDocument = gql`
@@ -467,6 +486,7 @@ export const GetUsersDocument = gql`
     users {
       id
       email
+      name
       created_at
     }
   }
@@ -476,14 +496,19 @@ export const GetUserDocument = gql`
     users_by_pk(id: $id) {
       id
       email
+      name
       created_at
     }
   }
 `;
 export const CreateUserDocument = gql`
-  mutation CreateUser($email: String!, $name: String!) {
-    insert_users_one(object: { email: $email, name: $name }) {
+  mutation CreateUser($email: String!, $name: String!, $password: String!) {
+    insert_users_one(
+      object: { email: $email, name: $name, password: $password }
+    ) {
       id
+      name
+      password
       email
     }
   }
@@ -492,7 +517,15 @@ export const UpdateUserDocument = gql`
   mutation UpdateUser($id: uuid!, $name: String!) {
     update_users_by_pk(pk_columns: { id: $id }, _set: { name: $name }) {
       id
+      name
       email
+    }
+  }
+`;
+export const DeleteUserDocument = gql`
+  mutation DeleteUser($id: uuid!) {
+    delete_users_by_pk(id: $id) {
+      id
     }
   }
 `;
@@ -584,6 +617,24 @@ export function getSdk(
             signal,
           }),
         'UpdateUser',
+        'mutation',
+        variables,
+      );
+    },
+    DeleteUser(
+      variables: DeleteUserMutationVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+      signal?: RequestInit['signal'],
+    ): Promise<DeleteUserMutation> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.request<DeleteUserMutation>({
+            document: DeleteUserDocument,
+            variables,
+            requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders },
+            signal,
+          }),
+        'DeleteUser',
         'mutation',
         variables,
       );
