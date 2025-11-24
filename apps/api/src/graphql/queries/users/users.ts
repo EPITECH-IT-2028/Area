@@ -29,8 +29,8 @@ export const CreateUserQuery = gql`
     ) {
       id
       name
-      password
       email
+      created_at
     }
   }
 `;
