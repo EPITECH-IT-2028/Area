@@ -8,6 +8,7 @@ import {
   Param,
   Post,
   Put,
+  UseGuards,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import {
@@ -17,6 +18,7 @@ import {
   IsString,
   MinLength,
 } from 'class-validator';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 class CreateUserDto {
   @IsEmail()
@@ -38,6 +40,7 @@ class UpdateUserDto {
   name?: string;
 }
 
+@UseGuards(JwtAuthGuard)
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}

@@ -4,6 +4,7 @@ import { GraphQLService } from '../graphql/graphql.service';
 import {
   GetUsersQuery,
   GetUserQuery,
+  GetUserByEmailQuery,
   CreateUserQuery,
   UpdateUserQuery,
   DeleteUserQuery,
@@ -44,9 +45,22 @@ export class UsersService {
     }
   }
 
+  async findByEmail(email: string): Promise<Users | null> {
+    try {
+      const data = await this.graphqlService.adminQuery<{ users: Users[] }>(
+        GetUserByEmailQuery,
+        { email },
+      );
+
+      return data.users[0] || null;
+    } catch (error) {
+      throw new Error(`Failed to fetch user by email: ${error}`);
+    }
+  }
+
   async create(input: CreateUserMutationVariables): Promise<Users> {
     try {
-      const data = await this.graphqlService.mutation<{
+      const data = await this.graphqlService.adminMutation<{
         insert_users_one: Users;
       }>(CreateUserQuery, input);
       return data.insert_users_one;
