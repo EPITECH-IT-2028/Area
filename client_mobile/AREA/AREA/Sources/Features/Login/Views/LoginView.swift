@@ -8,8 +8,7 @@
 import SwiftUI
 
 struct LoginView: View {
-		
-		@ObservedObject var viewModel: LoginViewModel = LoginViewModel()
+		@ObservedObject var viewModel: LoginViewModel
 		
 		var body: some View {
 				VStack {
@@ -55,5 +54,5 @@ struct LoginView: View {
 }
 
 #Preview {
-    LoginView()
+	LoginView(viewModel: LoginViewModel())
 }

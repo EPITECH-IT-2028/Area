@@ -7,7 +7,18 @@
 
 import Foundation
 
-struct LoginResponseData: Decodable {
-		let accessToken: String
-		let refreshToken: String
+struct LoginResponseData: Codable {
+	var success: Bool
+	var data: Data?
+	var message: String?
+}
+
+struct Data: Codable {
+	var access_token: String
+	var user: User
+}
+
+struct User: Codable {
+	var id: Int
+	var email: String
 }

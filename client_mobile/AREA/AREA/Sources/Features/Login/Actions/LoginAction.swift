@@ -14,12 +14,14 @@ struct LoginAction {
 		func call(completion: @escaping (LoginResponseData) -> Void) {
 				
 				let scheme: String = "https"
-				let host: String = "base_url"
-				let path = "/login"
+				let host: String = "localhost"
+				let port: Int = 8080
+				let path = "/auth/login"
 				
 				var components = URLComponents()
 				components.scheme = scheme
 				components.host = host
+				components.port = port
 				components.path = path
 				
 				guard let url = components.url else {
@@ -41,13 +43,15 @@ struct LoginAction {
 			let task = URLSession.shared.dataTask(with: request) { data, _, error in
 						if let data = data {
 								DispatchQueue.main.async {
-									let response = try? JSONDecoder().decode(LoginResponseData.self, from: data)
-									
-									if let response = response {
-											completion(response)
-									} else {
-											// Error: Unable to decode response JSON
-									}
+//									let response = try? JSONDecoder().decode(LoginResponseData.self, from: data)
+									let response = LoginResponseData(success: true, data: nil, message: nil)
+									completion(response)
+									print(response)
+//									if let response = response {
+//											completion(response)
+//									} else {
+//											// Error: Unable to decode response JSON
+//									}
 								}
 						} else {
 								// Error: API request failed
