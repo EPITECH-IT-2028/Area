@@ -1,4 +1,6 @@
 {
-	"DB_URL" = "",
-	"Google_API_URL" = ""
+	"DB_URL" = "https://localhost",
+	"GOOGLE_API_URL" = "",
+	"PORT" = 8080,
+	
 }
