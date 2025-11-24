@@ -37,16 +37,10 @@ export class AuthService {
   async register(registerDto: RegisterDto): Promise<AuthResponse> {
     const { email, password, name } = registerDto;
 
-    try {
-      const existingUsers = await this.usersService.findByEmail(email);
+    const existingUsers = await this.usersService.findByEmail(email);
 
-      if (existingUsers) {
-        throw new ConflictException('Email already in use');
-      }
-    } catch (error) {
-      if (error instanceof ConflictException) {
-        throw error;
-      }
+    if (existingUsers) {
+      throw new ConflictException('Email already in use');
     }
 
     const saltRounds = 10;
