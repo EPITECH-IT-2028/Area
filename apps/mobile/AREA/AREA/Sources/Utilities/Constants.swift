@@ -18,5 +18,11 @@ struct Constants {
 	static let servicesIconString = "list.bullet"
 	static let settingsIconString = "gear"
 	
-	
+	// Database network config
+	static let databaseScheme = "https"
+	static let databaseHost = "localhost"
+	static let databasePort = 8080
+
+	// Database paths
+	static let loginDBPath = "/auth/login"
 }

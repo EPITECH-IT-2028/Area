@@ -9,7 +9,6 @@ import Foundation
 internal import Combine
 
 class LoginViewModel: ObservableObject {
-
 	@Published var username: String
 	@Published var password: String
 	@Published var isLoggedIn: Bool
@@ -20,22 +19,17 @@ class LoginViewModel: ObservableObject {
 			self.isLoggedIn = false
 		}
 
-	func login() {
-		self.isLoggedIn = true
-	    LoginAction(
-	        parameters: LoginRequest(
-	            username: username,
-	            password: password
-	        )
-	    ).call { response in
-	        DispatchQueue.main.async {
-	            if response.success {
-	                self.isLoggedIn = true
-	            } else {
-	                self.isLoggedIn = false
-	                // Optionally: handle/display login error message here
-	            }
-	        }
-	    }
+	func login() async {
+		do {
+			let _: LoginResponseData = try await LoginAction(
+				parameters: LoginRequest(
+					username: username,
+					password: password
+				)
+			).call()
+			isLoggedIn = true
+		} catch {
+			print(error)
+		}
 	}
 }

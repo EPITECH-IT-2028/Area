@@ -8,59 +8,63 @@
 import Foundation
 
 struct LoginAction {
-		
-		var parameters: LoginRequest
-		
-		func call(completion: @escaping (LoginResponseData) -> Void) {
-				
-				let scheme: String = "https"
-				let host: String = "localhost"
-				let port: Int = 8080
-				let path = "/auth/login"
-				
-				var components = URLComponents()
-				components.scheme = scheme
-				components.host = host
-				components.port = port
-				components.path = path
-				
-				guard let url = components.url else {
-						return
-				}
-				
-				var request = URLRequest(url: url)
-				request.httpMethod = "post"
-				
-				request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-				request.addValue("application/json", forHTTPHeaderField: "Accept")
-				
-				do {
-						request.httpBody = try JSONEncoder().encode(parameters)
-				} catch {
-						// Error: Unable to encode request parameters
-				}
-				
-			let task = URLSession.shared.dataTask(with: request) { data, _, error in
-						if let data = data {
-								DispatchQueue.main.async {
-//									let response = try? JSONDecoder().decode(LoginResponseData.self, from: data)
-									let response = LoginResponseData(success: true, data: nil, message: nil)
-									completion(response)
-									print(response)
-//									if let response = response {
-//											completion(response)
-//									} else {
-//											// Error: Unable to decode response JSON
-//									}
-								}
-						} else {
-								// Error: API request failed
 
-								if let error = error {
-										print("Error: \(error.localizedDescription)")
-								}
-						}
-				}
-				task.resume()
+	var parameters: LoginRequest
+
+	func call() async throws -> LoginResponseData {
+		let url = try buildURL()
+		let request = try buildRequest(url: url)
+
+		let (data, urlResponse) = try await URLSession.shared.data(for: request)
+
+		guard let response = urlResponse as? HTTPURLResponse,
+			response.statusCode == 200
+		else {
+			throw NetworkError.badURLResponse(
+				underlyingError: NSError(
+					domain: "LoginAction",
+					code: (urlResponse as? HTTPURLResponse)?.statusCode ?? -1,
+					userInfo: [NSLocalizedDescriptionKey: "Invalid HTTP Response"]
+				)
+			)
 		}
+
+		let decoder = JSONDecoder()
+		decoder.keyDecodingStrategy = .convertFromSnakeCase
+		return try decoder.decode(LoginResponseData.self, from: data)
+	}
+
+	private func buildURL() throws -> URL {
+		let scheme = Constants.databaseScheme
+		let host = Constants.databaseHost
+		let port = Constants.databasePort
+		let path = Constants.loginDBPath
+
+		var components = URLComponents()
+		components.scheme = scheme
+		components.host = host
+		components.port = port
+		components.path = path
+
+		guard let url = components.url else {
+			throw NetworkError.urlBuildFailed
+		}
+
+		return url
+	}
+
+	private func buildRequest(url: URL) throws -> URLRequest {
+		var request = URLRequest(url: url)
+		request.httpMethod = "POST"
+		request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+		request.addValue("application/json", forHTTPHeaderField: "Accept")
+
+		do {
+			request.httpBody = try JSONEncoder().encode(parameters)
+		} catch {
+			throw NetworkError.encodingFailed(underlyingError: error)
+		}
+
+		return request
+	}
 }

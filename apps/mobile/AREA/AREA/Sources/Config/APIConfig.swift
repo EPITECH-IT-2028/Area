@@ -7,9 +7,10 @@
 import Foundation
 
 struct APIConfig: Decodable {
+	let DB_SCHEME: String
 	let DB_URL: String
 	let PORT: Int
-	
+
 	static let shared: APIConfig? = {
 		do {
 			return try loadConfig()
@@ -18,12 +19,14 @@ struct APIConfig: Decodable {
 			return nil
 		}
 	}()
-	
+
 	private static func loadConfig() throws -> APIConfig {
-		guard let url = Bundle.main.url(forResource: "APIConfig", withExtension: "json") else {
+		guard
+			let url = Bundle.main.url(forResource: "APIConfig", withExtension: "json")
+		else {
 			throw APIConfigError.fileNotFound
 		}
-		
+
 		do {
 			let data = try Data(contentsOf: url)
 			return try JSONDecoder().decode(APIConfig.self, from: data)
