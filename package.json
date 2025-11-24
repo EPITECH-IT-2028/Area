@@ -6,6 +6,7 @@
     "dev": "turbo run dev",
     "hasura:console": "cd hasura && hasura metadata apply && hasura console",
     "hasura:setup": "cd hasura && hasura metadata apply && hasura migrate apply --database-name Area && hasura metadata apply && cd ..",
+    "codegen": "turbo run codegen",
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "check-types": "turbo run check-types"
