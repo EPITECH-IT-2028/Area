@@ -55,7 +55,7 @@ export class UsersService {
     }
   }
 
-  async update(id: string, input: { name: string }): Promise<Users> {
+  async update(id: string, input: { name?: string }): Promise<Users> {
     try {
       const data = await this.graphqlService.mutation<{
         update_users_by_pk: Users;
