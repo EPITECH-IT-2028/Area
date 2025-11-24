@@ -1,5 +1,5 @@
 //
-//  SettingsView.swift
+//  ServicesView.swift
 //  AREA
 //
 //  Created by Arthur GUERINAULT on 20/11/2025.

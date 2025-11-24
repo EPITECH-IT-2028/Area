@@ -9,7 +9,7 @@ import SwiftUI
 
 struct LoginView: View {
 		
-//		@ObservedObject var viewModel: LoginViewModel = LoginViewModel()
+		@ObservedObject var viewModel: LoginViewModel = LoginViewModel()
 		
 		var body: some View {
 				VStack {
@@ -39,7 +39,7 @@ struct LoginView: View {
 						Spacer()
 						
 						Button(
-//								action: viewModel.login,
+								action: viewModel.login,
 								label: {
 									Text(LocalizedStringResource.loginLoginButtonTitle)
 												.font(.system(size: 24, weight: .bold, design: .default))

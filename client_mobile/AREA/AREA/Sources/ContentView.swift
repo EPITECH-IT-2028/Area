@@ -9,18 +9,19 @@ import SwiftUI
 
 struct ContentView: View {
     var body: some View {
-        TabView {
-					Tab(Constants.homeString, systemImage: Constants.homeIconString) {
-						HomeView()
-					}
-					Tab(Constants.servicesString, systemImage: Constants.servicesIconString) {
-						ServicesView()
-					}
-					Tab(Constants.settingsString, systemImage: Constants.settingsIconString) {
-						SettingsView()
-					}
-        }
-        .padding()
+			LoginView()
+//        TabView {
+//					Tab(Constants.homeString, systemImage: Constants.homeIconString) {
+//						HomeView()
+//					}
+//					Tab(Constants.servicesString, systemImage: Constants.servicesIconString) {
+//						ServicesView()
+//					}
+//					Tab(Constants.settingsString, systemImage: Constants.settingsIconString) {
+//						SettingsView()
+//					}
+//        }
+//        .padding()
     }
 }
 
