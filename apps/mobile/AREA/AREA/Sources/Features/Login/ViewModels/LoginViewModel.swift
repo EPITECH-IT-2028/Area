@@ -5,25 +5,26 @@
 //  Created by Arthur GUERINAULT on 20/11/2025.
 //
 
-import Foundation
 internal import Combine
+import Foundation
 
 class LoginViewModel: ObservableObject {
-	@Published var username: String
+	@Published var email: String
 	@Published var password: String
 	@Published var isLoggedIn: Bool
-	
-		init(username: String = "", password: String = "") {
-			self.username = username
-			self.password = password
-			self.isLoggedIn = false
-		}
+
+	init(email: String = "", password: String = "") {
+		self.email = email
+		self.password = password
+		self.isLoggedIn = false
+	}
 
 	func login() async {
+		print("hello world")
 		do {
 			let _: LoginResponseData = try await LoginAction(
 				parameters: LoginRequest(
-					username: username,
+					email: email,
 					password: password
 				)
 			).call()
@@ -32,4 +33,17 @@ class LoginViewModel: ObservableObject {
 			print(error)
 		}
 	}
+	
+//	func reset() async {
+//		do {
+//			let _ : ResetResponseData = try await ResetAction(
+//				parameters: ResetRequest(
+//					email: email,
+//					password: password
+//				).call()
+//		} catch {
+//			
+//		}
+//		}
+//	}
 }

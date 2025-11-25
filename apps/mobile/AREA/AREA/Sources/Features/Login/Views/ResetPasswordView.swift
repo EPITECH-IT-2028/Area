@@ -1,23 +1,22 @@
 //
-//  LoginView.swift
+//  ResetPasswordView.swift
 //  AREA
 //
-//  Created by Arthur GUERINAULT on 20/11/2025.
+//  Created by Arthur GUERINAULT on 25/11/2025.
 //
 
 import SwiftUI
 
-struct LoginView: View {
+struct ResetPasswordView: View {
 	@ObservedObject var viewModel: LoginViewModel
 
 	var body: some View {
 		VStack {
-
 			Spacer()
 
 			VStack {
 				TextField(
-					LocalizedStringResource.loginEmailFieldTitle,
+					LocalizedStringResource.loginEmailToResetTitle,
 					text: $viewModel.email
 				)
 				.autocapitalization(.none)
@@ -27,32 +26,23 @@ struct LoginView: View {
 				Divider()
 
 				SecureField(
-					LocalizedStringResource.loginPasswordFieldTitle,
+					LocalizedStringResource.loginResetPasswordTitle,
 					text: $viewModel.password
 				)
 				.padding(.top, 20)
 
 				Divider()
-
-				Button(
-					action: {
-
-					},
-					label: {
-						Text("Forgot password ?")
-							.font(.system(size: 12, weight: .regular, design: .default))
-					}
-				)
 			}
-
 			Spacer()
 
 			Button(
 				action: {
-					Task { await viewModel.login() }
+					Task {
+
+					}
 				},
 				label: {
-					Text(LocalizedStringResource.loginLoginButtonTitle)
+					Text(LocalizedStringResource.loginResetButtonTitle)
 						.font(.system(size: 24, weight: .bold, design: .default))
 						.frame(maxWidth: .infinity, maxHeight: 60)
 						.foregroundColor(Color.white)
@@ -66,5 +56,5 @@ struct LoginView: View {
 }
 
 #Preview {
-	LoginView(viewModel: LoginViewModel())
+	ResetPasswordView(viewModel: LoginViewModel())
 }

@@ -8,7 +8,7 @@
 import Foundation
 
 struct LoginRequest: Encodable {
-		let username: String
+		let email: String
 		let password: String
 }
 

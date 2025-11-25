@@ -19,7 +19,7 @@ struct Constants {
 	static let settingsIconString = "gear"
 	
 	// Database network config
-	static let databaseScheme = "https"
+	static let databaseScheme = "http"
 	static let databaseHost = "localhost"
 	static let databasePort = 8080
 

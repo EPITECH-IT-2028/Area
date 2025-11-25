@@ -1,22 +1,21 @@
 //
-//  LoginAction.swift
+//  ResetAction.swift
 //  AREA
 //
-//  Created by Arthur GUERINAULT on 20/11/2025.
+//  Created by Arthur GUERINAULT on 25/11/2025.
 //
 
 import Foundation
 
-struct LoginAction {
 
-	var parameters: LoginRequest
+struct ResetAction {
 
-	func call() async throws -> LoginResponseData {
+	var parameters: ResetRequest
+
+	func call() async throws -> ResetResponseData {
 		let builder = BuilderAPI()
 		let url = try builder.buildURL()
-		print(url)
 		let request = try builder.buildRequest(url: url, method: "POST", parameters: parameters)
-		print(request)
 
 		let (data, urlResponse) = try await URLSession.shared.data(for: request)
 
@@ -31,11 +30,9 @@ struct LoginAction {
 				)
 			)
 		}
+
 		let decoder = JSONDecoder()
 		decoder.keyDecodingStrategy = .convertFromSnakeCase
-		return try decoder.decode(LoginResponseData.self, from: data)
+		return try decoder.decode(ResetResponseData.self, from: data)
 	}
-
-	
 }
-
