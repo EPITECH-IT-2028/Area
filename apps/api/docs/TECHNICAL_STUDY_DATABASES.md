@@ -83,7 +83,7 @@ JSON-like syntax simplifies integration with modern applications.
 ### Cons
 
 **ACID Limitations**  
-Multi-document transactions are less robust compared to relational databases.
+While earlier MongoDB versions lacked multi-document ACID transactions, modern versions (4.0+) provide full ACID support including distributed transactions on sharded clusters. However, multi-document transactions incur greater performance costs than single-document operations.
 
 **Storage Overhead**  
 BSON format can increase storage requirements.
@@ -173,7 +173,7 @@ Limited to PostgreSQL as the underlying database.
 Requires additional tools or custom resolvers for advanced logic.
 
 **Performance Overhead**  
-Adds a layer of abstraction, which may impact performance in high-throughput scenarios.
+Adds a layer of abstraction. However, benchmarks show that Hasura performs comparably or better than manually written GraphQL solutions (60.68 ms vs. 63.21 ms for Node.js), efficiently handling thousands of requests per second.
 
 ### Use Cases
 
