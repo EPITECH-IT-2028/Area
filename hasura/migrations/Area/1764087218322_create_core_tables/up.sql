@@ -90,8 +90,6 @@ CREATE TABLE hook_logs (
 );
 
 -- Indexes for performance
-CREATE INDEX idx_users_email ON users(email);
-CREATE INDEX idx_users_password ON users(password);
 CREATE INDEX idx_users_created_at ON users(created_at);
 CREATE INDEX idx_user_services_user_id ON user_services(user_id);
 CREATE INDEX idx_user_services_service_id ON user_services(service_id);
