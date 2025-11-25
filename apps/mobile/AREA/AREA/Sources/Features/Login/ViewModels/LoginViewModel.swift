@@ -39,6 +39,7 @@ class LoginViewModel: ObservableObject {
 			).call()
 			isLoggedIn = true
 			status = .success
+			errorMessage = nil
 			do {
 				try simpleKeychain.set(
 					response.accessToken,
