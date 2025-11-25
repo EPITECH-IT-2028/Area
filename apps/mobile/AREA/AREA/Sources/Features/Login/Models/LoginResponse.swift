@@ -8,17 +8,12 @@
 import Foundation
 
 struct LoginResponseData: Codable {
-	var success: Bool
-	var data: DataStruct?
-	var message: String?
-}
-
-struct DataStruct: Codable {
 	var access_token: String
-	var user: User
+	var data: UserData?
 }
 
-struct User: Codable {
-	var id: Int
-	var email: String
+struct UserData: Codable {
+	var id: Int?
+	var email: String?
+	var name: String?
 }

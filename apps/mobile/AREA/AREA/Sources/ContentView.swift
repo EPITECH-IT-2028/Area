@@ -6,9 +6,11 @@
 //
 
 import SwiftUI
+import SimpleKeychain
 
 struct ContentView: View {
 	@StateObject private var viewModel = LoginViewModel()
+
 
 	var body: some View {
 		if viewModel.isLoggedIn {

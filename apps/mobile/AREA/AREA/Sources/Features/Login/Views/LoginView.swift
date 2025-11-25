@@ -5,16 +5,16 @@
 //  Created by Arthur GUERINAULT on 20/11/2025.
 //
 
+import SimpleKeychain
 import SwiftUI
 
 struct LoginView: View {
 	@ObservedObject var viewModel: LoginViewModel
+	let simpleKeychain = SimpleKeychain()
 
 	var body: some View {
 		VStack {
-
 			Spacer()
-
 			VStack {
 				TextField(
 					LocalizedStringResource.loginEmailFieldTitle,
@@ -23,20 +23,16 @@ struct LoginView: View {
 				.autocapitalization(.none)
 				.disableAutocorrection(true)
 				.padding(.top, 20)
-
 				Divider()
-
 				SecureField(
 					LocalizedStringResource.loginPasswordFieldTitle,
 					text: $viewModel.password
 				)
 				.padding(.top, 20)
-
 				Divider()
-
 				Button(
 					action: {
-
+						// TO DO: Reset password
 					},
 					label: {
 						Text("Forgot password ?")
@@ -44,12 +40,12 @@ struct LoginView: View {
 					}
 				)
 			}
-
 			Spacer()
-
 			Button(
 				action: {
-					Task { await viewModel.login() }
+					Task {
+						await viewModel.login()
+					}
 				},
 				label: {
 					Text(LocalizedStringResource.loginLoginButtonTitle)
@@ -62,6 +58,15 @@ struct LoginView: View {
 			)
 		}
 		.padding(30)
+		.onAppear {
+			do {
+				if try simpleKeychain.hasItem(forKey: Constants.keychainJWTKey) {
+					viewModel.isLoggedIn = true
+				}
+			} catch {
+				// Handle error if needed, or ignore
+			}
+		}
 	}
 }
 

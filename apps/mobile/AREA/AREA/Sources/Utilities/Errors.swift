@@ -31,6 +31,7 @@ enum NetworkError: Error, LocalizedError {
 	case missingConfig
 	case urlBuildFailed
 	case encodingFailed(underlyingError: Error)
+	case decodingError(underlyingError: Error)
 
 	var errorDescription: String? {
 		switch self {
@@ -40,6 +41,9 @@ enum NetworkError: Error, LocalizedError {
 		case .encodingFailed(underlyingError: let error):
 			return
 				"Failed to encode the request body. Underlying error: \(error.localizedDescription)"
+		case .decodingError(underlyingError: let error):
+			return
+				"Failed to decode the network response. Underlying error: \(error.localizedDescription)"
 		case .missingConfig:
 			return "The network request was missing the required API configuration."
 		case .urlBuildFailed:

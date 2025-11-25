@@ -16,17 +16,6 @@ class ResetViewModel: ObservableObject {
 		self.email = email
 		self.password = newPassword
 	}
-	
-//	func reset() async {
-//		do {
-//			let _ : ResetResponseData = try await ResetAction(
-//				parameters: ResetRequest(
-//					email: email,
-//					password: password
-//				).call()
-//		} catch {
-//			
-//		}
-//		}
-//	}
+
+	// TO DO: Implement func to reset password
 }

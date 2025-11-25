@@ -13,7 +13,6 @@ struct ResetPasswordView: View {
 	var body: some View {
 		VStack {
 			Spacer()
-
 			VStack {
 				TextField(
 					LocalizedStringResource.loginEmailToResetTitle,
@@ -34,7 +33,6 @@ struct ResetPasswordView: View {
 				Divider()
 			}
 			Spacer()
-
 			Button(
 				action: {
 					Task {

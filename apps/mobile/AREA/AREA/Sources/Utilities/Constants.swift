@@ -12,12 +12,12 @@ struct Constants {
 	static let homeString = "Home"
 	static let servicesString = "Services"
 	static let settingsString = "Settings"
-	
+
 	// Icon string for tabs
 	static let homeIconString = "house"
 	static let servicesIconString = "list.bullet"
 	static let settingsIconString = "gear"
-	
+
 	// Database network config
 	static let databaseScheme = "http"
 	static let databaseHost = "localhost"
@@ -25,4 +25,7 @@ struct Constants {
 
 	// Database paths
 	static let loginDBPath = "/auth/login"
+
+	// Keychain values
+	static let keychainJWTKey = "jwt"
 }

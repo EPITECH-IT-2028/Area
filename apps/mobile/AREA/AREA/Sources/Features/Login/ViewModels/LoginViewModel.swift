@@ -7,11 +7,13 @@
 
 internal import Combine
 import Foundation
+import SimpleKeychain
 
 class LoginViewModel: ObservableObject {
 	@Published var email: String
 	@Published var password: String
 	@Published var isLoggedIn: Bool
+	let simpleKeychain = SimpleKeychain()
 
 	init(email: String = "", password: String = "") {
 		self.email = email
@@ -20,30 +22,24 @@ class LoginViewModel: ObservableObject {
 	}
 
 	func login() async {
-		print("hello world")
 		do {
-			let _: LoginResponseData = try await LoginAction(
+			let response: LoginResponseData = try await LoginAction(
 				parameters: LoginRequest(
 					email: email,
 					password: password
 				)
 			).call()
 			isLoggedIn = true
+			do {
+				try simpleKeychain.set(
+					response.access_token,
+					forKey: Constants.keychainJWTKey
+				)
+			} catch let error as SimpleKeychainError {
+				print(error.localizedDescription)
+			}
 		} catch {
 			print(error)
 		}
 	}
-	
-//	func reset() async {
-//		do {
-//			let _ : ResetResponseData = try await ResetAction(
-//				parameters: ResetRequest(
-//					email: email,
-//					password: password
-//				).call()
-//		} catch {
-//			
-//		}
-//		}
-//	}
 }
