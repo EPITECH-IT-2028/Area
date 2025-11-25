@@ -22,6 +22,18 @@ export const GetUserQuery = gql`
   }
 `;
 
+export const GetUserByEmailQuery = gql`
+  query GetUserByEmail($email: String!) {
+    users(where: { email: { _eq: $email } }, limit: 1) {
+      id
+      email
+      name
+      password
+      created_at
+    }
+  }
+`;
+
 export const CreateUserQuery = gql`
   mutation CreateUser($email: String!, $name: String!, $password: String!) {
     insert_users_one(
