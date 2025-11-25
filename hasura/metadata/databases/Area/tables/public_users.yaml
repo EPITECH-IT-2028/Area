@@ -13,3 +13,15 @@ select_permissions:
         id:
           _eq: X-Hasura-User-Id
     comment: ""
+update_permissions:
+  - role: user
+    permission:
+      columns:
+        - created_at
+        - email
+        - name
+      filter:
+        id:
+          _eq: X-Hasura-User-Id
+      check: null
+    comment: ""

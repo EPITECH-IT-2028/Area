@@ -16,7 +16,7 @@ export class UsersService {
 
   async findAll(): Promise<Users[]> {
     try {
-      const data = await this.graphqlService.query<{ users: Users[] }>(
+      const data = await this.graphqlService.adminQuery<{ users: Users[] }>(
         GetUsersQuery,
       );
       return data.users;
@@ -27,10 +27,9 @@ export class UsersService {
 
   async findOne(id: string): Promise<Users> {
     try {
-      const data = await this.graphqlService.query<{ users_by_pk: Users }>(
-        GetUserQuery,
-        { id },
-      );
+      const data = await this.graphqlService.adminQuery<{
+        users_by_pk: Users | null;
+      }>(GetUserQuery, { id });
 
       if (!data.users_by_pk) {
         throw new NotFoundException(`User with ID ${id} not found`);
@@ -90,7 +89,7 @@ export class UsersService {
 
   async delete(id: string): Promise<{ success: boolean }> {
     try {
-      const data = await this.graphqlService.mutation<{
+      const data = await this.graphqlService.adminMutation<{
         delete_users_by_pk: { id: string };
       }>(DeleteUserQuery, { id });
 
