@@ -1,4 +1,5 @@
 -- Drop triggers
+DROP TRIGGER IF EXISTS update_users_updated_at ON users;
 DROP TRIGGER IF EXISTS update_areas_updated_at ON areas;
 DROP TRIGGER IF EXISTS update_user_services_updated_at ON user_services;
 DROP TRIGGER IF EXISTS update_reactions_updated_at ON reactions;
@@ -9,6 +10,9 @@ DROP TRIGGER IF EXISTS update_services_updated_at ON services;
 DROP FUNCTION IF EXISTS update_updated_at_column();
 
 -- Drop indexes
+DROP INDEX IF EXISTS idx_users_email;
+DROP INDEX IF EXISTS idx_users_password;
+DROP INDEX IF EXISTS idx_users_created_at;
 DROP INDEX IF EXISTS idx_reactions_service_id;
 DROP INDEX IF EXISTS idx_actions_service_id;
 DROP INDEX IF EXISTS idx_hook_logs_created_at;
