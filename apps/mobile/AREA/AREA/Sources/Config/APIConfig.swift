@@ -7,9 +7,7 @@
 import Foundation
 
 struct APIConfig: Decodable {
-	let DB_SCHEME: String
-	let DB_URL: String
-	let PORT: Int
+
 
 	static let shared: APIConfig? = {
 		do {
