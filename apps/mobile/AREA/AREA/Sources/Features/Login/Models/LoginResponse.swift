@@ -7,12 +7,12 @@
 
 import Foundation
 
-struct LoginResponseData: Codable {
+struct LoginResponseData: Decodable {
 	var accessToken: String
 	var data: UserData?
 }
 
-struct UserData: Codable {
+struct UserData: Decodable {
 	var id: Int?
 	var email: String?
 	var name: String?

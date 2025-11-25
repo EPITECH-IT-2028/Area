@@ -37,10 +37,8 @@ class LoginViewModel: ObservableObject {
 					password: password
 				)
 			).call()
-			await MainActor.run {
-				isLoggedIn = true
-				status = .success
-			}
+			isLoggedIn = true
+			status = .success
 			do {
 				try simpleKeychain.set(
 					response.accessToken,
@@ -50,10 +48,8 @@ class LoginViewModel: ObservableObject {
 				print(error.localizedDescription)
 			}
 		} catch {
-			await MainActor.run {
-				errorMessage = error.localizedDescription
-				status = .success
-			}
+			errorMessage = error.localizedDescription
+			status = .failure
 			throw LoginError.invalidCredentials
 		}
 	}
