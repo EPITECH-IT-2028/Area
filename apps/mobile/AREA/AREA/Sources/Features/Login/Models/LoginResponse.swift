@@ -8,7 +8,7 @@
 import Foundation
 
 struct LoginResponseData: Codable {
-	var access_token: String
+	var accessToken: String
 	var data: UserData?
 }
 

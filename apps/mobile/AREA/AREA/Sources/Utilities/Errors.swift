@@ -52,3 +52,14 @@ enum NetworkError: Error, LocalizedError {
 		}
 	}
 }
+
+enum LoginError: Error, LocalizedError {
+	case invalidCredentials
+
+	var errorDescription: String? {
+		switch self {
+		case .invalidCredentials:
+			return "The provided credentials are invalid."
+		}
+	}
+}

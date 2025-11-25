@@ -13,7 +13,14 @@ class LoginViewModel: ObservableObject {
 	@Published var email: String
 	@Published var password: String
 	@Published var isLoggedIn: Bool
+	@Published var errorMessage: String? = nil
+	@Published var status: LoginStatus = .success
 	let simpleKeychain = SimpleKeychain()
+
+	enum LoginStatus {
+		case success
+		case failure
+	}
 
 	init(email: String = "", password: String = "") {
 		self.email = email
@@ -21,7 +28,8 @@ class LoginViewModel: ObservableObject {
 		self.isLoggedIn = false
 	}
 
-	func login() async {
+	@MainActor
+	func login() async throws {
 		do {
 			let response: LoginResponseData = try await LoginAction(
 				parameters: LoginRequest(
@@ -29,17 +37,24 @@ class LoginViewModel: ObservableObject {
 					password: password
 				)
 			).call()
-			isLoggedIn = true
+			await MainActor.run {
+				isLoggedIn = true
+				status = .success
+			}
 			do {
 				try simpleKeychain.set(
-					response.access_token,
+					response.accessToken,
 					forKey: Constants.keychainJWTKey
 				)
 			} catch let error as SimpleKeychainError {
 				print(error.localizedDescription)
 			}
 		} catch {
-			print(error)
+			await MainActor.run {
+				errorMessage = error.localizedDescription
+				status = .success
+			}
+			throw LoginError.invalidCredentials
 		}
 	}
 }

@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ResetPasswordView: View {
-	@ObservedObject var viewModel: LoginViewModel
+	@ObservedObject var viewModel: ResetViewModel
 
 	var body: some View {
 		VStack {
@@ -54,5 +54,5 @@ struct ResetPasswordView: View {
 }
 
 #Preview {
-	ResetPasswordView(viewModel: LoginViewModel())
+	ResetPasswordView(viewModel: ResetViewModel())
 }

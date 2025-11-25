@@ -68,6 +68,23 @@
         }
       }
     },
+    "Login.ForgotPassword.Title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Forgot password ?"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mot de passe oublié"
+          }
+        }
+      }
+    },
     "Login.LoginButton.Title" : {
       "extractionState" : "manual",
       "localizations" : {

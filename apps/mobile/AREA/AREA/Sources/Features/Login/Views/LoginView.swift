@@ -10,12 +10,17 @@ import SwiftUI
 
 struct LoginView: View {
 	@ObservedObject var viewModel: LoginViewModel
-	let simpleKeychain = SimpleKeychain()
 
 	var body: some View {
 		VStack {
+
 			Spacer()
+
+			Text("AREA")
+				.font(.titleFont)
+
 			VStack {
+
 				TextField(
 					LocalizedStringResource.loginEmailFieldTitle,
 					text: $viewModel.email
@@ -23,28 +28,51 @@ struct LoginView: View {
 				.autocapitalization(.none)
 				.disableAutocorrection(true)
 				.padding(.top, 20)
+				.font(.defaultFont)
+				.foregroundStyle(Color(.black))
+
 				Divider()
+
 				SecureField(
 					LocalizedStringResource.loginPasswordFieldTitle,
 					text: $viewModel.password
 				)
+				.foregroundStyle(Color(.black))
 				.padding(.top, 20)
+				.font(.defaultFont)
+
 				Divider()
+
 				Button(
 					action: {
 						// TO DO: Reset password
 					},
 					label: {
-						Text("Forgot password ?")
+						Text(LocalizedStringResource.loginForgotPasswordTitle)
 							.font(.system(size: 12, weight: .regular, design: .default))
 					}
 				)
+
+				if let errorMessage = viewModel.errorMessage {
+					Text(errorMessage)
+						.foregroundStyle(Color(.red))
+						.padding(20)
+						.font(.defaultFont)
+				}
+
 			}
+
 			Spacer()
+
 			Button(
 				action: {
 					Task {
-						await viewModel.login()
+						do {
+							try await viewModel.login()
+						} catch {
+							viewModel.email = ""
+							viewModel.password = ""
+						}
 					}
 				},
 				label: {
@@ -56,11 +84,14 @@ struct LoginView: View {
 						.cornerRadius(10)
 				}
 			)
+
 		}
 		.padding(30)
 		.onAppear {
 			do {
-				if try simpleKeychain.hasItem(forKey: Constants.keychainJWTKey) {
+				if try viewModel.simpleKeychain.hasItem(
+					forKey: Constants.keychainJWTKey
+				) {
 					viewModel.isLoggedIn = true
 				}
 			} catch {
