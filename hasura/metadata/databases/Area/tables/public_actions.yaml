@@ -1,3 +1,15 @@
 table:
   name: actions
   schema: public
+object_relationships:
+  - name: service
+    using:
+      foreign_key_constraint_on: service_id
+array_relationships:
+  - name: areas
+    using:
+      foreign_key_constraint_on:
+        column: action_id
+        table:
+          name: areas
+          schema: public
