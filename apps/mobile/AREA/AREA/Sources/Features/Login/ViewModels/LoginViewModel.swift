@@ -29,30 +29,28 @@ class LoginViewModel: ObservableObject {
 
 	@MainActor
 	func login() async throws {
+		let response: LoginResponseData = try await LoginAction(
+			parameters: LoginRequest(
+				email: email,
+				password: password
+			)
+		).call()
+		isLoggedIn = true
+		status = .success
+		errorMessage = nil
+		guard let data = response.data else {
+			throw NetworkError.missingResponseData
+		}
+		guard let accessToken = data.accessToken else {
+			throw NetworkError.missingAccessToken
+		}
 		do {
-			let response: LoginResponseData = try await LoginAction(
-				parameters: LoginRequest(
-					email: email,
-					password: password
-				)
-			).call()
-			isLoggedIn = true
-			status = .success
-			errorMessage = nil
-			guard let data = response.data else {
-				throw NetworkError.missingResponseData
-			}
-			guard let accessToken = data.accessToken else {
-				throw NetworkError.missingAccessToken
-			}
-			do {
-				try KeychainManager.shared.keychain.set(
-					accessToken,
-					forKey: Constants.keychainJWTKey
-				)
-			} catch {
-				print("Keychain error: \(error.localizedDescription)")
-			}
+			try KeychainManager.shared.keychain.set(
+				accessToken,
+				forKey: Constants.keychainJWTKey
+			)
+		} catch {
+			print("Keychain error: \(error.localizedDescription)")
 		}
 	}
 }
