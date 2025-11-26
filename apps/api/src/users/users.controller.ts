@@ -18,7 +18,7 @@ import {
   IsString,
   MinLength,
 } from 'class-validator';
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 
 class CreateUserDto {
   @IsEmail()

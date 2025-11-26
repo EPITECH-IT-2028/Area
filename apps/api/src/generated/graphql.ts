@@ -235,7 +235,7 @@ export type Users = {
   email: Scalars['String']['output'];
   id: Scalars['uuid']['output'];
   name?: Maybe<Scalars['String']['output']>;
-  password: Scalars['String']['output'];
+  password?: Maybe<Scalars['String']['output']>;
 };
 
 /** aggregated selection of "users" */
@@ -440,10 +440,26 @@ export type GetUserQuery = {
   } | null;
 };
 
+export type GetUserByEmailQueryVariables = Exact<{
+  email: Scalars['String']['input'];
+}>;
+
+export type GetUserByEmailQuery = {
+  __typename?: 'query_root';
+  users: Array<{
+    __typename?: 'users';
+    id: string;
+    email: string;
+    name?: string | null;
+    password?: string | null;
+    created_at: string;
+  }>;
+};
+
 export type CreateUserMutationVariables = Exact<{
   email: Scalars['String']['input'];
   name: Scalars['String']['input'];
-  password: Scalars['String']['input'];
+  password?: InputMaybe<Scalars['String']['input']>;
 }>;
 
 export type CreateUserMutation = {
@@ -452,8 +468,8 @@ export type CreateUserMutation = {
     __typename?: 'users';
     id: string;
     name?: string | null;
-    password: string;
     email: string;
+    created_at: string;
   } | null;
 };
 
@@ -501,15 +517,26 @@ export const GetUserDocument = gql`
     }
   }
 `;
+export const GetUserByEmailDocument = gql`
+  query GetUserByEmail($email: String!) {
+    users(where: { email: { _eq: $email } }, limit: 1) {
+      id
+      email
+      name
+      password
+      created_at
+    }
+  }
+`;
 export const CreateUserDocument = gql`
-  mutation CreateUser($email: String!, $name: String!, $password: String!) {
+  mutation CreateUser($email: String!, $name: String!, $password: String) {
     insert_users_one(
       object: { email: $email, name: $name, password: $password }
     ) {
       id
       name
-      password
       email
+      created_at
     }
   }
 `;
@@ -581,6 +608,24 @@ export function getSdk(
             signal,
           }),
         'GetUser',
+        'query',
+        variables,
+      );
+    },
+    GetUserByEmail(
+      variables: GetUserByEmailQueryVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+      signal?: RequestInit['signal'],
+    ): Promise<GetUserByEmailQuery> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.request<GetUserByEmailQuery>({
+            document: GetUserByEmailDocument,
+            variables,
+            requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders },
+            signal,
+          }),
+        'GetUserByEmail',
         'query',
         variables,
       );

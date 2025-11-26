@@ -18,6 +18,12 @@ export interface LoginDto {
   password: string;
 }
 
+export interface GoogleUser {
+  id: string;
+  email: string;
+  name: string;
+}
+
 export interface AuthResponse {
   access_token: string;
   user: {
@@ -78,6 +84,24 @@ export class AuthService {
 
     if (!isPasswordValid) {
       throw new UnauthorizedException('Invalid credentials');
+    }
+
+    const payload = { sub: user.id, email: user.email };
+    const access_token = this.jwtService.sign(payload);
+
+    return {
+      access_token,
+      user: {
+        id: user.id,
+        email: user.email,
+        name: user.name || '',
+      },
+    };
+  }
+
+  async googleLogin(user: GoogleUser): Promise<AuthResponse> {
+    if (!user) {
+      throw new UnauthorizedException('No user from Google');
     }
 
     const payload = { sub: user.id, email: user.email };
