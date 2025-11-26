@@ -39,24 +39,20 @@ class LoginViewModel: ObservableObject {
 			isLoggedIn = true
 			status = .success
 			errorMessage = nil
+			guard let data = response.data else {
+				throw NetworkError.missingResponseData
+			}
+			guard let accessToken = data.accessToken else {
+				throw NetworkError.missingAccessToken
+			}
 			do {
-				guard let data = response.data else {
-					throw NetworkError.missingResponseData
-				}
-				guard let accessToken = data.accessToken else {
-					throw NetworkError.missingAccessToken
-				}
-				try? KeychainManager.shared.keychain.set(
+				try KeychainManager.shared.keychain.set(
 					accessToken,
 					forKey: Constants.keychainJWTKey
 				)
-			} catch let error as SimpleKeychainError {
-				print(error.localizedDescription)
+			} catch {
+				print("Keychain error: \(error.localizedDescription)")
 			}
-		} catch {
-			errorMessage = error.localizedDescription
-			status = .failure
-			throw LoginError.invalidCredentials
 		}
 	}
 }
