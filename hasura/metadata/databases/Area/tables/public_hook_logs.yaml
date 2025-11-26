@@ -1,0 +1,3 @@
+table:
+  name: hook_logs
+  schema: public

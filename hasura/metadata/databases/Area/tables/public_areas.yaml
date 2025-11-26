@@ -1,0 +1,3 @@
+table:
+  name: areas
+  schema: public
