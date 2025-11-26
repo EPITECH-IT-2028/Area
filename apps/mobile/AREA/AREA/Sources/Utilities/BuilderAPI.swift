@@ -34,7 +34,6 @@ struct BuilderAPI {
 		request.httpMethod = method
 		request.addValue("application/json", forHTTPHeaderField: "Content-Type")
 		request.addValue("application/json", forHTTPHeaderField: "Accept")
-
 		do {
 			request.httpBody = try JSONEncoder().encode(parameters)
 		} catch {

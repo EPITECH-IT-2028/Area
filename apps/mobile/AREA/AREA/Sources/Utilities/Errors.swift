@@ -30,6 +30,8 @@ enum NetworkError: Error, LocalizedError {
 	case badURLResponse(underlyingError: Error)
 	case missingConfig
 	case urlBuildFailed
+	case missingResponseData
+	case missingAccessToken
 	case encodingFailed(underlyingError: Error)
 	case decodingError(underlyingError: Error)
 
@@ -48,7 +50,10 @@ enum NetworkError: Error, LocalizedError {
 			return "The network request was missing the required API configuration."
 		case .urlBuildFailed:
 			return "Failed to build the URL for the network request."
-
+		case .missingResponseData:
+			return "The network request returned a response with no data."
+		case .missingAccessToken:
+			return "The network request was missing an access token."
 		}
 	}
 }

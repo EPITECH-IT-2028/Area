@@ -41,10 +41,13 @@ class LoginViewModel: ObservableObject {
 			status = .success
 			errorMessage = nil
 			do {
-				try simpleKeychain.set(
-					response.accessToken,
-					forKey: Constants.keychainJWTKey
-				)
+				guard let data = response.data else {
+					throw NetworkError.missingResponseData
+				}
+				guard let accessToken = data.accessToken else {
+					throw NetworkError.missingAccessToken
+				}
+				try? simpleKeychain.set(accessToken, forKey: Constants.keychainJWTKey)
 			} catch let error as SimpleKeychainError {
 				print(error.localizedDescription)
 			}

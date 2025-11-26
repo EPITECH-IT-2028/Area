@@ -8,6 +8,6 @@
 import Foundation
 
 struct ResetRequest: Encodable {
-		let email: String
-		let newPassword: String
+	let email: String
+	let newPassword: String
 }

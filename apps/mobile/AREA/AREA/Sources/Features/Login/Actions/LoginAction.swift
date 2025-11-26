@@ -39,7 +39,6 @@ struct LoginAction {
 				from: data,
 				statusCode: response.statusCode
 			)
-
 			throw NetworkError.badURLResponse(
 				underlyingError: NSError(
 					domain: "LoginAction",

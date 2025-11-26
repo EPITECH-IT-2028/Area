@@ -9,6 +9,10 @@ import Foundation
 import SwiftUI
 
 extension Font {
-	static let defaultFont = Font.system(size: 16, weight: .bold, design: .default)
+	static let defaultFont = Font.system(
+		size: 16,
+		weight: .bold,
+		design: .default
+	)
 	static let titleFont = Font.largeTitle.bold()
 }

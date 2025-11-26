@@ -7,12 +7,11 @@
 
 import Foundation
 
-
 struct ResetAction {
 
 	var parameters: ResetRequest
 
-//	func call() async throws -> ResetResponseData {
-//		// TO DO: Implement func to reset password
-//	}
+	//	func call() async throws -> ResetResponseData {
+	//		// TO DO: Implement func to reset password
+	//	}
 }

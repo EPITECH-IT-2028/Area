@@ -8,12 +8,18 @@
 import Foundation
 
 struct LoginResponseData: Decodable {
-	var accessToken: String
-	var data: UserData?
+	var success: Bool
+	var data: DataLoginResponse?
+	var message: String?
+}
+
+struct DataLoginResponse: Decodable {
+	var accessToken: String?
+	var user: UserData?
 }
 
 struct UserData: Decodable {
-	var id: Int?
+	var id: String?
 	var email: String?
 	var name: String?
 }
