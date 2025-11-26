@@ -39,7 +39,6 @@ struct BuilderAPI {
 		} catch {
 			throw NetworkError.encodingFailed(underlyingError: error)
 		}
-
 		return request
 	}
 

@@ -89,7 +89,7 @@ struct LoginView: View {
 		.padding(30)
 		.onAppear {
 			do {
-				if try viewModel.simpleKeychain.hasItem(
+				if try KeychainManager.shared.keychain.hasItem(
 					forKey: Constants.keychainJWTKey
 				) {
 					viewModel.isLoggedIn = true

@@ -15,7 +15,6 @@ class LoginViewModel: ObservableObject {
 	@Published var isLoggedIn: Bool
 	@Published var errorMessage: String? = nil
 	@Published var status: LoginStatus = .success
-	let simpleKeychain = SimpleKeychain()
 
 	enum LoginStatus {
 		case success
@@ -47,7 +46,10 @@ class LoginViewModel: ObservableObject {
 				guard let accessToken = data.accessToken else {
 					throw NetworkError.missingAccessToken
 				}
-				try? simpleKeychain.set(accessToken, forKey: Constants.keychainJWTKey)
+				try? KeychainManager.shared.keychain.set(
+					accessToken,
+					forKey: Constants.keychainJWTKey
+				)
 			} catch let error as SimpleKeychainError {
 				print(error.localizedDescription)
 			}
