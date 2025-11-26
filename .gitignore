@@ -35,6 +35,7 @@ yarn-error.log
 *.pem
 .vscode/
 .zed/
+.idea/
 
 # XCode
 *.swp
