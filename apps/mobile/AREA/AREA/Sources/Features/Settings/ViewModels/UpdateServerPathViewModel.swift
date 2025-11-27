@@ -28,7 +28,11 @@ class UpdateServerPathViewModel: ObservableObject {
 		{
 			isErrorVisible = true
 			errorMessage = "Invalid scheme: \(serverScheme) is not http or https"
-			throw NSError(domain: "Invalid scheme: \(serverScheme) is not http or https", code: 0, userInfo: nil)
+			throw NSError(
+				domain: "Invalid scheme: \(serverScheme) is not http or https",
+				code: 0,
+				userInfo: nil
+			)
 		}
 		if serverHost == "" {
 			isErrorVisible = true
@@ -50,6 +54,14 @@ class UpdateServerPathViewModel: ObservableObject {
 		Settings.serverHost = serverHost
 		Settings.serverPort = port
 		Settings.serverScheme = serverScheme
+	}
+
+	func reset() {
+		serverScheme = Settings.serverScheme
+		serverHost = Settings.serverHost
+		serverPort = String(Settings.serverPort)
+		isErrorVisible = false
+		errorMessage = nil
 	}
 
 	func createServerFullPath() -> String {

@@ -8,6 +8,8 @@
 import Foundation
 import SwiftUI
 
+/// View that allows users to update the server connection path
+/// Users can configure the scheme (http/https), host (domain/IP), and port
 struct UpdateServerPathView: View {
 	@ObservedObject var viewModel: UpdateServerPathViewModel =
 		UpdateServerPathViewModel()
@@ -21,46 +23,51 @@ struct UpdateServerPathView: View {
 				LocalizedStringResource.updateServerPathExplainFormatTitle
 			)
 			.font(.system(size: 14, weight: .light, design: .default))
+
 			TextField(
 				LocalizedStringResource.updateServerPathServerSchemeTitle,
 				text: $viewModel.serverScheme
-			).autocapitalization(.none)
-				.disableAutocorrection(true)
-				.padding(.top, 20)
-				.font(.defaultFont)
-				.foregroundStyle(Color(.black))
+			)
+			.autocapitalization(.none)
+			.disableAutocorrection(true)
+			.padding(.top, 20)
+			.font(.defaultFont)
+			.foregroundStyle(Color(.black))
 
 			Divider()
 
 			TextField(
 				LocalizedStringResource.updateServerPathServerHostTitle,
 				text: $viewModel.serverHost
-			).autocapitalization(.none)
-				.disableAutocorrection(true)
-				.padding(.top, 20)
-				.font(.defaultFont)
-				.foregroundStyle(Color(.black))
+			)
+			.autocapitalization(.none)
+			.disableAutocorrection(true)
+			.padding(.top, 20)
+			.font(.defaultFont)
+			.foregroundStyle(Color(.black))
 
 			Divider()
 
 			TextField(
 				LocalizedStringResource.updateServerPathServerPortTitle,
 				text: $viewModel.serverPort
-			).autocapitalization(.none)
-				.disableAutocorrection(true)
-				.padding(.top, 20)
-				.font(.defaultFont)
-				.foregroundStyle(Color(.black))
+			)
+			.autocapitalization(.none)
+			.disableAutocorrection(true)
+			.padding(.top, 20)
+			.font(.defaultFont)
+			.foregroundStyle(Color(.black))
 
 			Divider()
 
 			Text(
 				"\(LocalizedStringResource.updateServerPathCurrentPathTitle) \(viewModel.createServerFullPath())"
-			).autocapitalization(.none)
-				.disableAutocorrection(true)
-				.padding(.top, 20)
-				.font(.system(size: 14, weight: .light, design: .default))
-				.foregroundStyle(Color(.black))
+			)
+			.autocapitalization(.none)
+			.disableAutocorrection(true)
+			.padding(.top, 20)
+			.font(.system(size: 14, weight: .light, design: .default))
+			.foregroundStyle(Color(.black))
 
 			if let errorMessage = viewModel.errorMessage {
 				Text(errorMessage)
@@ -92,6 +99,7 @@ struct UpdateServerPathView: View {
 					LocalizedStringResource.updateServerPathCancelTitle,
 					role: .cancel
 				) {
+					viewModel.reset()
 					dismiss()
 				}
 				Button(
