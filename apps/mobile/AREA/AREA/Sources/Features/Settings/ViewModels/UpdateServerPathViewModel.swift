@@ -24,11 +24,11 @@ class UpdateServerPathViewModel: ObservableObject {
 
 	func save() throws {
 		if serverScheme != Constants.httpString
-			|| serverScheme != Constants.httpsString
+			&& serverScheme != Constants.httpsString
 		{
 			isErrorVisible = true
-			errorMessage = "Invalid scheme"
-			throw NSError(domain: "Invalid scheme", code: 0, userInfo: nil)
+			errorMessage = "Invalid scheme: \(serverScheme) is not http or https"
+			throw NSError(domain: "Invalid scheme: \(serverScheme) is not http or https", code: 0, userInfo: nil)
 		}
 		if serverHost == "" {
 			isErrorVisible = true
