@@ -9,10 +9,10 @@ import Foundation
 
 struct BuilderAPI {
 	func buildURL() throws -> URL {
-		let scheme = Constants.databaseScheme
-		let host = Constants.databaseHost
-		let port = Constants.databasePort
-		let path = Constants.loginDBPath
+		let scheme = Settings.serverScheme
+		let host = Settings.serverHost
+		let port = Settings.serverPort
+		let path = Constants.loginServerPath
 
 		var components = URLComponents()
 		components.scheme = scheme
