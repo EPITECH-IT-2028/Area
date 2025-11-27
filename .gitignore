@@ -36,3 +36,17 @@ yarn-error.log
 .vscode/
 .zed/
 .idea/
+
+# XCode
+*.swp
+*.lock
+*.xcuserstate
+*.xcuserdata
+*.xcscmblueprint
+DerivedData/
+*.moved-aside
+*.xccheckout
+*.playground*
+
+# XCode/Dependency managers
+Carthage/Build/
