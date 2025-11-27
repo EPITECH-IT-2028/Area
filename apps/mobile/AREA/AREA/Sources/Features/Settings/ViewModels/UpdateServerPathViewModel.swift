@@ -9,9 +9,9 @@ internal import Combine
 import Foundation
 
 class UpdateServerPathViewModel: ObservableObject {
-	@Published var serverScheme: String = Settings.serverScheme
-	@Published var serverHost: String = Settings.serverHost
-	@Published var serverPort: String = String(Settings.serverPort)
+	@Published var serverScheme: String = SettingsUD.serverScheme
+	@Published var serverHost: String = SettingsUD.serverHost
+	@Published var serverPort: String = String(SettingsUD.serverPort)
 	@Published var isSaving: Bool = false
 	@Published var errorMessage: String? = nil
 	@Published var isErrorVisible: Bool = false
@@ -27,39 +27,39 @@ class UpdateServerPathViewModel: ObservableObject {
 			&& serverScheme != Constants.httpsString
 		{
 			isErrorVisible = true
-			errorMessage = "Invalid scheme: \(serverScheme) is not http or https"
+			errorMessage = "\(LocalizedStringResource.errorInvalidScheme)"
 			throw NSError(
-				domain: "Invalid scheme: \(serverScheme) is not http or https",
+				domain: "\(LocalizedStringResource.errorInvalidScheme)",
 				code: 0,
 				userInfo: nil
 			)
 		}
 		if serverHost == "" {
 			isErrorVisible = true
-			errorMessage = "Invalid host"
-			throw NSError(domain: "Invalid host", code: 0, userInfo: nil)
+			errorMessage = "\(LocalizedStringResource.errorInvalidHost)"
+			throw NSError(domain: "\(LocalizedStringResource.errorInvalidHost)", code: 0, userInfo: nil)
 		}
 		guard !serverPort.isEmpty, let port = Int(serverPort) else {
 			isErrorVisible = true
-			errorMessage = "Invalid port"
-			throw NSError(domain: "Invalid port", code: 0, userInfo: nil)
+			errorMessage = "\(LocalizedStringResource.errorInvalidPort)"
+			throw NSError(domain: "\(LocalizedStringResource.errorInvalidPort)", code: 0, userInfo: nil)
 		}
-		if port <= Constants.portMin || port > Constants.portMax {
+		if port < Constants.portMin || port > Constants.portMax {
 			isErrorVisible = true
-			errorMessage = "Invalid port"
-			throw NSError(domain: "Invalid port", code: 0, userInfo: nil)
+			errorMessage = "\(LocalizedStringResource.errorInvalidPort)"
+			throw NSError(domain: "\(LocalizedStringResource.errorInvalidPort)", code: 0, userInfo: nil)
 		}
 		isErrorVisible = false
 		errorMessage = nil
-		Settings.serverHost = serverHost
-		Settings.serverPort = port
-		Settings.serverScheme = serverScheme
+		SettingsUD.serverHost = serverHost
+		SettingsUD.serverPort = port
+		SettingsUD.serverScheme = serverScheme
 	}
 
 	func reset() {
-		serverScheme = Settings.serverScheme
-		serverHost = Settings.serverHost
-		serverPort = String(Settings.serverPort)
+		serverScheme = SettingsUD.serverScheme
+		serverHost = SettingsUD.serverHost
+		serverPort = String(SettingsUD.serverPort)
 		isErrorVisible = false
 		errorMessage = nil
 	}

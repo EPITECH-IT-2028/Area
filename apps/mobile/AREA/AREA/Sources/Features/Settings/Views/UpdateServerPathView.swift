@@ -32,7 +32,7 @@ struct UpdateServerPathView: View {
 			.disableAutocorrection(true)
 			.padding(.top, 20)
 			.font(.defaultFont)
-			.foregroundStyle(Color(.black))
+			.foregroundStyle(Color.primary)
 
 			Divider()
 
@@ -44,7 +44,7 @@ struct UpdateServerPathView: View {
 			.disableAutocorrection(true)
 			.padding(.top, 20)
 			.font(.defaultFont)
-			.foregroundStyle(Color(.black))
+			.foregroundStyle(Color.primary)
 
 			Divider()
 
@@ -56,18 +56,17 @@ struct UpdateServerPathView: View {
 			.disableAutocorrection(true)
 			.padding(.top, 20)
 			.font(.defaultFont)
-			.foregroundStyle(Color(.black))
+			.foregroundStyle(Color.primary)
 
 			Divider()
 
-			Text(
-				"\(LocalizedStringResource.updateServerPathCurrentPathTitle) \(viewModel.createServerFullPath())"
-			)
-			.autocapitalization(.none)
-			.disableAutocorrection(true)
+			HStack(spacing: 4) {
+				Text(LocalizedStringResource.updateServerPathCurrentPathTitle)
+				Text(viewModel.createServerFullPath())
+			}
 			.padding(.top, 20)
 			.font(.system(size: 14, weight: .light, design: .default))
-			.foregroundStyle(Color(.black))
+			.foregroundStyle(Color.primary)
 
 			if let errorMessage = viewModel.errorMessage {
 				Text(errorMessage)
@@ -83,7 +82,7 @@ struct UpdateServerPathView: View {
 					viewModel.isSaving = true
 				},
 				label: {
-					Text("Save new server path")
+					Text(LocalizedStringResource.updateServerPathSaveNewPathTitle)
 						.font(.system(size: 24, weight: .bold))
 						.frame(maxWidth: .infinity, maxHeight: 60)
 						.foregroundColor(.white)
@@ -100,7 +99,6 @@ struct UpdateServerPathView: View {
 					role: .cancel
 				) {
 					viewModel.reset()
-					dismiss()
 				}
 				Button(
 					LocalizedStringResource.updateServerPathSaveTitle,

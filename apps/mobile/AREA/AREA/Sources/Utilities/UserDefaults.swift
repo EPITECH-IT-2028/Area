@@ -18,7 +18,7 @@ struct UserDefault<T> {
 	}
 }
 
-struct Settings {
+struct SettingsUD {
 	@UserDefault(key: "isDarkMode", defaultValue: false)
 	static var isDarkMode: Bool
 

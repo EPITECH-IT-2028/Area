@@ -13,7 +13,7 @@ struct SettingsView: View {
 			List {
 				NavigationLink(destination: UpdateServerPathView()) {
 					Text(LocalizedStringResource.settingsUpdateServerPathTitle)
-						.foregroundStyle(Color.black)
+						.foregroundStyle(Color.primary)
 				}
 			}
 		}
