@@ -68,7 +68,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Schema invalide"
+            "value" : "Schéma invalide"
           }
         }
       }
@@ -349,7 +349,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Êtes-vous sûre de vouloir sauvegarder le nouveau chemin vers le serveur ?"
+            "value" : "Êtes-vous sûr de vouloir sauvegarder le nouveau chemin vers le serveur ?"
           }
         }
       }

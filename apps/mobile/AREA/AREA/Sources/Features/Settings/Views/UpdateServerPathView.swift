@@ -11,7 +11,7 @@ import SwiftUI
 /// View that allows users to update the server connection path
 /// Users can configure the scheme (http/https), host (domain/IP), and port
 struct UpdateServerPathView: View {
-	@ObservedObject var viewModel: UpdateServerPathViewModel =
+	@StateObject var viewModel: UpdateServerPathViewModel =
 		UpdateServerPathViewModel()
 	@Environment(\.dismiss) var dismiss
 

@@ -27,27 +27,27 @@ class UpdateServerPathViewModel: ObservableObject {
 			&& serverScheme != Constants.httpsString
 		{
 			isErrorVisible = true
-			errorMessage = "\(LocalizedStringResource.errorInvalidScheme)"
+			errorMessage = String(localized: LocalizedStringResource.errorInvalidScheme)
 			throw NSError(
-				domain: "\(LocalizedStringResource.errorInvalidScheme)",
+				domain: "Invalid Scheme",
 				code: 0,
 				userInfo: nil
 			)
 		}
 		if serverHost == "" {
 			isErrorVisible = true
-			errorMessage = "\(LocalizedStringResource.errorInvalidHost)"
-			throw NSError(domain: "\(LocalizedStringResource.errorInvalidHost)", code: 0, userInfo: nil)
+			errorMessage = String(localized: LocalizedStringResource.errorInvalidHost)
+			throw NSError(domain: "Invalid Host", code: 0, userInfo: nil)
 		}
 		guard !serverPort.isEmpty, let port = Int(serverPort) else {
 			isErrorVisible = true
-			errorMessage = "\(LocalizedStringResource.errorInvalidPort)"
-			throw NSError(domain: "\(LocalizedStringResource.errorInvalidPort)", code: 0, userInfo: nil)
+			errorMessage = String(localized: LocalizedStringResource.errorInvalidPort)
+			throw NSError(domain: "Invalid Port", code: 0, userInfo: nil)
 		}
 		if port < Constants.portMin || port > Constants.portMax {
 			isErrorVisible = true
-			errorMessage = "\(LocalizedStringResource.errorInvalidPort)"
-			throw NSError(domain: "\(LocalizedStringResource.errorInvalidPort)", code: 0, userInfo: nil)
+			errorMessage = String(localized: LocalizedStringResource.errorInvalidPort)
+			throw NSError(domain: "Invalid Port", code: 0, userInfo: nil)
 		}
 		isErrorVisible = false
 		errorMessage = nil
