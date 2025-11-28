@@ -11,9 +11,10 @@ struct SplashScreenView: View {
 	var body: some View {
 		ZStack {
 			Color.black.ignoresSafeArea()
-			Text(LocalizedStringResource.splashScreenTitle)
+			Text("AREA")
 				.font(.title)
 				.foregroundStyle(Color.white)
+				.accessibilityLabel("Application AREA")
 		}
 	}
 }

@@ -11,6 +11,13 @@ import SwiftUI
 struct ContentView: View {
 	@StateObject private var viewModel = LoginViewModel()
 	@State private var showSplash = true
+	private let fadeOutDuration: TimeInterval = 0.5
+
+	private var isUserAuthenticated: Bool {
+		(try? KeychainManager.shared.keychain.hasItem(
+			forKey: Constants.keychainJWTKey
+		)) == true
+	}
 
 	var body: some View {
 		ZStack {
@@ -18,14 +25,11 @@ struct ContentView: View {
 				SplashScreenView()
 					.transition(.opacity)
 					.animation(
-						.easeOut(duration: Constants.splashScreenAnimationDuration),
+						.easeOut(duration: fadeOutDuration),
 						value: showSplash
 					)
 			} else {
-				if (try? KeychainManager.shared.keychain.hasItem(
-					forKey: Constants.keychainJWTKey
-				))
-					== true
+				if isUserAuthenticated
 				{
 					TabView {
 						Tab(Constants.homeString, systemImage: Constants.homeIconString) {
@@ -51,7 +55,8 @@ struct ContentView: View {
 		}
 		.onAppear {
 			DispatchQueue.main.asyncAfter(
-				deadline: .now() + Constants.splashScreenAnimationDuration
+				deadline: .now()
+					+ (Constants.splashScreenAnimationDuration - fadeOutDuration)
 			) {
 				withAnimation {
 					self.showSplash = false
