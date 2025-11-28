@@ -27,7 +27,9 @@ class UpdateServerPathViewModel: ObservableObject {
 			&& serverScheme != Constants.httpsString
 		{
 			isErrorVisible = true
-			errorMessage = String(localized: LocalizedStringResource.errorInvalidScheme)
+			errorMessage = String(
+				localized: LocalizedStringResource.errorInvalidScheme
+			)
 			throw NSError(
 				domain: "Invalid Scheme",
 				code: 0,

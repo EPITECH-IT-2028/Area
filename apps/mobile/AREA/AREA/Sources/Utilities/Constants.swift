@@ -22,6 +22,9 @@ struct Constants {
 	static let portMin: UInt16 = 0
 	static let portMax: UInt16 = 65535
 
+	// Splash screen animation duration
+	static let splashScreenAnimationDuration: TimeInterval = 1.5
+
 	// Server scheme
 	static let httpString = "http"
 	static let httpsString = "https"
