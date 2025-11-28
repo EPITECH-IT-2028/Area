@@ -8,11 +8,18 @@
 import SwiftUI
 
 struct SettingsView: View {
-    var body: some View {
-        Text("Settings")
-    }
+	var body: some View {
+		NavigationStack {
+			List {
+				NavigationLink(destination: UpdateServerPathView()) {
+					Text(LocalizedStringResource.settingsUpdateServerPathTitle)
+						.foregroundStyle(Color.primary)
+				}
+			}
+		}
+	}
 }
 
 #Preview {
-    SettingsView()
+	SettingsView()
 }

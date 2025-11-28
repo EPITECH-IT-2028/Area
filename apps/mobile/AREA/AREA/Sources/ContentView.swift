@@ -12,7 +12,9 @@ struct ContentView: View {
 	@StateObject private var viewModel = LoginViewModel()
 
 	var body: some View {
-		if (try? KeychainManager.shared.keychain.hasItem(forKey: Constants.keychainJWTKey))
+		if (try? KeychainManager.shared.keychain.hasItem(
+			forKey: Constants.keychainJWTKey
+		))
 			== true
 		{
 			TabView {
@@ -28,7 +30,6 @@ struct ContentView: View {
 					SettingsView()
 				}
 			}
-			.padding()
 		} else {
 			LoginView(viewModel: viewModel)
 		}
