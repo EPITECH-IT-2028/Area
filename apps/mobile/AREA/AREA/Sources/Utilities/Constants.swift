@@ -18,14 +18,18 @@ struct Constants {
 	static let servicesIconString = "list.bullet"
 	static let settingsIconString = "gear"
 
-	// Database network config
-	static let databaseScheme = "http"
-	static let databaseHost = "localhost"
-	static let databasePort = 8080
+	// Port MAX/MIN
+	static let portMin: UInt16 = 0
+	static let portMax: UInt16 = 65535
 
-	// Database paths
-	static let loginDBPath = "/auth/login"
+	// Server scheme
+	static let httpString = "http"
+	static let httpsString = "https"
+
+	// Server paths
+	static let loginServerPath = "/auth/login"
 
 	// Keychain values
 	static let keychainJWTKey = "jwt"
+
 }
