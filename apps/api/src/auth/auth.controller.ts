@@ -72,13 +72,13 @@ export class AuthController {
 
   @Get('google/callback')
   @UseGuards(GoogleOauthGuard)
-  async googleAuthCallback(
+  googleAuthCallback(
     @Req() req: any,
     @Res({ passthrough: false }) res: Response,
     @Query('platform') platform?: string,
   ) {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-    const result = await this.authService.googleLogin(req.user);
+    const result = this.authService.googleLogin(req.user);
 
     if (platform === 'mobile') {
       const frontendScheme = process.env.FRONTEND_MOBILE_SCHEME || 'area://';

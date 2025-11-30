@@ -99,7 +99,7 @@ export class AuthService {
     };
   }
 
-  async googleLogin(user: GoogleUser): Promise<AuthResponse> {
+  googleLogin(user: GoogleUser): AuthResponse {
     if (!user) {
       throw new UnauthorizedException('No user from Google');
     }
