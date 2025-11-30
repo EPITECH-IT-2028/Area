@@ -3741,6 +3741,131 @@ export type Uuid_Comparison_Exp = {
   _nin?: InputMaybe<Array<Scalars['uuid']['input']>>;
 };
 
+export type GetUserServiceQueryVariables = Exact<{
+  userId: Scalars['uuid']['input'];
+  serviceId: Scalars['uuid']['input'];
+}>;
+
+export type GetUserServiceQuery = {
+  __typename?: 'query_root';
+  user_services: Array<{
+    __typename?: 'user_services';
+    id: string;
+    user_id: string;
+    service_id: string;
+    access_token?: string | null;
+    refresh_token?: string | null;
+    token_expiry?: string | null;
+    is_connected?: boolean | null;
+    credentials?: any | null;
+    created_at?: string | null;
+    updated_at?: string | null;
+  }>;
+};
+
+export type GetUserServicesByUserQueryVariables = Exact<{
+  userId: Scalars['uuid']['input'];
+}>;
+
+export type GetUserServicesByUserQuery = {
+  __typename?: 'query_root';
+  user_services: Array<{
+    __typename?: 'user_services';
+    id: string;
+    user_id: string;
+    service_id: string;
+    is_connected?: boolean | null;
+    last_sync?: string | null;
+    created_at?: string | null;
+    updated_at?: string | null;
+    service: {
+      __typename?: 'services';
+      id: string;
+      name: string;
+      display_name: string;
+      icon_url?: string | null;
+    };
+  }>;
+};
+
+export type GetServiceByNameQueryVariables = Exact<{
+  name: Scalars['String']['input'];
+}>;
+
+export type GetServiceByNameQuery = {
+  __typename?: 'query_root';
+  services: Array<{
+    __typename?: 'services';
+    id: string;
+    name: string;
+    display_name: string;
+    auth_type: string;
+  }>;
+};
+
+export type CreateUserServiceMutationVariables = Exact<{
+  userId: Scalars['uuid']['input'];
+  serviceId: Scalars['uuid']['input'];
+  accessToken?: InputMaybe<Scalars['String']['input']>;
+  refreshToken?: InputMaybe<Scalars['String']['input']>;
+  tokenExpiry?: InputMaybe<Scalars['timestamptz']['input']>;
+  credentials?: InputMaybe<Scalars['jsonb']['input']>;
+}>;
+
+export type CreateUserServiceMutation = {
+  __typename?: 'mutation_root';
+  insert_user_services_one?: {
+    __typename?: 'user_services';
+    id: string;
+    user_id: string;
+    service_id: string;
+    is_connected?: boolean | null;
+  } | null;
+};
+
+export type UpdateUserServiceTokensMutationVariables = Exact<{
+  id: Scalars['uuid']['input'];
+  accessToken?: InputMaybe<Scalars['String']['input']>;
+  refreshToken?: InputMaybe<Scalars['String']['input']>;
+  tokenExpiry?: InputMaybe<Scalars['timestamptz']['input']>;
+}>;
+
+export type UpdateUserServiceTokensMutation = {
+  __typename?: 'mutation_root';
+  update_user_services_by_pk?: {
+    __typename?: 'user_services';
+    id: string;
+    user_id: string;
+    service_id: string;
+    is_connected?: boolean | null;
+  } | null;
+};
+
+export type DisconnectUserServiceMutationVariables = Exact<{
+  id: Scalars['uuid']['input'];
+}>;
+
+export type DisconnectUserServiceMutation = {
+  __typename?: 'mutation_root';
+  update_user_services_by_pk?: {
+    __typename?: 'user_services';
+    id: string;
+    is_connected?: boolean | null;
+  } | null;
+};
+
+export type DeleteUserServiceMutationVariables = Exact<{
+  id: Scalars['uuid']['input'];
+}>;
+
+export type DeleteUserServiceMutation = {
+  __typename?: 'mutation_root';
+  delete_user_services_by_pk?: {
+    __typename?: 'user_services';
+    id: string;
+  } | null;
+};
+
 export type GetUsersQueryVariables = Exact<{ [key: string]: never }>;
 
 export type GetUsersQuery = {
@@ -3826,6 +3951,138 @@ export type DeleteUserMutation = {
   delete_users_by_pk?: { __typename?: 'users'; id: string } | null;
 };
 
+export const GetUserServiceDocument = gql`
+  query GetUserService($userId: uuid!, $serviceId: uuid!) {
+    user_services(
+      where: { user_id: { _eq: $userId }, service_id: { _eq: $serviceId } }
+      limit: 1
+    ) {
+      id
+      user_id
+      service_id
+      access_token
+      refresh_token
+      token_expiry
+      is_connected
+      credentials
+      created_at
+      updated_at
+    }
+  }
+`;
+export const GetUserServicesByUserDocument = gql`
+  query GetUserServicesByUser($userId: uuid!) {
+    user_services(where: { user_id: { _eq: $userId } }) {
+      id
+      user_id
+      service_id
+      is_connected
+      last_sync
+      created_at
+      updated_at
+      service {
+        id
+        name
+        display_name
+        icon_url
+      }
+    }
+  }
+`;
+export const GetServiceByNameDocument = gql`
+  query GetServiceByName($name: String!) {
+    services(where: { name: { _eq: $name } }, limit: 1) {
+      id
+      name
+      display_name
+      auth_type
+    }
+  }
+`;
+export const CreateUserServiceDocument = gql`
+  mutation CreateUserService(
+    $userId: uuid!
+    $serviceId: uuid!
+    $accessToken: String
+    $refreshToken: String
+    $tokenExpiry: timestamptz
+    $credentials: jsonb
+  ) {
+    insert_user_services_one(
+      object: {
+        user_id: $userId
+        service_id: $serviceId
+        access_token: $accessToken
+        refresh_token: $refreshToken
+        token_expiry: $tokenExpiry
+        credentials: $credentials
+        is_connected: true
+      }
+      on_conflict: {
+        constraint: user_services_user_id_service_id_key
+        update_columns: [
+          access_token
+          refresh_token
+          token_expiry
+          credentials
+          is_connected
+          updated_at
+        ]
+      }
+    ) {
+      id
+      user_id
+      service_id
+      is_connected
+    }
+  }
+`;
+export const UpdateUserServiceTokensDocument = gql`
+  mutation UpdateUserServiceTokens(
+    $id: uuid!
+    $accessToken: String
+    $refreshToken: String
+    $tokenExpiry: timestamptz
+  ) {
+    update_user_services_by_pk(
+      pk_columns: { id: $id }
+      _set: {
+        access_token: $accessToken
+        refresh_token: $refreshToken
+        token_expiry: $tokenExpiry
+        updated_at: "now()"
+      }
+    ) {
+      id
+      user_id
+      service_id
+      is_connected
+    }
+  }
+`;
+export const DisconnectUserServiceDocument = gql`
+  mutation DisconnectUserService($id: uuid!) {
+    update_user_services_by_pk(
+      pk_columns: { id: $id }
+      _set: {
+        is_connected: false
+        access_token: null
+        refresh_token: null
+        token_expiry: null
+      }
+    ) {
+      id
+      is_connected
+    }
+  }
+`;
+export const DeleteUserServiceDocument = gql`
+  mutation DeleteUserService($id: uuid!) {
+    delete_user_services_by_pk(id: $id) {
+      id
+    }
+  }
+`;
 export const GetUsersDocument = gql`
   query GetUsers {
     users {
@@ -3905,6 +4162,132 @@ export function getSdk(
   withWrapper: SdkFunctionWrapper = defaultWrapper,
 ) {
   return {
+    GetUserService(
+      variables: GetUserServiceQueryVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+      signal?: RequestInit['signal'],
+    ): Promise<GetUserServiceQuery> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.request<GetUserServiceQuery>({
+            document: GetUserServiceDocument,
+            variables,
+            requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders },
+            signal,
+          }),
+        'GetUserService',
+        'query',
+        variables,
+      );
+    },
+    GetUserServicesByUser(
+      variables: GetUserServicesByUserQueryVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+      signal?: RequestInit['signal'],
+    ): Promise<GetUserServicesByUserQuery> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.request<GetUserServicesByUserQuery>({
+            document: GetUserServicesByUserDocument,
+            variables,
+            requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders },
+            signal,
+          }),
+        'GetUserServicesByUser',
+        'query',
+        variables,
+      );
+    },
+    GetServiceByName(
+      variables: GetServiceByNameQueryVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+      signal?: RequestInit['signal'],
+    ): Promise<GetServiceByNameQuery> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.request<GetServiceByNameQuery>({
+            document: GetServiceByNameDocument,
+            variables,
+            requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders },
+            signal,
+          }),
+        'GetServiceByName',
+        'query',
+        variables,
+      );
+    },
+    CreateUserService(
+      variables: CreateUserServiceMutationVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+      signal?: RequestInit['signal'],
+    ): Promise<CreateUserServiceMutation> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.request<CreateUserServiceMutation>({
+            document: CreateUserServiceDocument,
+            variables,
+            requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders },
+            signal,
+          }),
+        'CreateUserService',
+        'mutation',
+        variables,
+      );
+    },
+    UpdateUserServiceTokens(
+      variables: UpdateUserServiceTokensMutationVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+      signal?: RequestInit['signal'],
+    ): Promise<UpdateUserServiceTokensMutation> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.request<UpdateUserServiceTokensMutation>({
+            document: UpdateUserServiceTokensDocument,
+            variables,
+            requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders },
+            signal,
+          }),
+        'UpdateUserServiceTokens',
+        'mutation',
+        variables,
+      );
+    },
+    DisconnectUserService(
+      variables: DisconnectUserServiceMutationVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+      signal?: RequestInit['signal'],
+    ): Promise<DisconnectUserServiceMutation> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.request<DisconnectUserServiceMutation>({
+            document: DisconnectUserServiceDocument,
+            variables,
+            requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders },
+            signal,
+          }),
+        'DisconnectUserService',
+        'mutation',
+        variables,
+      );
+    },
+    DeleteUserService(
+      variables: DeleteUserServiceMutationVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+      signal?: RequestInit['signal'],
+    ): Promise<DeleteUserServiceMutation> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.request<DeleteUserServiceMutation>({
+            document: DeleteUserServiceDocument,
+            variables,
+            requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders },
+            signal,
+          }),
+        'DeleteUserService',
+        'mutation',
+        variables,
+      );
+    },
     GetUsers(
       variables?: GetUsersQueryVariables,
       requestHeaders?: GraphQLClientRequestHeaders,
