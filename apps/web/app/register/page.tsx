@@ -1,7 +1,9 @@
+import RegisterView from "@/app/register/views/RegisterView";
+
 export default function Page() {
   return (
-    <main className="flex min-h-screen items-center justify-center">
-      <h1 className="text-4xl select-none">Register page</h1>
+    <main className="flex min-h-screen items-center justify-center bg-[url(/background.jpg)] bg-cover bg-center">
+      <RegisterView />
     </main>
   );
 }
