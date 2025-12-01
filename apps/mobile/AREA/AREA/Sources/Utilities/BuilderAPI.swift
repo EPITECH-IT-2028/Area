@@ -8,17 +8,19 @@
 import Foundation
 
 struct BuilderAPI {
-	func buildURL() throws -> URL {
+	func buildURL(path: String? = nil) throws -> URL {
 		let scheme = SettingsUD.serverScheme
 		let host = SettingsUD.serverHost
 		let port = SettingsUD.serverPort
-		let path = Constants.loginServerPath
 
 		var components = URLComponents()
 		components.scheme = scheme
 		components.host = host
 		components.port = port
-		components.path = path
+		guard let checkPath = path else {
+				throw NetworkError.urlBuildFailed
+		}
+		components.path = checkPath
 
 		guard let url = components.url else {
 			throw NetworkError.urlBuildFailed

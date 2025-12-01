@@ -9,14 +9,19 @@ import SimpleKeychain
 import SwiftUI
 
 struct ContentView: View {
-	@StateObject private var viewModel = LoginViewModel()
+	@StateObject private var loginViewModel = LoginViewModel()
+	@StateObject private var registerViewModel = RegisterViewModel()
 	@State private var showSplash = true
+	@State private var showingRegister = false
 	private let fadeOutDuration: TimeInterval = 0.5
 
 	private var isUserAuthenticated: Bool {
 		(try? KeychainManager.shared.keychain.hasItem(
 			forKey: Constants.keychainJWTKey
 		)) == true
+			|| (try? KeychainManager.shared.keychain.hasItem(
+				forKey: Constants.keychainJWTKey
+			)) == true
 	}
 
 	var body: some View {
@@ -29,8 +34,7 @@ struct ContentView: View {
 						value: showSplash
 					)
 			} else {
-				if isUserAuthenticated
-				{
+				if isUserAuthenticated {
 					TabView {
 						Tab(Constants.homeString, systemImage: Constants.homeIconString) {
 							HomeView()
@@ -49,7 +53,11 @@ struct ContentView: View {
 						}
 					}
 				} else {
-					LoginView(viewModel: viewModel)
+					if showingRegister {
+						RegisterView(viewModel: registerViewModel, onShowRegister: { showingRegister = false })
+					} else {
+						LoginView(viewModel: loginViewModel, onShowRegister: { showingRegister = true })
+					}
 				}
 			}
 		}

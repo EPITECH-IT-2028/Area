@@ -31,6 +31,7 @@ struct Constants {
 
 	// Server paths
 	static let loginServerPath = "/auth/login"
+	static let registerServerPath = "/auth/register"
 
 	// Keychain values
 	static let keychainJWTKey = "jwt"
