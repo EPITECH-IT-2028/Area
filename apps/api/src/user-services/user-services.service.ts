@@ -16,7 +16,7 @@ export interface CreateUserServiceDto {
   serviceId: string;
   accessToken?: string;
   refreshToken?: string;
-  tokenExpiry?: string;
+  tokenExpiry?: string | null;
   credentials?: any;
 }
 

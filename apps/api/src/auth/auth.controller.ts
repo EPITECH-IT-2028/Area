@@ -14,6 +14,7 @@ import { IsEmail, IsNotEmpty, IsString, MinLength } from 'class-validator';
 import type { Response } from 'express';
 import { AuthService } from './auth.service';
 import { GoogleOauthGuard } from './guards/google-auth.guard';
+import { GithubOauthGuard } from './guards/github-auth.guard';
 
 class RegisterDto {
   @IsEmail()
@@ -80,16 +81,33 @@ export class AuthController {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     const result = this.authService.googleLogin(req.user);
 
-    if (platform === 'mobile') {
-      const frontendScheme = process.env.FRONTEND_MOBILE_SCHEME || 'area://';
-      return res.redirect(
-        `${frontendScheme}://auth/callback?token=${result.access_token}`,
-      );
-    }
-
-    const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:8081';
-    return res.redirect(
-      `${frontendUrl}/auth/callback?token=${result.access_token}`,
-    );
+    redirectToApp(platform || 'web', res, result.access_token);
   }
+
+  @Get('github')
+  @UseGuards(GithubOauthGuard)
+  async githubAuth() {}
+
+  @Get('github/callback')
+  @UseGuards(GithubOauthGuard)
+  githubAuthCallback(
+    @Req() req: any,
+    @Res({ passthrough: false }) res: Response,
+    @Query('platform') platform?: string,
+  ) {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    const result = this.authService.githubLogin(req.user);
+
+    redirectToApp(platform || 'web', res, result.access_token);
+  }
+}
+
+function redirectToApp(plateform: string, res: Response, token: string) {
+  if (plateform === 'mobile') {
+    const frontendScheme = process.env.FRONTEND_MOBILE_SCHEME || 'area://';
+    return res.redirect(`${frontendScheme}://auth/callback?token=${token}`);
+  }
+
+  const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:8081';
+  return res.redirect(`${frontendUrl}/auth/callback?token=${token}`);
 }

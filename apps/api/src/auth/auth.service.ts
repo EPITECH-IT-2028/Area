@@ -18,7 +18,7 @@ export interface LoginDto {
   password: string;
 }
 
-export interface GoogleUser {
+export interface OAuthUser {
   id: string;
   email: string;
   name: string;
@@ -99,9 +99,27 @@ export class AuthService {
     };
   }
 
-  googleLogin(user: GoogleUser): AuthResponse {
+  googleLogin(user: OAuthUser): AuthResponse {
     if (!user) {
       throw new UnauthorizedException('No user from Google');
+    }
+
+    const payload = { sub: user.id, email: user.email };
+    const access_token = this.jwtService.sign(payload);
+
+    return {
+      access_token,
+      user: {
+        id: user.id,
+        email: user.email,
+        name: user.name || '',
+      },
+    };
+  }
+
+  githubLogin(user: OAuthUser): AuthResponse {
+    if (!user) {
+      throw new UnauthorizedException('No user from GitHub');
     }
 
     const payload = { sub: user.id, email: user.email };
