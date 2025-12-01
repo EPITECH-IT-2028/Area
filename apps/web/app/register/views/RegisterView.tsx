@@ -103,14 +103,6 @@ export default function RegisterView() {
                 </div>
               </div>
 
-              {/* Forgot Password */}
-              <a
-                href="#"
-                className="mt-4 flex items-center justify-end text-xs font-medium hover:underline"
-              >
-                Forgot Password ?
-              </a>
-
               {/* Sign In Buttons */}
               <div className="mt-12 space-y-2">
                 <Button className="w-full">Sign In</Button>
@@ -158,9 +150,12 @@ export default function RegisterView() {
 
               <div className="mt-6 text-center text-xs text-zinc-500">
                 Already have an account?{" "}
-                <span className="cursor-pointer font-bold text-zinc-900 hover:underline">
+                <a
+                  href="#"
+                  className="cursor-pointer font-bold text-zinc-900 hover:underline"
+                >
                   Sign In
-                </span>
+                </a>
               </div>
             </div>
           </div>
