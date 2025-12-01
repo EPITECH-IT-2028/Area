@@ -110,10 +110,26 @@ export class AuthController {
     res: Response,
     platform: string | undefined,
     loginMethod: (user: any) => AuthResponse,
-  ): void {
+  ) {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-    const result = loginMethod(req.user);
-    redirectToApp(platform || 'web', res, result.access_token);
+    if (!req.user) {
+      return res.status(HttpStatus.UNAUTHORIZED).json({
+        success: false,
+        message: 'Authentication failed',
+      });
+    }
+
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      const result = loginMethod(req.user);
+      redirectToApp(platform || 'web', res, result.access_token);
+    } catch (error) {
+      console.error('OAuth login error:', error);
+      return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
+        success: false,
+        message: 'Login failed due to server error',
+      });
+    }
   }
 }
 
