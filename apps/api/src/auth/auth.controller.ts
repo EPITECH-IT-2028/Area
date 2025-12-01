@@ -12,7 +12,7 @@ import {
 } from '@nestjs/common';
 import { IsEmail, IsNotEmpty, IsString, MinLength } from 'class-validator';
 import type { Response } from 'express';
-import { AuthService } from './auth.service';
+import { AuthService, AuthResponse } from './auth.service';
 import { GoogleOauthGuard } from './guards/google-auth.guard';
 import { GithubOauthGuard } from './guards/github-auth.guard';
 
@@ -77,11 +77,13 @@ export class AuthController {
     @Req() req: any,
     @Res({ passthrough: false }) res: Response,
     @Query('platform') platform?: string,
-  ) {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-    const result = this.authService.googleLogin(req.user);
-
-    redirectToApp(platform || 'web', res, result.access_token);
+  ): void {
+    this.handleOAuthCallback(
+      req,
+      res,
+      platform,
+      this.authService.googleLogin.bind(this.authService),
+    );
   }
 
   @Get('github')
@@ -94,18 +96,35 @@ export class AuthController {
     @Req() req: any,
     @Res({ passthrough: false }) res: Response,
     @Query('platform') platform?: string,
-  ) {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-    const result = this.authService.githubLogin(req.user);
+  ): void {
+    this.handleOAuthCallback(
+      req,
+      res,
+      platform,
+      this.authService.githubLogin.bind(this.authService),
+    );
+  }
 
+  private handleOAuthCallback(
+    req: any,
+    res: Response,
+    platform: string | undefined,
+    loginMethod: (user: any) => AuthResponse,
+  ): void {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    const result = loginMethod(req.user);
     redirectToApp(platform || 'web', res, result.access_token);
   }
 }
 
-function redirectToApp(plateform: string, res: Response, token: string) {
-  if (plateform === 'mobile') {
+function redirectToApp(platform: string, res: Response, token: string) {
+  if (!['web', 'mobile'].includes(platform)) {
+    platform = 'web';
+  }
+
+  if (platform === 'mobile') {
     const frontendScheme = process.env.FRONTEND_MOBILE_SCHEME || 'area://';
-    return res.redirect(`${frontendScheme}://auth/callback?token=${token}`);
+    return res.redirect(`${frontendScheme}auth/callback?token=${token}`);
   }
 
   const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:8081';

@@ -51,8 +51,8 @@ export class GithubStrategy extends PassportStrategy(Strategy, 'github') {
         userId: user.id,
         serviceId: githubService.id,
         accessToken,
-        refreshToken: refreshToken,
-        tokenExpiry: null,
+        refreshToken: refreshToken || null,
+        tokenExpiry: null, // GitHub tokens do not expire
         credentials: {
           profile: {
             id: profile.id,
@@ -62,6 +62,8 @@ export class GithubStrategy extends PassportStrategy(Strategy, 'github') {
           },
         },
       });
+    } else {
+      return done(new Error('GitHub service not found'), false);
     }
 
     return done(null, user);

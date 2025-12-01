@@ -49,14 +49,39 @@ export class UserServicesController {
       serviceId,
     );
 
+    if (!service) {
+      return {
+        success: false,
+        data: null,
+        message: 'Service not connected',
+      };
+    }
+
+    const sanitized = {
+      id: service.id,
+      service_id: service.service_id,
+      is_connected: service.is_connected,
+      created_at: service.created_at,
+    };
+
     return {
       success: true,
-      data: service,
+      data: sanitized,
     };
   }
 
   @Delete(':id')
-  async disconnectService(@Param('id') id: string) {
+  async disconnectService(@Request() req: any, @Param('id') id: string) {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    const userId = req.user.sub as string;
+
+    const userService =
+      await this.userServicesService.findUserServicesByUser(id);
+
+    if (!userService || userService[0].user_id !== userId) {
+      throw new Error('Service not found or not owned by user');
+    }
+
     const result = await this.userServicesService.disconnect(id);
 
     return {

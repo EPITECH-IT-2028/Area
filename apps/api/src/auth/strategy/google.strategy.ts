@@ -23,6 +23,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
   async validate(
     accessToken: string,
     refreshToken: string,
+    params: any,
     profile: Profile,
     done: VerifyCallback,
   ): Promise<any> {
@@ -50,12 +51,16 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
       await this.userServicesService.getServiceByName('google');
 
     if (googleService) {
+      const expiresAt = new Date(
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        Date.now() + (params.expires_in || 3600) * 1000,
+      ).toISOString();
       await this.userServicesService.createOrUpdate({
         userId: user.id,
         serviceId: googleService.id,
         accessToken,
         refreshToken,
-        tokenExpiry: new Date(Date.now() + 3600 * 1000).toISOString(), // 1h
+        tokenExpiry: expiresAt,
         credentials: {
           profile: {
             id: profile.id,
@@ -64,6 +69,8 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
           },
         },
       });
+    } else {
+      return done(new Error('Google service not found'), false);
     }
 
     return done(null, user);

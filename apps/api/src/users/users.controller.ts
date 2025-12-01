@@ -64,6 +64,15 @@ export class UsersController {
     };
   }
 
+  @Get('email/:email')
+  async findByEmail(@Param('email') email: string) {
+    const user = await this.usersService.findByEmail(email);
+    return {
+      success: true,
+      data: user,
+    };
+  }
+
   @Post()
   @HttpCode(HttpStatus.CREATED)
   async create(@Body() createUserDto: CreateUserDto) {

@@ -100,26 +100,16 @@ export class AuthService {
   }
 
   googleLogin(user: OAuthUser): AuthResponse {
-    if (!user) {
-      throw new UnauthorizedException('No user from Google');
-    }
-
-    const payload = { sub: user.id, email: user.email };
-    const access_token = this.jwtService.sign(payload);
-
-    return {
-      access_token,
-      user: {
-        id: user.id,
-        email: user.email,
-        name: user.name || '',
-      },
-    };
+    return this.oauthLogin(user, 'Google');
   }
 
   githubLogin(user: OAuthUser): AuthResponse {
+    return this.oauthLogin(user, 'GitHub');
+  }
+
+  private oauthLogin(user: OAuthUser, provider: string): AuthResponse {
     if (!user) {
-      throw new UnauthorizedException('No user from GitHub');
+      throw new UnauthorizedException(`No user from ${provider}`);
     }
 
     const payload = { sub: user.id, email: user.email };
