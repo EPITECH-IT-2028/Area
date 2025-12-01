@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
@@ -9,7 +9,7 @@ import { Eye, EyeClosed } from "lucide-react";
 import Image from "next/image";
 
 export default function LoginView() {
-  const [passwordVisilibity, setPasswordVisilibity] = useState(false);
+  const [passwordVisibility, setPasswordVisibility] = useState(false);
 
   return (
     <div className="absolute top-1/2 left-1/2 h-[90%] w-[90%] max-w-[1400px] min-w-[800px] -translate-x-1/2 -translate-y-1/2">
@@ -17,7 +17,7 @@ export default function LoginView() {
         <div className="relative z-[-1] flex h-full flex-col justify-end rounded-[1.75rem] bg-white/5 p-10 ring-[50rem] ring-white backdrop-blur-sm ">
           <div className="mt-auto w-2/3 text-white">
             <div className="absolute top-6 flex items-center space-x-4">
-              <p className="font-white flex-none">A WISE QUOTE</p>
+              <p className="flex-none">A WISE QUOTE</p>
               <Separator className="bg-white" />
             </div>
             <p className="mb-2 font-serif text-6xl">Believe in your journey</p>
@@ -32,7 +32,7 @@ export default function LoginView() {
           <div className="w-3/4 max-w-md">
             <div className="mb-24 flex flex-col items-center">
               <Image
-                src="logo_horizontal.svg"
+                src="/logo_horizontal.svg"
                 width={96}
                 height={96}
                 alt="logo"
@@ -68,17 +68,19 @@ export default function LoginView() {
                   <div className="relative">
                     <Input
                       id="password"
-                      type={passwordVisilibity ? "text" : "password"}
+                      type={passwordVisibility ? "text" : "password"}
                       placeholder="Enter your password"
                       className="bg-zinc-50 pr-10"
                     />
                     <button
+                      type="button"
                       className="absolute top-1/2 right-3 -translate-y-1/2 cursor-pointer text-zinc-400 hover:text-zinc-600"
                       onClick={() => {
-                        setPasswordVisilibity(!passwordVisilibity);
+                        setPasswordVisibility(!passwordVisibility);
                       }}
+                      aria-label="Toggle Password Visibility"
                     >
-                      {passwordVisilibity ? (
+                      {passwordVisibility ? (
                         <Eye size={18} />
                       ) : (
                         <EyeClosed size={18} />
