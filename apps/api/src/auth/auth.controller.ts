@@ -113,29 +113,59 @@ export class AuthController {
   ) {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     if (!req.user) {
-      return res.status(HttpStatus.UNAUTHORIZED).json({
-        success: false,
-        message: 'Authentication failed',
-      });
+      redirectToApp(
+        platform || 'web',
+        res,
+        '',
+        'Authentication failed, no user information found',
+      );
+      return;
     }
 
     try {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       const result = loginMethod(req.user);
+      if (!result || !result.access_token) {
+        redirectToApp(
+          platform || 'web',
+          res,
+          '',
+          'Login failed, could not generate access token',
+        );
+      }
       redirectToApp(platform || 'web', res, result.access_token);
     } catch (error) {
       console.error('OAuth login error:', error);
-      return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
-        success: false,
-        message: 'Login failed due to server error',
-      });
+      redirectToApp(
+        platform || 'web',
+        res,
+        '',
+        'An error occurred during login',
+      );
     }
   }
 }
 
-function redirectToApp(platform: string, res: Response, token: string) {
+function redirectToApp(
+  platform: string,
+  res: Response,
+  token: string,
+  error?: string,
+) {
   if (!['web', 'mobile'].includes(platform)) {
     platform = 'web';
+  }
+  if (error) {
+    if (platform === 'web') {
+      const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:8081';
+      return res.redirect(
+        `${frontendUrl}/auth/callback?error=${encodeURIComponent(error)}`,
+      );
+    }
+    const frontendScheme = process.env.FRONTEND_MOBILE_SCHEME || 'area://';
+    return res.redirect(
+      `${frontendScheme}auth/callback?error=${encodeURIComponent(error)}`,
+    );
   }
 
   const encodedToken = encodeURIComponent(token);
