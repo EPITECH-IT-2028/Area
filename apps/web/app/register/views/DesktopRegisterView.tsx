@@ -18,9 +18,10 @@ export default function DesktopRegisterView() {
     setEmail,
     password,
     setPassword,
+    handleSubmit,
     passwordErrors,
   } = useRegisterViewModel();
-  const [passwordVisibility, setPasswordVisibility] = useState(false);
+  const [passwordVisilibity, setPasswordVisilibity] = useState(false);
 
   return (
     <div className="absolute left-1/2 w-[90%] max-w-[1400px] -translate-x-1/2 md:top-10 lg:top-1/2 lg:h-[90%] lg:-translate-y-1/2">
@@ -138,8 +139,8 @@ export default function DesktopRegisterView() {
               </div>
 
               <div className="mt-12 space-y-2">
-                <Button type="button" className="w-full">
-                  Sign Up
+                <Button type="button" className="w-full" onClick={handleSubmit}>
+                  Sign In
                 </Button>
 
                 <div className="flex space-x-2">
