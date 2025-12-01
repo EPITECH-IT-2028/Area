@@ -143,7 +143,6 @@ struct RegisterView: View {
 					viewModel.isRegister = true
 				}
 			} catch {
-				// Handle error if needed, or ignore
 			}
 		}
 	}

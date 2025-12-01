@@ -105,6 +105,9 @@
         }
       }
     },
+    "Key" : {
+      "extractionState" : "manual"
+    },
     "Login.EmailField.Title" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -326,6 +329,9 @@
           }
         }
       }
+    },
+    "Register.PasswordDoNotMatch" : {
+      "extractionState" : "manual"
     },
     "Register.PasswordField.Title" : {
       "extractionState" : "manual",

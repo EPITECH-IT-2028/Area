@@ -54,9 +54,15 @@ struct ContentView: View {
 					}
 				} else {
 					if showingRegister {
-						RegisterView(viewModel: registerViewModel, onShowRegister: { showingRegister = false })
+						RegisterView(
+							viewModel: registerViewModel,
+							onShowRegister: { showingRegister = false }
+						)
 					} else {
-						LoginView(viewModel: loginViewModel, onShowRegister: { showingRegister = true })
+						LoginView(
+							viewModel: loginViewModel,
+							onShowRegister: { showingRegister = true }
+						)
 					}
 				}
 			}
