@@ -122,11 +122,13 @@ function redirectToApp(platform: string, res: Response, token: string) {
     platform = 'web';
   }
 
+  const encodedToken = encodeURIComponent(token);
+
   if (platform === 'mobile') {
     const frontendScheme = process.env.FRONTEND_MOBILE_SCHEME || 'area://';
-    return res.redirect(`${frontendScheme}auth/callback?token=${token}`);
+    return res.redirect(`${frontendScheme}auth/callback?token=${encodedToken}`);
   }
 
   const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:8081';
-  return res.redirect(`${frontendUrl}/auth/callback?token=${token}`);
+  return res.redirect(`${frontendUrl}/auth/callback?token=${encodedToken}`);
 }
