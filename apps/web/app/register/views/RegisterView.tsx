@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Eye, EyeClosed } from "lucide-react";
+import Image from "next/image";
 
 export default function RegisterView() {
   const [passwordVisilibity, setPasswordVisilibity] = useState(false);
@@ -32,8 +33,16 @@ export default function RegisterView() {
         <div className="flex h-full items-center justify-center rounded-[1.75rem] bg-white text-zinc-950">
           <div className="w-3/4 max-w-md">
             <div className="mb-24 flex flex-col items-center">
+              <Image
+                src="logo_horizontal.svg"
+                width={96}
+                height={96}
+                alt="logo"
+                className="pointer-events-none absolute top-2 flex items-center space-x-4 select-none"
+                draggable="false"
+              />
               <p className="font-bodoni-moda text-5xl">Create Account</p>
-              <p className="font-bodoni-moda text-sm text-black/75">
+              <p className="text-sm text-black/50">
                 Enter your details to create a new account
               </p>
             </div>
