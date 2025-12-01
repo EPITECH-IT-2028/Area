@@ -28,6 +28,7 @@ export default function RootLayout({
       <body
         className={`font-sf-pro ${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <link rel="icon" href="/icon.svg" sizes="any" />
         {children}
       </body>
     </html>
