@@ -94,7 +94,9 @@ class RegisterViewModel: ObservableObject {
 				forKey: Constants.keychainJWTKey
 			)
 		} catch {
-			print("Keychain error: \(error.localizedDescription)")
+			errorMessage = String(localized: LocalizedStringResource.keychainError)
+			status = .failure
+			throw NetworkError.keychainError(underlyingError: error)
 		}
 	}
 
