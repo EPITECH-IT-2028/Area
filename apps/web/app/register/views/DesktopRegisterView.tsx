@@ -140,7 +140,7 @@ export default function DesktopRegisterView() {
 
               <div className="mt-12 space-y-2">
                 <Button type="button" className="w-full" onClick={handleSubmit}>
-                  Sign In
+                  Sign Up
                 </Button>
 
                 <div className="flex space-x-2">
