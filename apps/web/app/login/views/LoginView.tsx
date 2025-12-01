@@ -146,7 +146,7 @@ export default function LoginView() {
               <div className="mt-6 text-center text-xs text-zinc-500">
                 Don&apos;t have an account?{" "}
                 <a
-                  href="#"
+                  href="/register"
                   className="cursor-pointer font-bold text-zinc-900 hover:underline"
                 >
                   Sign Up

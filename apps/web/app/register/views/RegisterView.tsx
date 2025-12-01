@@ -151,7 +151,7 @@ export default function RegisterView() {
               <div className="mt-6 text-center text-xs text-zinc-500">
                 Already have an account?{" "}
                 <a
-                  href="#"
+                  href="/login"
                   className="cursor-pointer font-bold text-zinc-900 hover:underline"
                 >
                   Sign In
