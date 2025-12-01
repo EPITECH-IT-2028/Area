@@ -9,10 +9,10 @@ import Foundation
 
 struct RegisterAction {
 
-	var parameters: RegisterRequest
+	var parameters: RegisterRequestPayload
 
 	/// This function is used to register the user using the name, email and password
-	func call() async throws -> RegisterResponseData {
+	func call() async throws -> RegisterResponsePayload {
 		let builder = BuilderAPI()
 		let url = try builder.buildURL(path: Constants.registerServerPath)
 		let request = try builder.buildRequest(
@@ -34,8 +34,8 @@ struct RegisterAction {
 				)
 			)
 		}
-		print(urlResponse)
-		guard response.statusCode == 201 else {
+
+		guard (200...299).contains(response.statusCode) else {
 			let errorMessage = parseErrorMessage(
 				from: data,
 				statusCode: response.statusCode
@@ -54,7 +54,7 @@ struct RegisterAction {
 		let decoder = JSONDecoder()
 		decoder.keyDecodingStrategy = .convertFromSnakeCase
 		do {
-			return try decoder.decode(RegisterResponseData.self, from: data)
+			return try decoder.decode(RegisterResponsePayload.self, from: data)
 		} catch {
 			throw NetworkError.decodingError(
 				underlyingError: error

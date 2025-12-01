@@ -19,9 +19,7 @@ struct ContentView: View {
 		(try? KeychainManager.shared.keychain.hasItem(
 			forKey: Constants.keychainJWTKey
 		)) == true
-			|| (try? KeychainManager.shared.keychain.hasItem(
-				forKey: Constants.keychainJWTKey
-			)) == true
+		// TO DO: GET ABOUT.JSON FILE TO CHECK IF TOKEN IS AVAILABLE
 	}
 
 	var body: some View {

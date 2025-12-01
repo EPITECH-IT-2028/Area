@@ -116,10 +116,8 @@ struct RegisterView: View {
 						do {
 							try await viewModel.register()
 						} catch {
-							viewModel.name = ""
-							viewModel.email = ""
-							viewModel.password = ""
-							viewModel.confirmPassword = ""
+							viewModel.status = .failure
+							viewModel.errorMessage = error.localizedDescription
 						}
 					}
 				},
@@ -143,6 +141,7 @@ struct RegisterView: View {
 					viewModel.isRegister = true
 				}
 			} catch {
+				print("\(LocalizedStringResource.errorRegisterViewOnAppear) \(error)")
 			}
 		}
 	}

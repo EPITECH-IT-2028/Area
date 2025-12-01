@@ -18,7 +18,7 @@ class RegisterViewModel: ObservableObject {
 	@Published var emailValid: Bool
 	@Published var passwordValid: Bool = true
 	@Published var confirmPasswordValid: Bool = true
-	@Published var errorMessage: String? = nil
+	@Published var errorMessage: String?
 	@Published var status: RegisterStatus = .success
 
 	enum RegisterStatus {
@@ -38,6 +38,12 @@ class RegisterViewModel: ObservableObject {
 
 	@MainActor
 	func register() async throws {
+		passwordValid = true
+		confirmPasswordValid = true
+		emailValid = true
+		errorMessage = nil
+		status = .success
+
 		let isPasswordValid: String? = validatePassword(password)
 
 		if isPasswordValid != nil {
@@ -49,8 +55,9 @@ class RegisterViewModel: ObservableObject {
 
 		if password != confirmPassword {
 			errorMessage = String(
-				localized: LocalizedStringResource.registerPasswordNoCaps
+				localized: LocalizedStringResource.registerPasswordDoNotMatch
 			)
+			passwordValid = false
 			confirmPasswordValid = false
 			status = .failure
 			return
@@ -64,8 +71,8 @@ class RegisterViewModel: ObservableObject {
 
 		// TO DO: CHECK IF USER ALREADY EXISTS TO DISPLAY BETTER ERROR
 
-		let response: RegisterResponseData = try await RegisterAction(
-			parameters: RegisterRequest(
+		let response: RegisterResponsePayload = try await RegisterAction(
+			parameters: RegisterRequestPayload(
 				name: name,
 				email: email,
 				password: password
@@ -91,7 +98,7 @@ class RegisterViewModel: ObservableObject {
 		}
 	}
 
-	/// This function is used to valide the format of the email
+	/// This function is used to validate the format of the email
 	func textFieldValidatorEmail(_ string: String) -> Bool {
 		if string.count > 100 {
 			return false
@@ -108,7 +115,7 @@ class RegisterViewModel: ObservableObject {
 		return emailPredicate.evaluate(with: string)
 	}
 
-	/// This function is used to return the error when the user as not a strong password
+	/// This function returns an error message when the user has not a strong password
 	func validatePassword(_ password: String) -> String? {
 		if password.count < 10 {
 			return String(localized: LocalizedStringResource.registerPasswordTooShort)

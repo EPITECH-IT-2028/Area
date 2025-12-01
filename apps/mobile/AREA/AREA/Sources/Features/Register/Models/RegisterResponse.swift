@@ -7,19 +7,19 @@
 
 import Foundation
 
-struct RegisterResponseData: Decodable {
+struct RegisterResponsePayload: Decodable {
 	var success: Bool?
-	var data: DataRegisterResponse?
+	var data: RegisterResponseData?
 	var message: String?
 	var error: String?
 }
 
-struct DataRegisterResponse: Decodable {
+struct RegisterResponseData: Decodable {
 	var accessToken: String?
-	var user: UserRegisterData?
+	var user: RegisterUserData?
 }
 
-struct UserRegisterData: Decodable {
+struct RegisterUserData: Decodable {
 	var id: String?
 	var email: String?
 	var name: String?
