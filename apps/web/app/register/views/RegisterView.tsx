@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { useRegisterViewModel } from "@/app/register/viewModels/registerViewModel";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
@@ -9,6 +10,16 @@ import { Eye, EyeClosed } from "lucide-react";
 import Image from "next/image";
 
 export default function RegisterView() {
+  const {
+    username,
+    setUsername,
+    email,
+    setEmail,
+    password,
+    setPassword,
+    handleSubmit,
+    passwordErrors,
+  } = useRegisterViewModel();
   const [passwordVisilibity, setPasswordVisilibity] = useState(false);
 
   return (
@@ -59,6 +70,8 @@ export default function RegisterView() {
                     type="text"
                     placeholder="Enter your full name"
                     className="bg-zinc-50"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
                   />
                 </div>
 
@@ -72,6 +85,8 @@ export default function RegisterView() {
                     type="email"
                     placeholder="Enter your email"
                     className="bg-zinc-50"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                   />
                 </div>
 
@@ -86,6 +101,8 @@ export default function RegisterView() {
                       type={passwordVisilibity ? "text" : "password"}
                       placeholder="Enter your password"
                       className="bg-zinc-50 pr-10"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
                     />
                     <button
                       className="absolute top-1/2 right-3 -translate-y-1/2 cursor-pointer text-zinc-400 hover:text-zinc-600"
@@ -100,12 +117,25 @@ export default function RegisterView() {
                       )}
                     </button>
                   </div>
+                  {passwordErrors.length > 0 && (
+                    <div className="mt-2 text-xs text-destructive">
+                      <p className="mb-2">
+                        New passwords must meet the password policy
+                        requirements. It must have :
+                      </p>
+                      {passwordErrors.map((error, index) => (
+                        <p key={index} className="translate-x-[0.75rem]">
+                          • {error}
+                        </p>
+                      ))}
+                    </div>
+                  )}
                 </div>
               </div>
 
               {/* Sign In Buttons */}
               <div className="mt-12 space-y-2">
-                <Button className="w-full">Sign In</Button>
+                <Button className="w-full">Sign Up</Button>
 
                 <div className="flex space-x-2">
                   <Button variant="outline" className="grow">
