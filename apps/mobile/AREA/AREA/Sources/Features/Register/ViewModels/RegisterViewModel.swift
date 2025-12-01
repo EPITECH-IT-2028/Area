@@ -62,6 +62,8 @@ class RegisterViewModel: ObservableObject {
 			return
 		}
 
+		// TO DO: CHECK IF USER ALREADY EXISTS TO DISPLAY BETTER ERROR
+
 		let response: RegisterResponseData = try await RegisterAction(
 			parameters: RegisterRequest(
 				name: name,
