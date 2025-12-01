@@ -20,9 +20,7 @@ export default function LoginView() {
               <p className="font-white flex-none">A WISE QUOTE</p>
               <Separator className="bg-white" />
             </div>
-            <p className="mb-2 font-bodoni-moda text-6xl">
-              Believe in your journey
-            </p>
+            <p className="mb-2 font-serif text-6xl">Believe in your journey</p>
             <p className="text-md text-white/75">
               Every step brings you closer to your goals when you stay focused
               and keep learning.
@@ -41,7 +39,7 @@ export default function LoginView() {
                 className="pointer-events-none absolute top-2 flex items-center space-x-4 select-none"
                 draggable="false"
               />
-              <p className="font-bodoni-moda text-5xl">Welcome Back</p>
+              <p className="font-serif text-5xl">Welcome Back</p>
               <p className="text-sm text-black/50">
                 Enter your email and password to access your account
               </p>

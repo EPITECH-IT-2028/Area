@@ -31,9 +31,7 @@ export default function RegisterView() {
               <p className="font-white flex-none">A WISE QUOTE</p>
               <Separator className="bg-white" />
             </div>
-            <p className="mb-2 font-bodoni-moda text-6xl">
-              Get Everything You Want
-            </p>
+            <p className="mb-2 font-serif text-6xl">Get Everything You Want</p>
             <p className="text-md text-white/75">
               You can get everything you want if you work hard, <br />
               trust the process, and stick to the plan.
@@ -52,7 +50,7 @@ export default function RegisterView() {
                 className="pointer-events-none absolute top-2 flex items-center space-x-4 select-none"
                 draggable="false"
               />
-              <p className="font-bodoni-moda text-5xl">Create Account</p>
+              <p className="font-serif text-5xl">Create Account</p>
               <p className="text-sm text-black/50">
                 Enter your details to create a new account
               </p>
