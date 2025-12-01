@@ -103,6 +103,7 @@ export default function RegisterView() {
                       className="bg-zinc-50 pr-10"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
+                      aria-invalid={passwordErrors.length > 0}
                     />
                     <button
                       className="absolute top-1/2 right-3 -translate-y-1/2 cursor-pointer text-zinc-400 hover:text-zinc-600"
