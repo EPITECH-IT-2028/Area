@@ -1,7 +1,7 @@
 import { useState, useEffect, useEffectEvent } from "react";
 
 export function useRegisterViewModel() {
-  const [username, setUsername] = useState("");
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordErrors, setPasswordErrors] = useState<string[]>([]);
@@ -40,8 +40,8 @@ export function useRegisterViewModel() {
   }, [password]);
 
   return {
-    username,
-    setUsername,
+    name,
+    setName,
     email,
     setEmail,
     password,

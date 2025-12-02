@@ -11,8 +11,8 @@ import Image from "next/image";
 
 export default function RegisterView() {
   const {
-    username,
-    setUsername,
+    name,
+    setName,
     email,
     setEmail,
     password,
@@ -67,8 +67,8 @@ export default function RegisterView() {
                     type="text"
                     placeholder="Enter your full name"
                     className="bg-zinc-50"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
                   />
                 </div>
 
