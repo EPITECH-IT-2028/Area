@@ -10,7 +10,13 @@ import {
   Req,
   Res,
 } from '@nestjs/common';
-import { IsEmail, IsNotEmpty, IsString, MinLength } from 'class-validator';
+import {
+  IsEmail,
+  IsNotEmpty,
+  IsString,
+  IsStrongPassword,
+  MinLength,
+} from 'class-validator';
 import type { Response } from 'express';
 import { AuthService, AuthResponse } from './auth.service';
 import { GoogleOauthGuard } from './guards/google-auth.guard';
@@ -24,6 +30,7 @@ class RegisterDto {
   @IsString()
   @MinLength(6)
   @IsNotEmpty()
+  @IsStrongPassword()
   password: string;
 
   @IsString()
