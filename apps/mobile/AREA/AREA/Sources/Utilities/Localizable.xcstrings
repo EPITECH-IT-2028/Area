@@ -139,9 +139,6 @@
         }
       }
     },
-    "Key" : {
-      "extractionState" : "manual"
-    },
     "Login.EmailField.Title" : {
       "extractionState" : "manual",
       "localizations" : {
