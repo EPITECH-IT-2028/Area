@@ -22,7 +22,7 @@ export default function DesktopRegisterView() {
     response,
     passwordErrors,
   } = useRegisterViewModel();
-  const [passwordVisilibity, setPasswordVisilibity] = useState(false);
+  const [passwordVisibility, setPasswordVisibility] = useState(false);
 
   return (
     <div className="absolute left-1/2 w-[90%] max-w-[1400px] -translate-x-1/2 md:top-10 lg:top-1/2 lg:h-[90%] lg:-translate-y-1/2">
