@@ -23,17 +23,9 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
   async validate(
     accessToken: string,
     refreshToken: string,
-    params: any,
     profile: Profile,
   ): Promise<any> {
     const { name, emails } = profile;
-    /* DEBUG */
-    console.log('Google profile:', profile);
-    console.log('Google params:', params);
-    /* END DEBUG */
-
-    console.log('Emails:', emails);
-    console.log('Name:', name);
 
     const email = emails && emails.length > 0 ? emails[0].value : null;
 
@@ -58,16 +50,12 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
       await this.userServicesService.getServiceByName('google');
 
     if (googleService) {
-      const expiresAt = new Date(
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-        Date.now() + (params.expires_in || 3600) * 1000,
-      ).toISOString();
       await this.userServicesService.createOrUpdate({
         userId: user.id,
         serviceId: googleService.id,
         accessToken,
         refreshToken,
-        tokenExpiry: expiresAt,
+        tokenExpiry: new Date(Date.now() + 3600 * 1000).toISOString(), // 1hour
         credentials: {
           profile: {
             id: profile.id,
