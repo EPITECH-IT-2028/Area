@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
-import { Strategy, Profile, VerifyCallback } from 'passport-google-oauth20';
+import { Strategy, Profile } from 'passport-google-oauth20';
 import { ConfigService } from '@nestjs/config';
 import { UsersService } from '../../users/users.service';
 import { UserServicesService } from '../../user-services/user-services.service';
@@ -25,13 +25,20 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
     refreshToken: string,
     params: any,
     profile: Profile,
-    done: VerifyCallback,
   ): Promise<any> {
     const { name, emails } = profile;
+    /* DEBUG */
+    console.log('Google profile:', profile);
+    console.log('Google params:', params);
+    /* END DEBUG */
+
+    console.log('Emails:', emails);
+    console.log('Name:', name);
 
     const email = emails && emails.length > 0 ? emails[0].value : null;
+
     if (!email) {
-      return done(new Error('No email found in Google profile'), false);
+      throw new Error('No email found in Google profile');
     }
 
     let user = await this.usersService.findByEmail(email);
@@ -70,9 +77,9 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
         },
       });
     } else {
-      return done(new Error('Google service not found'), false);
+      throw new Error('Google service not found');
     }
 
-    return done(null, user);
+    return user;
   }
 }

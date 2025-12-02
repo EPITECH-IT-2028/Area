@@ -20,17 +20,12 @@ export class GithubStrategy extends PassportStrategy(Strategy, 'github') {
     });
   }
 
-  async validate(
-    accessToken: string,
-    refreshToken: string,
-    profile: Profile,
-    done: (error: any, user?: any) => void,
-  ): Promise<any> {
+  async validate(accessToken: string, refreshToken: string, profile: Profile) {
     const { displayName, emails, username } = profile;
 
     const email = emails && emails.length > 0 ? emails[0].value : null;
     if (!email) {
-      return done(new Error('No email found in GitHub profile'), false);
+      throw new Error('No email found in GitHub profile');
     }
 
     let user = await this.usersService.findByEmail(email);
@@ -63,9 +58,9 @@ export class GithubStrategy extends PassportStrategy(Strategy, 'github') {
         },
       });
     } else {
-      return done(new Error('GitHub service not found'), false);
+      throw new Error('GitHub service not found');
     }
 
-    return done(null, user);
+    return user;
   }
 }
