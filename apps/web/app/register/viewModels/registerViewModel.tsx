@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useEffectEvent } from "react";
 
 export function useRegisterViewModel() {
   const [username, setUsername] = useState("");
@@ -6,7 +6,7 @@ export function useRegisterViewModel() {
   const [password, setPassword] = useState("");
   const [passwordErrors, setPasswordErrors] = useState<string[]>([]);
 
-  const validatePassword = (p: string) => {
+  const validatePassword = useEffectEvent((p: string) => {
     const errors: string[] = [];
     if (p.length < 8) {
       errors.push("8 minimum characters");
@@ -25,13 +25,17 @@ export function useRegisterViewModel() {
     }
     setPasswordErrors(errors);
     return errors.length === 0;
-  };
+  });
+
+  const clearPasswordErrors = useEffectEvent(() => {
+    setPasswordErrors([]);
+  });
 
   useEffect(() => {
     if (password.length > 0) {
       validatePassword(password);
     } else {
-      setPasswordErrors([]);
+      clearPasswordErrors();
     }
   }, [password]);
 
