@@ -71,32 +71,61 @@ class RegisterViewModel: ObservableObject {
 
 		// TO DO: CHECK IF USER ALREADY EXISTS TO DISPLAY BETTER ERROR
 
-		let response: RegisterResponsePayload = try await RegisterAction(
-			parameters: RegisterRequestPayload(
-				name: name,
-				email: email,
-				password: password
-			)
-		).call()
+		var response: RegisterResponsePayload
 
-		isRegister = true
-		status = .success
-		errorMessage = nil
+		do {
+			response = try await RegisterAction(
+				parameters: RegisterRequestPayload(
+					name: name,
+					email: email,
+					password: password
+				)
+			).call()
+		} catch let error as NetworkError {
+			switch error {
+			case .badURLResponse(let underlyingError):
+				print("Underlying error: \(underlyingError)")
+				errorMessage =
+					"Bad URL Response: \(underlyingError.localizedDescription)"
+				status = .failure
+			case .decodingError(let underlyingError):
+				print("Underlying error: \(underlyingError)")
+				errorMessage = "Decoding issue: \(underlyingError.localizedDescription)"
+				status = .failure
+			default:
+				errorMessage = error.localizedDescription
+				status = .failure
+			}
+			throw error
+		} catch {
+			errorMessage = error.localizedDescription
+			status = .failure
+			throw error
+		}
+
 		guard let data = response.data else {
+			status = .failure
 			throw NetworkError.missingResponseData
 		}
+		
 		guard let accessToken = data.accessToken else {
+			status = .failure
 			throw NetworkError.missingAccessToken
 		}
+		
 		do {
 			try KeychainManager.shared.keychain.set(
 				accessToken,
 				forKey: Constants.keychainJWTKey
 			)
+			isRegister = true
+			status = .success
+			errorMessage = nil
 		} catch {
-			errorMessage = String(localized: LocalizedStringResource.keychainError)
+			errorMessage = String(localized: LocalizedStringResource.errorKeychainSet)
 			status = .failure
-			throw NetworkError.keychainError(underlyingError: error)
+			isRegister = false
+			throw NetworkError.keychainError
 		}
 	}
 

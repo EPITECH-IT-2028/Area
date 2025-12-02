@@ -90,12 +90,13 @@ struct RegisterView: View {
 
 				Divider()
 
-				if !viewModel.passwordValid, let errorMessage = viewModel.errorMessage {
-					Text(errorMessage)
-						.font(.callout)
-						.foregroundColor(Color.red)
-				}
+			}
 
+			if viewModel.status == .failure, let errorMessage = viewModel.errorMessage
+			{
+				Text(errorMessage)
+					.font(.callout)
+					.foregroundColor(Color.red)
 			}
 
 			Spacer()

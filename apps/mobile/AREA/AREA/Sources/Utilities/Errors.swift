@@ -34,6 +34,7 @@ enum NetworkError: Error, LocalizedError {
 	case missingAccessToken
 	case encodingFailed(underlyingError: Error)
 	case decodingError(underlyingError: Error)
+	case keychainError
 
 	var errorDescription: String? {
 		switch self {
@@ -54,6 +55,8 @@ enum NetworkError: Error, LocalizedError {
 			return "The network request returned a response with no data."
 		case .missingAccessToken:
 			return "The network request was missing an access token."
+		case .keychainError:
+			return "A keychain error occurred."
 		}
 	}
 }
