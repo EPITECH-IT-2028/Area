@@ -8,17 +8,18 @@
 internal import Combine
 import Foundation
 import SimpleKeychain
+import SwiftUI
 
 class RegisterViewModel: ObservableObject {
-	@Published var name: String
-	@Published var email: String
-	@Published var password: String
-	@Published var confirmPassword: String
-	@Published var isRegister: Bool
-	@Published var emailValid: Bool
+	@Published var name: String = ""
+	@Published var email: String = ""
+	@Published var password: String = ""
+	@Published var confirmPassword: String = ""
+	@Published var isRegister: Bool = false
+	@Published var emailValid: Bool = true
 	@Published var passwordValid: Bool = true
 	@Published var confirmPasswordValid: Bool = true
-	@Published var errorMessage: String?
+	@Published var errorMessage: String? = nil
 	@Published var status: RegisterStatus = .success
 
 	enum RegisterStatus {
@@ -114,18 +115,16 @@ class RegisterViewModel: ObservableObject {
 		}
 		
 		do {
-			try KeychainManager.shared.keychain.set(
-				accessToken,
-				forKey: Constants.keychainJWTKey
-			)
+			try AuthState.shared.authenticate(accessToken: accessToken)
 			isRegister = true
 			status = .success
 			errorMessage = nil
+			name = ""
+			email = ""
+			password = ""
+			confirmPassword = ""
 		} catch {
-			errorMessage = String(localized: LocalizedStringResource.errorKeychainSet)
-			status = .failure
-			isRegister = false
-			throw NetworkError.keychainError
+			print("Keychain error: \(error.localizedDescription)")
 		}
 	}
 

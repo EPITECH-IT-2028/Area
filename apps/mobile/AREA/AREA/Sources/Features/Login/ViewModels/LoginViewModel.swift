@@ -35,9 +35,7 @@ class LoginViewModel: ObservableObject {
 				password: password
 			)
 		).call()
-		isLoggedIn = true
-		status = .success
-		errorMessage = nil
+
 		guard let data = response.data else {
 			throw NetworkError.missingResponseData
 		}
@@ -45,10 +43,12 @@ class LoginViewModel: ObservableObject {
 			throw NetworkError.missingAccessToken
 		}
 		do {
-			try KeychainManager.shared.keychain.set(
-				accessToken,
-				forKey: Constants.keychainJWTKey
-			)
+			try AuthState.shared.authenticate(accessToken: accessToken)
+			isLoggedIn = true
+			status = .success
+			errorMessage = nil
+			email = ""
+			password = ""
 		} catch {
 			print("Keychain error: \(error.localizedDescription)")
 		}

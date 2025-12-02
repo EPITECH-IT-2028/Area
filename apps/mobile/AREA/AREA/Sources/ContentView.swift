@@ -9,18 +9,12 @@ import SimpleKeychain
 import SwiftUI
 
 struct ContentView: View {
+	@EnvironmentObject var authState: AuthState
 	@StateObject private var loginViewModel = LoginViewModel()
 	@StateObject private var registerViewModel = RegisterViewModel()
 	@State private var showSplash = true
 	@State private var showingRegister = false
 	private let fadeOutDuration: TimeInterval = 0.5
-
-	private var isUserAuthenticated: Bool {
-		(try? KeychainManager.shared.keychain.hasItem(
-			forKey: Constants.keychainJWTKey
-		)) == true
-		// TO DO: GET ABOUT.JSON FILE TO CHECK IF TOKEN IS AVAILABLE
-	}
 
 	var body: some View {
 		ZStack {
@@ -32,7 +26,7 @@ struct ContentView: View {
 						value: showSplash
 					)
 			} else {
-				if isUserAuthenticated {
+				if authState.isAuthenticated {
 					TabView {
 						Tab(Constants.homeString, systemImage: Constants.homeIconString) {
 							HomeView()
@@ -80,4 +74,5 @@ struct ContentView: View {
 
 #Preview {
 	ContentView()
+		.environmentObject(AuthState.shared)
 }
