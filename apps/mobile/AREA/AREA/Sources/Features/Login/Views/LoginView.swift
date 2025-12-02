@@ -70,7 +70,7 @@ struct LoginView: View {
 					onShowRegister()
 				},
 				label: {
-					Text(LocalizedStringResource.loginNoAccoutRegisterTitle)
+					Text(LocalizedStringResource.loginNoAccountRegisterTitle)
 						.font(.system(size: 12, weight: .regular, design: .default))
 				}
 			)

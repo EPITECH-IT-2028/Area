@@ -207,7 +207,7 @@
         }
       }
     },
-    "Login.NoAccoutRegister.Title" : {
+    "Login.NoAccountRegister.Title" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
