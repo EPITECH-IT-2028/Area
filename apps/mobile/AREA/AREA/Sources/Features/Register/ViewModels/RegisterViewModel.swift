@@ -65,6 +65,7 @@ class RegisterViewModel: ObservableObject {
 		}
 
 		if !textFieldValidatorEmail(email) {
+			errorMessage = String(localized: LocalizedStringResource.registerEmailNotValid)
 			emailValid = false
 			status = .failure
 			return

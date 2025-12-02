@@ -51,6 +51,8 @@ class LoginViewModel: ObservableObject {
 			password = ""
 		} catch {
 			print("Keychain error: \(error.localizedDescription)")
+			status = .failure
+			errorMessage = error.localizedDescription
 		}
 	}
 }
