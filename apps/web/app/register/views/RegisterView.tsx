@@ -22,10 +22,10 @@ export default function RegisterView() {
   const [passwordVisibility, setPasswordVisibility] = useState(false);
 
   return (
-    <div className="absolute top-1/2 left-1/2 h-[90%] w-[90%] max-w-[1400px] min-w-[800px] -translate-x-1/2 -translate-y-1/2">
-      <div className="relative grid h-full w-full grid-cols-2 gap-[12px] overflow-hidden rounded-[2.5rem] p-[12px] shadow-2xl">
-        <div className="relative z-[-1] flex h-full flex-col justify-end rounded-[1.75rem] bg-white/5 p-10 ring-[50rem] ring-white backdrop-blur-sm ">
-          <div className="mt-auto w-2/3 text-white">
+    <div className="absolute left-1/2 w-[90%] max-w-[1400px] -translate-x-1/2 md:top-10 lg:top-1/2 lg:h-[90%] lg:-translate-y-1/2">
+      <div className="relative h-full w-full grid-cols-2 grid-rows-1 gap-[12px] overflow-hidden rounded-[2.5rem] p-[12px] shadow-2xl lg:grid">
+        <div className="relative z-[-1] flex flex-col justify-end rounded-[1.75rem] bg-white/5 p-10 ring-[50rem] ring-white backdrop-blur-sm md:h-96 lg:h-full">
+          <div className="mt-auto w-5/6 text-white lg:w-2/3">
             <div className="absolute top-6 flex items-center space-x-4">
               <p className="flex-none">A WISE QUOTE</p>
               <Separator className="bg-white" />
@@ -38,15 +38,15 @@ export default function RegisterView() {
           </div>
         </div>
 
-        <div className="flex h-full items-center justify-center rounded-[1.75rem] bg-white text-zinc-950">
-          <div className="w-3/4 max-w-md">
-            <div className="mb-24 flex flex-col items-center">
+        <div className="flex h-full items-center justify-center rounded-[1.75rem] bg-white text-zinc-950 md:mt-6 lg:mt-0">
+          <div className="w-full md:w-3/4 lg:max-w-md">
+            <div className="flex flex-col items-center md:mb-12 lg:mb-24">
               <Image
                 src="/logo_horizontal.svg"
                 width={96}
                 height={96}
                 alt="logo"
-                className="pointer-events-none absolute top-2 flex items-center space-x-4 select-none"
+                className="pointer-events-none flex items-center space-x-4 select-none lg:absolute lg:top-2"
                 draggable="false"
               />
               <p className="font-serif text-5xl">Create Account</p>
@@ -178,7 +178,7 @@ export default function RegisterView() {
                 </div>
               </div>
 
-              <div className="mt-6 text-center text-xs text-zinc-500">
+              <div className="mt-6 text-center text-xs text-zinc-500 md:mb-12 lg:mb-0">
                 Already have an account?{" "}
                 <a
                   href="/login"
