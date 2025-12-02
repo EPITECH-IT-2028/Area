@@ -19,6 +19,7 @@ export default function DesktopRegisterView() {
     password,
     setPassword,
     handleSubmit,
+    response,
     passwordErrors,
   } = useRegisterViewModel();
   const [passwordVisilibity, setPasswordVisilibity] = useState(false);

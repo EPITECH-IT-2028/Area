@@ -1,6 +1,8 @@
 import { useState, useEffect, useEffectEvent } from "react";
+import useRegister from "../hooks/useRegister";
 
 export function useRegisterViewModel() {
+  const { register, response } = useRegister();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -39,6 +41,12 @@ export function useRegisterViewModel() {
     }
   }, [password]);
 
+  const handleSubmit = () => {
+    if (validatePassword(password)) {
+      register({ name, email, password }).then();
+    }
+  };
+
   return {
     name,
     setName,
@@ -46,6 +54,8 @@ export function useRegisterViewModel() {
     setEmail,
     password,
     setPassword,
+    handleSubmit,
+    response,
     passwordErrors,
   };
 }

@@ -8,8 +8,11 @@ import { Separator } from "@/components/ui/separator";
 import { Eye, EyeClosed } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useLoginViewModel } from "@/app/login/viewModels/loginViewModel";
 
 export default function DesktopLoginView() {
+  const { email, setEmail, password, setPassword, handleSubmit, response } =
+    useLoginViewModel();
   const [passwordVisibility, setPasswordVisibility] = useState(false);
 
   return (
@@ -58,6 +61,8 @@ export default function DesktopLoginView() {
                     type="email"
                     placeholder="Enter your email"
                     className="bg-zinc-50"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                     autoComplete="email"
                     aria-label="email"
                   />
@@ -74,6 +79,8 @@ export default function DesktopLoginView() {
                       type={passwordVisibility ? "text" : "password"}
                       placeholder="Enter your password"
                       className="bg-zinc-50 pr-10"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
                       autoComplete="current-password"
                       aria-label="password"
                     />
@@ -105,7 +112,7 @@ export default function DesktopLoginView() {
 
               {/* Sign In Buttons */}
               <div className="mt-12 space-y-2">
-                <Button type="button" className="w-full">
+                <Button type="button" className="w-full" onClick={handleSubmit}>
                   Log In
                 </Button>
 
