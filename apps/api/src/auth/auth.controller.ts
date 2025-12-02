@@ -139,6 +139,7 @@ export class AuthController {
           '',
           'Login failed, could not generate access token',
         );
+        return;
       }
       redirectToApp(platform || 'web', res, result.access_token);
     } catch (error) {
