@@ -1,0 +1,25 @@
+table:
+  name: services
+  schema: public
+array_relationships:
+  - name: actions
+    using:
+      foreign_key_constraint_on:
+        column: service_id
+        table:
+          name: actions
+          schema: public
+  - name: reactions
+    using:
+      foreign_key_constraint_on:
+        column: service_id
+        table:
+          name: reactions
+          schema: public
+  - name: user_services
+    using:
+      foreign_key_constraint_on:
+        column: service_id
+        table:
+          name: user_services
+          schema: public

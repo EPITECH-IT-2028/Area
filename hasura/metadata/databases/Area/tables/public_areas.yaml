@@ -1,0 +1,21 @@
+table:
+  name: areas
+  schema: public
+object_relationships:
+  - name: action
+    using:
+      foreign_key_constraint_on: action_id
+  - name: reaction
+    using:
+      foreign_key_constraint_on: reaction_id
+  - name: user
+    using:
+      foreign_key_constraint_on: user_id
+array_relationships:
+  - name: hook_logs
+    using:
+      foreign_key_constraint_on:
+        column: area_id
+        table:
+          name: hook_logs
+          schema: public

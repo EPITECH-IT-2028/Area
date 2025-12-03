@@ -35,7 +35,7 @@ export const GetUserByEmailQuery = gql`
 `;
 
 export const CreateUserQuery = gql`
-  mutation CreateUser($email: String!, $name: String!, $password: String!) {
+  mutation CreateUser($email: String!, $name: String!, $password: String) {
     insert_users_one(
       object: { email: $email, name: $name, password: $password }
     ) {

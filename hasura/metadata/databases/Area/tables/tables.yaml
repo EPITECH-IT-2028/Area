@@ -1,1 +1,7 @@
+- "!include public_actions.yaml"
+- "!include public_areas.yaml"
+- "!include public_hook_logs.yaml"
+- "!include public_reactions.yaml"
+- "!include public_services.yaml"
+- "!include public_user_services.yaml"
 - "!include public_users.yaml"
