@@ -9,7 +9,7 @@ import { Separator } from "@/components/ui/separator";
 import { Eye, EyeClosed } from "lucide-react";
 import Image from "next/image";
 
-export default function RegisterView() {
+export default function DesktopRegisterView() {
   const {
     name,
     setName,
@@ -57,7 +57,6 @@ export default function RegisterView() {
 
             <div>
               <div className="space-y-4">
-                {/* Full Name Field */}
                 <div>
                   <Label htmlFor="name" className="mb-2">
                     Full Name
@@ -72,7 +71,6 @@ export default function RegisterView() {
                   />
                 </div>
 
-                {/* Email Field */}
                 <div>
                   <Label htmlFor="email" className="mb-2">
                     Email
@@ -87,7 +85,6 @@ export default function RegisterView() {
                   />
                 </div>
 
-                {/* Password Field */}
                 <div>
                   <Label htmlFor="password" className="mb-2">
                     Password
@@ -133,7 +130,6 @@ export default function RegisterView() {
                 </div>
               </div>
 
-              {/* Sign In Buttons */}
               <div className="mt-12 space-y-2">
                 <Button className="w-full">Sign Up</Button>
 
