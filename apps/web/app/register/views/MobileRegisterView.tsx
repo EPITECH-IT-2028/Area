@@ -51,6 +51,8 @@ export default function MobileRegisterView() {
                 className="h-12 bg-zinc-50"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
+                autoComplete="name"
+                aria-label="name"
               />
             </div>
 
@@ -62,6 +64,8 @@ export default function MobileRegisterView() {
                 className="h-12 bg-zinc-50"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                autoComplete="email"
+                aria-label="email"
               />
             </div>
 
@@ -75,6 +79,8 @@ export default function MobileRegisterView() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   aria-invalid={passwordErrors.length > 0}
+                  autoComplete="current-password"
+                  aria-label="password"
                 />
                 <button
                   type="button"
