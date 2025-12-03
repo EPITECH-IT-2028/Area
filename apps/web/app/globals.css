@@ -37,6 +37,7 @@
 @theme inline {
     --color-background: var(--background);
     --color-foreground: var(--foreground);
+    --font-serif: serif;
     --font-sans: Geist, ui-monospace, monospace;
     --font-mono: JetBrains Mono, monospace;
     --color-sidebar-ring: var(--sidebar-ring);
@@ -72,7 +73,6 @@
     --radius-md: calc(var(--radius) - 2px);
     --radius-lg: var(--radius);
     --radius-xl: calc(var(--radius) + 4px);
-    --font-serif: serif;
     --radius: var(--radius);
     --tracking-tighter: calc(var(--tracking-normal) - 0.05em);
     --tracking-tight: calc(var(--tracking-normal) - 0.025em);
@@ -148,10 +148,6 @@ body {
     --sidebar-accent-foreground: hsl(0 0% 12.55%);
     --sidebar-border: hsl(0 0% 84.71%);
     --sidebar-ring: hsl(24.8 79.79% 63.14%);
-
-    --font-sans: Geist, ui-monospace, monospace;
-    --font-serif: serif;
-    --font-mono: JetBrains Mono, monospace;
 
     --shadow-color: #000000;
     --shadow-opacity: 0.05;
