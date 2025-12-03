@@ -1,15 +1,13 @@
-"use client";
+import type { Viewport } from "next";
+import ContentView from "@/app/register/views/ContentView";
 
-import RegisterView from "@/app/register/views/RegisterView";
-import MobileRegisterView from "@/app/register/views/MobileRegisterView";
-import { useMediaQuery } from "@/hooks/useMediaQuery";
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#261412" },
+    { media: "(prefers-color-scheme: dark)", color: "#261412" },
+  ],
+};
 
 export default function Page() {
-  const isDesktop = useMediaQuery("(min-width: 767px)");
-
-  return (
-    <main className="flex min-h-screen items-center justify-center bg-[url(/background.jpg)] bg-contain bg-top bg-no-repeat md:bg-cover md:bg-center">
-      {isDesktop ? <RegisterView /> : <MobileRegisterView />}
-    </main>
-  );
+  return <ContentView />;
 }
