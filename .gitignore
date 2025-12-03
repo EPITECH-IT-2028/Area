@@ -47,6 +47,7 @@ DerivedData/
 *.moved-aside
 *.xccheckout
 *.playground*
+*.plist
 APIConfig.json
 
 # XCode/Dependency managers

@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5DBE58E62EE03EA100EFA570 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 5DBE58E52EE03EA100EFA570 /* GoogleSignIn */; };
+		5DBE58E82EE03EA100EFA570 /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 5DBE58E72EE03EA100EFA570 /* GoogleSignInSwift */; };
 		5DD884CE2ED5E7DA00AF5084 /* SimpleKeychain in Frameworks */ = {isa = PBXBuildFile; productRef = 5DD884CD2ED5E7DA00AF5084 /* SimpleKeychain */; };
 /* End PBXBuildFile section */
 
@@ -27,7 +29,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5DBE58E82EE03EA100EFA570 /* GoogleSignInSwift in Frameworks */,
 				5DD884CE2ED5E7DA00AF5084 /* SimpleKeychain in Frameworks */,
+				5DBE58E62EE03EA100EFA570 /* GoogleSignIn in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -71,6 +75,8 @@
 			name = AREA;
 			packageProductDependencies = (
 				5DD884CD2ED5E7DA00AF5084 /* SimpleKeychain */,
+				5DBE58E52EE03EA100EFA570 /* GoogleSignIn */,
+				5DBE58E72EE03EA100EFA570 /* GoogleSignInSwift */,
 			);
 			productName = AREA;
 			productReference = 5D5444A42ECB6D720081D5C9 /* AREA.app */;
@@ -103,6 +109,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				5DD884CC2ED5E7DA00AF5084 /* XCRemoteSwiftPackageReference "SimpleKeychain" */,
+				5DBE58E42EE03EA100EFA570 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 5D5444A52ECB6D720081D5C9 /* Products */;
@@ -268,6 +275,7 @@
 				DEVELOPMENT_TEAM = DAHMVU6CXM;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = AREA/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -300,6 +308,7 @@
 				DEVELOPMENT_TEAM = DAHMVU6CXM;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = AREA/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -346,6 +355,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		5DBE58E42EE03EA100EFA570 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/google/GoogleSignIn-iOS";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 9.0.0;
+			};
+		};
 		5DD884CC2ED5E7DA00AF5084 /* XCRemoteSwiftPackageReference "SimpleKeychain" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/auth0/SimpleKeychain.git";
@@ -357,6 +374,16 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		5DBE58E52EE03EA100EFA570 /* GoogleSignIn */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5DBE58E42EE03EA100EFA570 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
+			productName = GoogleSignIn;
+		};
+		5DBE58E72EE03EA100EFA570 /* GoogleSignInSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5DBE58E42EE03EA100EFA570 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
+			productName = GoogleSignInSwift;
+		};
 		5DD884CD2ED5E7DA00AF5084 /* SimpleKeychain */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 5DD884CC2ED5E7DA00AF5084 /* XCRemoteSwiftPackageReference "SimpleKeychain" */;

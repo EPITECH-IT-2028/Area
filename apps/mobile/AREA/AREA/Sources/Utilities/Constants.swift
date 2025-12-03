@@ -35,6 +35,7 @@ struct Constants {
 	// Server paths
 	static let loginServerPath = "/auth/login"
 	static let registerServerPath = "/auth/register"
+	static let googleOAuth2ServerPath = "/auth/google"
 
 	// Keychain values
 	static let keychainJWTKey = "jwt"
