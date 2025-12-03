@@ -131,7 +131,9 @@ export default function DesktopRegisterView() {
               </div>
 
               <div className="mt-12 space-y-2">
-                <Button className="w-full">Sign Up</Button>
+                <Button type="button" className="w-full">
+                  Sign Up
+                </Button>
 
                 <div className="flex space-x-2">
                   <Button variant="outline" className="grow">

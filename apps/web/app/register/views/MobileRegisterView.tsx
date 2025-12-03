@@ -114,7 +114,9 @@ export default function MobileRegisterView() {
           </div>
 
           <div className="mt-12 space-y-2">
-            <Button className="h-12 w-full text-lg">Sign Up</Button>
+            <Button type="button" className="h-12 w-full text-lg">
+              Sign Up
+            </Button>
 
             <div className="my-4 flex items-center">
               <Separator className="shrink" />

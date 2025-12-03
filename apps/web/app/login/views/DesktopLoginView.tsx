@@ -100,7 +100,9 @@ export default function DesktopLoginView() {
 
               {/* Sign In Buttons */}
               <div className="mt-12 space-y-2">
-                <Button className="w-full">Log In</Button>
+                <Button type="button" className="w-full">
+                  Log In
+                </Button>
 
                 <div className="flex space-x-2">
                   <Button variant="outline" className="grow">
