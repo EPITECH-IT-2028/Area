@@ -18,7 +18,7 @@ import {
   IsString,
   MinLength,
 } from 'class-validator';
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 
 class CreateUserDto {
   @IsEmail()
@@ -58,6 +58,15 @@ export class UsersController {
   @Get(':id')
   async findOne(@Param('id') id: string) {
     const user = await this.usersService.findOne(id);
+    return {
+      success: true,
+      data: user,
+    };
+  }
+
+  @Get('email/:email')
+  async findByEmail(@Param('email') email: string) {
+    const user = await this.usersService.findByEmail(email);
     return {
       success: true,
       data: user,
