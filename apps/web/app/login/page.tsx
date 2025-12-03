@@ -1,9 +1,13 @@
-import LoginView from "@/app/login/views/LoginView";
+import type { Viewport } from "next";
+import ContentView from "@/app/login/views/ContentView";
+
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#261412" },
+    { media: "(prefers-color-scheme: dark)", color: "#261412" },
+  ],
+};
 
 export default function Page() {
-  return (
-    <main className="flex min-h-screen items-center justify-center bg-[url(/background.jpg)] bg-cover bg-center">
-      <LoginView />
-    </main>
-  );
+  return <ContentView />;
 }

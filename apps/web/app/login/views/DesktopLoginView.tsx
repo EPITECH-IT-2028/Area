@@ -8,7 +8,7 @@ import { Separator } from "@/components/ui/separator";
 import { Eye, EyeClosed } from "lucide-react";
 import Image from "next/image";
 
-export default function LoginView() {
+export default function DesktopLoginView() {
   const [passwordVisibility, setPasswordVisibility] = useState(false);
 
   return (
