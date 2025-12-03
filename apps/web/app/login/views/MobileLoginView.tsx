@@ -7,8 +7,11 @@ import { Separator } from "@/components/ui/separator";
 import { Eye, EyeClosed } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useLoginViewModel } from "@/app/login/viewModels/loginViewModel";
 
 export default function MobileLoginView() {
+  const { email, setEmail, password, setPassword, handleSubmit, response } =
+    useLoginViewModel();
   const [passwordVisibility, setPasswordVisibility] = useState(false);
 
   return (
@@ -40,8 +43,8 @@ export default function MobileLoginView() {
                 type="email"
                 placeholder="Email"
                 className="h-12 bg-zinc-50"
-                // value={email}
-                // onChange={(e) => setEmail(e.target.value)}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 autoComplete="email"
                 aria-label="email"
               />
@@ -54,8 +57,8 @@ export default function MobileLoginView() {
                   type={passwordVisibility ? "text" : "password"}
                   placeholder="Password"
                   className="h-12 bg-zinc-50 pr-10"
-                  // value={password}
-                  // onChange={(e) => setPassword(e.target.value)}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                   autoComplete="current-password"
                   aria-label="password"
                 />
@@ -78,7 +81,11 @@ export default function MobileLoginView() {
           </div>
 
           <div className="mt-12 space-y-2">
-            <Button type="button" className="h-12 w-full text-lg">
+            <Button
+              type="button"
+              className="h-12 w-full text-lg"
+              onClick={handleSubmit}
+            >
               Log In
             </Button>
 

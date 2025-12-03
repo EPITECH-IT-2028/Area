@@ -17,6 +17,8 @@ export default function MobileRegisterView() {
     setEmail,
     password,
     setPassword,
+    handleSubmit,
+    response,
     passwordErrors,
   } = useRegisterViewModel();
   const [passwordVisibility, setPasswordVisibility] = useState(false);
@@ -115,7 +117,11 @@ export default function MobileRegisterView() {
           </div>
 
           <div className="mt-12 space-y-2">
-            <Button type="button" className="h-12 w-full text-lg">
+            <Button
+              type="button"
+              className="h-12 w-full text-lg"
+              onClick={handleSubmit}
+            >
               Sign Up
             </Button>
 
