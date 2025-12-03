@@ -41,6 +41,8 @@ export default function MobileLoginView() {
                 className="h-12 bg-zinc-50"
                 // value={email}
                 // onChange={(e) => setEmail(e.target.value)}
+                autoComplete="email"
+                aria-label="email"
               />
             </div>
 
@@ -53,6 +55,8 @@ export default function MobileLoginView() {
                   className="h-12 bg-zinc-50 pr-10"
                   // value={password}
                   // onChange={(e) => setPassword(e.target.value)}
+                  autoComplete="current-password"
+                  aria-label="password"
                 />
                 <button
                   type="button"
