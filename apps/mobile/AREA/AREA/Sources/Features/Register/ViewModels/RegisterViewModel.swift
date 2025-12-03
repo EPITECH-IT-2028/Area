@@ -148,7 +148,7 @@ class RegisterViewModel: ObservableObject {
 
 	/// This function returns an error message when the user has not a strong password
 	func validatePassword(_ password: String) -> String? {
-		if password.count < 10 {
+		if password.count < 6 {
 			return String(localized: LocalizedStringResource.registerPasswordTooShort)
 		}
 
