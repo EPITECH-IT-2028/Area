@@ -55,7 +55,14 @@ function useRegister() {
             status_code: 409,
           });
           toast.error(message);
+        } else if (
+          error.response.status !== 400 &&
+          error.response.status !== 409
+        ) {
+          toast.error("An unexpected error occurred. Please try again later.");
         }
+      } else {
+        toast.error("A network error occurred. Please check your connection.");
       }
     }
   }
