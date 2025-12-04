@@ -112,11 +112,17 @@ class RegisterViewModel: ObservableObject {
 
 		guard let data = response.data else {
 			status = .failure
+			errorMessage = String(
+				localized: LocalizedStringResource.registerUnknownError
+			)
 			throw NetworkError.missingResponseData
 		}
 
 		guard let accessToken = data.accessToken else {
 			status = .failure
+			errorMessage = String(
+				localized: LocalizedStringResource.registerUnknownError
+			)
 			throw NetworkError.missingAccessToken
 		}
 
