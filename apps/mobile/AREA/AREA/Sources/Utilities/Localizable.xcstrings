@@ -378,6 +378,74 @@
         }
       }
     },
+    "Register.GoogleInvalidResponseFromServer" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Invalid response from server."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Réponse invalide du serveur."
+          }
+        }
+      }
+    },
+    "Register.GoogleMissingConfigClientId" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Google Client Id missing in configuration."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Client ID Google manquant dans la configuration."
+          }
+        }
+      }
+    },
+    "Register.GoogleMissingViewForGoogleConnexion" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Missing root view for google connexion."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Impossible de trouver la vue racine pour afficher la connexion Google."
+          }
+        }
+      }
+    },
+    "Register.GoogleUnableToRetrieveIdToken" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unable to retrieve the Google Id token."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Impossible de récupérer l'ID Token Google."
+          }
+        }
+      }
+    },
     "Register.NameField.Title" : {
       "extractionState" : "manual",
       "localizations" : {

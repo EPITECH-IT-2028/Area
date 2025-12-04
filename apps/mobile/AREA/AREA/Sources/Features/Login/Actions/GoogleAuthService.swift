@@ -15,105 +15,111 @@ class GoogleAuthService: ObservableObject {
 	@Published var errorMessage: String?
 	@Published var isLoading = false
 
+	private let clientID = APIConfig.shared?.GOOGLE_CLIENT_ID
+
 	init() {}
 
-	let clientID = APIConfig.shared?.GOOGLE_CLIENT_ID
-
-	func signIn() {
-		guard let presentingViewController = getRootViewController() else {
-			errorMessage = "Impossible de trouver le view controller"
-			return
-		}
-
+	/// Start the Google connexion flow client side, then send the token to the backend.
+	@MainActor
+	func signIn() async throws {
 		guard let clientID = clientID else {
-			errorMessage = "Le client ID est manquant"
+			self.errorMessage = String(
+				localized: LocalizedStringResource.registerGoogleMissingConfigClientId
+			)
 			return
 		}
 
-		isLoading = true
-		errorMessage = nil
-
-		let config = GIDConfiguration(clientID: clientID)
-		GIDSignIn.sharedInstance.configuration = config
-
-		GIDSignIn.sharedInstance.signIn(withPresenting: presentingViewController) {
-			[weak self] result, error in
-			guard let self = self else { return }
-
-			DispatchQueue.main.async {
-				self.isLoading = false
-
-				if let error = error {
-					self.errorMessage =
-						"Erreur de connexion: \(error.localizedDescription)"
-					return
-				}
-
-				guard let user = result?.user,
-					let idToken = user.idToken?.tokenString
-				else {
-					self.errorMessage = "Impossible de récupérer le token"
-					return
-				}
-				self.sendTokenToBackend(idToken: idToken)
-			}
-		}
-	}
-
-	private func sendTokenToBackend(idToken: String) {
-		let backendUrl = "http://localhost:8080/auth/google?plateform=mobile"
-		guard let url = URL(string: backendUrl) else {
-			errorMessage = "URL invalide"
+		guard let rootViewController = getRootViewController() else {
+			self.errorMessage = String(
+				localized: LocalizedStringResource
+					.registerGoogleMissingViewForGoogleConnexion
+			)
 			return
 		}
 
-		var request = URLRequest(url: url)
-		request.httpMethod = "POST"
-		request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+		self.isLoading = true
+		self.errorMessage = nil
 
-		let body: [String: Any] = ["idToken": idToken]
-		request.httpBody = try? JSONSerialization.data(withJSONObject: body)
+		do {
+			let config = GIDConfiguration(clientID: clientID)
+			GIDSignIn.sharedInstance.configuration = config
 
-		isLoading = true
-
-		URLSession.shared.dataTask(with: request) {
-			[weak self] data, response, error in
-			guard let self = self else { return }
-
-			DispatchQueue.main.async {
-				self.isLoading = false
-
-				if let error = error {
-					self.errorMessage = "Erreur réseau: \(error.localizedDescription)"
-					return
-				}
-
-				guard let httpResponse = response as? HTTPURLResponse,
-					(200...299).contains(httpResponse.statusCode)
-				else {
-					self.errorMessage = "Erreur serveur"
-					return
-				}
-
-				if let data = data,
-					let json = try? JSONSerialization.jsonObject(with: data)
-						as? [String: Any]
-				{
-					print(data)
-					print(json)
-					if let token = json["token"] as? String {
-						UserDefaults.standard.set(token, forKey: "authToken")
-						self.isAuthenticated = true
-					}
-				}
+			let result = try await GIDSignIn.sharedInstance.signIn(
+				withPresenting: rootViewController
+			)
+			guard let idToken = result.user.idToken?.tokenString else {
+				throw NSError(
+					domain: "GoogleAuth",
+					code: -1,
+					userInfo: [
+						NSLocalizedDescriptionKey: LocalizedStringResource
+							.registerGoogleUnableToRetrieveIdToken
+					]
+				)
 			}
-		}.resume()
+
+			try await sendTokenToBackend(idToken: idToken)
+
+		} catch {
+			print("Google Sign-In Error: \(error.localizedDescription)")
+			self.errorMessage = error.localizedDescription
+			self.isAuthenticated = false
+		}
+
+		self.isLoading = false
 	}
 
-	func signOut() {
-		GIDSignIn.sharedInstance.signOut()
-		UserDefaults.standard.removeObject(forKey: "authToken")
-		isAuthenticated = false
+	/// Send the Google's ID Token to the backend to create a user session.
+	private func sendTokenToBackend(idToken: String) async throws {
+		let builder = BuilderAPI()
+		let url = try builder.buildURL(path: Constants.googleOAuth2ServerPath)
+
+		let parameters = ["token": idToken]
+
+		let request = try builder.buildRequest(
+			url: url,
+			method: "POST",
+			parameters: parameters
+		)
+
+		let (data, urlResponse) = try await URLSession.shared.data(for: request)
+
+		guard let response = urlResponse as? HTTPURLResponse else {
+			throw NetworkError.badURLResponse(
+				underlyingError: NSError(
+					domain: "GoogleAuth",
+					code: -1,
+					userInfo: [
+						NSLocalizedDescriptionKey: LocalizedStringResource
+							.registerGoogleInvalidResponseFromServer
+					]
+				)
+			)
+		}
+
+		guard (200...299).contains(response.statusCode) else {
+			let errorMsg = parseErrorMessage(
+				from: data,
+				statusCode: response.statusCode
+			)
+			throw NSError(
+				domain: "BackendAuth",
+				code: response.statusCode,
+				userInfo: [NSLocalizedDescriptionKey: errorMsg]
+			)
+		}
+
+		let decoder = JSONDecoder()
+		decoder.keyDecodingStrategy = .convertFromSnakeCase
+
+		let loginResponse = try decoder.decode(LoginResponseData.self, from: data)
+
+		if let accessToken = loginResponse.data?.accessToken {
+			try AuthState.shared.authenticate(accessToken: accessToken)
+			self.isAuthenticated = true
+		} else {
+			throw NetworkError.missingAccessToken
+		}
 	}
 
 	private func getRootViewController() -> UIViewController? {
@@ -123,6 +129,21 @@ class GoogleAuthService: ObservableObject {
 		else {
 			return nil
 		}
-		return rootViewController
+		var currentController = rootViewController
+		while let presented = currentController.presentedViewController {
+			currentController = presented
+		}
+		return currentController
+	}
+
+	private func parseErrorMessage(from data: Data, statusCode: Int) -> String {
+		if let json = try? JSONSerialization.jsonObject(with: data)
+			as? [String: Any]
+		{
+			if let message = json["message"] as? String { return message }
+			if let error = json["error"] as? String { return error }
+		}
+		return
+			"\(LocalizedStringResource.registerGoogleInvalidResponseFromServer): \(statusCode)"
 	}
 }

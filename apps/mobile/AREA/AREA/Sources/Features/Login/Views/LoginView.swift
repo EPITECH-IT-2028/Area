@@ -66,7 +66,9 @@ struct LoginView: View {
 			Spacer()
 
 			Button(action: {
-				viewModel.googleLogin()
+				Task {
+					await viewModel.googleLogin()
+				}
 			}) {
 				HStack {
 					Image(systemName: "globe")

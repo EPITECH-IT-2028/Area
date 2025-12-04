@@ -28,13 +28,21 @@ class LoginViewModel: ObservableObject {
 		self.isLoggedIn = false
 	}
 
-	func googleLogin() {
-		authService.signIn()
+	func googleLogin() async {
+		do {
+			try await authService.signIn()
+		} catch {
+			return
+		}
 		
 		if (authService.isAuthenticated == true) {
 			isLoggedIn = true
 			status = .success
 			errorMessage = nil
+		} else {
+			errorMessage = authService.errorMessage
+			isLoggedIn = false
+			status = .failure
 		}
 	}
 	
