@@ -9,6 +9,7 @@ import { Separator } from "@/components/ui/separator";
 import { Eye, EyeClosed } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { FieldError } from "@/components/ui/field";
 
 export default function DesktopRegisterView() {
   const {
@@ -89,7 +90,11 @@ export default function DesktopRegisterView() {
                     onChange={(e) => setEmail(e.target.value)}
                     autoComplete="email"
                     aria-label="email"
+                    aria-invalid={response?.success === false}
                   />
+                  {response?.success === false && (
+                    <FieldError className="mt-2">{response.message}</FieldError>
+                  )}
                 </div>
 
                 <div>
