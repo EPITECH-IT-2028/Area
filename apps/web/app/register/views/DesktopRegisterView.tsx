@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Eye, EyeClosed } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function DesktopRegisterView() {
   const {
@@ -38,7 +39,7 @@ export default function DesktopRegisterView() {
           </div>
         </div>
 
-        <div className="flex h-full items-center justify-center rounded-3xl bg-white text-zinc-950 md:mt-6 lg:mt-0">
+        <div className="flex h-full items-center justify-center rounded-[3.75rem] bg-white text-zinc-950 md:mt-6 lg:mt-0">
           <div className="w-full md:w-3/4 lg:max-w-md">
             <div className="flex flex-col items-center md:mb-12 lg:mb-24">
               <Image
@@ -178,12 +179,12 @@ export default function DesktopRegisterView() {
 
               <div className="mt-6 text-center text-xs text-zinc-500 md:mb-12 lg:mb-0">
                 Already have an account?{" "}
-                <a
+                <Link
                   href="/login"
                   className="cursor-pointer font-bold text-zinc-900 hover:underline"
                 >
                   Log In
-                </a>
+                </Link>
               </div>
             </div>
           </div>

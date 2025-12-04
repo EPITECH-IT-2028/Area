@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Eye, EyeClosed } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function MobileLoginView() {
   const [passwordVisibility, setPasswordVisibility] = useState(false);
@@ -130,12 +131,12 @@ export default function MobileLoginView() {
 
           <div className="mt-8 text-center text-xs text-zinc-500">
             Don&apos;t have an account?{" "}
-            <a
+            <Link
               href="/register"
               className="cursor-pointer font-bold text-zinc-900 hover:underline"
             >
               Sign Up
-            </a>
+            </Link>
           </div>
         </div>
       </div>
