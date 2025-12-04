@@ -9,4 +9,5 @@ export interface RegisterResponse {
     };
   };
   message: string;
+  status_code?: number;
 }
