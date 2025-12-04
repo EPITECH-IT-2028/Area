@@ -2,6 +2,10 @@ import { useState, useEffect } from "react";
 import useRegister from "../hooks/useRegister";
 
 function getPasswordValidationErrors(p: string): string[] {
+  if (p.length <= 0) {
+    return [];
+  }
+
   const errors: string[] = [];
   if (p.length < 8) {
     errors.push("8 minimum characters");
