@@ -13,8 +13,8 @@ export default function DesktopLoginView() {
 
   return (
     <div className="absolute left-1/2 w-[90%] max-w-[1400px] -translate-x-1/2 md:top-10 lg:top-1/2 lg:h-[90%] lg:-translate-y-1/2">
-      <div className="relative h-full w-full grid-cols-2 grid-rows-1 gap-[12px] overflow-hidden rounded-[2.5rem] p-[12px] shadow-2xl lg:grid">
-        <div className="relative z-[-1] flex flex-col justify-end rounded-[1.75rem] bg-white/5 p-10 ring-[50rem] ring-white backdrop-blur-sm md:h-96 lg:h-full">
+      <div className="relative h-full w-full grid-cols-2 grid-rows-1 gap-[12px] overflow-hidden rounded-[4.5rem] p-[12px] shadow-2xl lg:grid">
+        <div className="relative z-[-1] flex flex-col justify-end rounded-[3.75rem] bg-white/5 p-10 ring-[50rem] ring-white backdrop-blur-sm md:h-96 lg:h-full">
           <div className="mt-auto w-5/6 text-white lg:w-2/3">
             <div className="absolute top-6 flex items-center space-x-4">
               <p className="flex-none">A WISE QUOTE</p>
@@ -28,7 +28,7 @@ export default function DesktopLoginView() {
           </div>
         </div>
 
-        <div className="flex h-full items-center justify-center rounded-[1.75rem] bg-white text-zinc-950 md:mt-6 lg:mt-0">
+        <div className="flex h-full items-center justify-center rounded-[3.75rem] bg-white text-zinc-950 md:mt-6 lg:mt-0">
           <div className="w-full md:w-3/4 lg:max-w-md">
             <div className="flex flex-col items-center md:mb-12 lg:mb-24">
               <Image
