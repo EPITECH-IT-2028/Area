@@ -406,7 +406,7 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Le mot de passe doit contenir au moins une lettre majuscule."
           }
         }
@@ -440,7 +440,7 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Le mot de passe doit contenir au moins un chiffre."
           }
         }
@@ -457,7 +457,7 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Le mot de passe doit contenir au moins un caractère spécial."
           }
         }
@@ -474,7 +474,7 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Le mot de passe doit contenir au moins 10 caractères."
           }
         }
@@ -543,7 +543,7 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Modifier le chemin vers le serveur"
           }
         }
@@ -615,7 +615,7 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Vous devez entrer le bon chemin grâce au format suivant : scheme://host:port"
           }
         }

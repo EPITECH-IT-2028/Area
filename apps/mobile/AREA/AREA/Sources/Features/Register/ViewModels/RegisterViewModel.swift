@@ -19,7 +19,7 @@ class RegisterViewModel: ObservableObject {
 	@Published var emailValid: Bool = true
 	@Published var passwordValid: Bool = true
 	@Published var confirmPasswordValid: Bool = true
-	@Published var errorMessage: String? = nil
+	@Published var errorMessage: String?
 	@Published var status: RegisterStatus = .success
 
 	enum RegisterStatus {
