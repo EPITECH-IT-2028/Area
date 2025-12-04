@@ -229,7 +229,9 @@ body {
     }
 
     [class*="rounded-"] {
-        corner-shape: squircle;
+        @supports (corner-shape: squircle) {
+            corner-shape: squircle;
+        }
     }
 
 }
