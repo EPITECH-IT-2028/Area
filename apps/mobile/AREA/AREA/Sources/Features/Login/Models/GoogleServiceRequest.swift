@@ -6,3 +6,7 @@
 //
 
 import Foundation
+
+struct GoogleServiceRequest: Encodable {
+	let token: String
+}

@@ -74,12 +74,12 @@ class GoogleAuthService: ObservableObject {
 		let builder = BuilderAPI()
 		let url = try builder.buildURL(path: Constants.googleOAuth2ServerPath)
 
-		let parameters = ["token": idToken]
-
 		let request = try builder.buildRequest(
 			url: url,
 			method: "POST",
-			parameters: parameters
+			parameters: GoogleServiceRequest(
+				token: idToken
+			)
 		)
 
 		let (data, urlResponse) = try await URLSession.shared.data(for: request)
