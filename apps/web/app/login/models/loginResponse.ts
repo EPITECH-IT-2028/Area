@@ -9,4 +9,5 @@ export interface LoginResponse {
     };
   };
   message: string;
+  status_code?: number;
 }
