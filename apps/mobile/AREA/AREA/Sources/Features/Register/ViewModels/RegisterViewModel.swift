@@ -65,7 +65,9 @@ class RegisterViewModel: ObservableObject {
 		}
 
 		if !textFieldValidatorEmail(email) {
-			errorMessage = String(localized: LocalizedStringResource.registerEmailNotValid)
+			errorMessage = String(
+				localized: LocalizedStringResource.registerEmailNotValid
+			)
 			emailValid = false
 			status = .failure
 			return
@@ -109,12 +111,12 @@ class RegisterViewModel: ObservableObject {
 			status = .failure
 			throw NetworkError.missingResponseData
 		}
-		
+
 		guard let accessToken = data.accessToken else {
 			status = .failure
 			throw NetworkError.missingAccessToken
 		}
-		
+
 		do {
 			try AuthState.shared.authenticate(accessToken: accessToken)
 			isRegister = true
@@ -148,8 +150,13 @@ class RegisterViewModel: ObservableObject {
 
 	/// This function returns an error message when the user has not a strong password
 	func validatePassword(_ password: String) -> String? {
-		if password.count < 6 {
+		if password.count < 8 {
 			return String(localized: LocalizedStringResource.registerPasswordTooShort)
+		}
+
+		let lowercaseRegex = ".*[a-z].*"
+		if password.range(of: lowercaseRegex, options: .regularExpression) == nil {
+			return String(localized: LocalizedStringResource.registerPasswordNoLowers)
 		}
 
 		let uppercaseRegex = ".*[A-Z].*"

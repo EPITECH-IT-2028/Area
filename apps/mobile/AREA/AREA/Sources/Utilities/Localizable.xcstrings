@@ -412,6 +412,23 @@
         }
       }
     },
+    "Register.PasswordNoLowers" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your password must contain at least 1 lowercase letter."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le mot de passe doit contenir au moins une lettre minuscule."
+          }
+        }
+      }
+    },
     "Register.PasswordNoNumber" : {
       "extractionState" : "manual",
       "localizations" : {
