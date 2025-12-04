@@ -17,9 +17,7 @@ class GoogleAuthService: ObservableObject {
 
 	init() {}
 
-	let clientID = APIConfig.shared?.googleClientId
-
-	private let backendURL = "https://votre-backend.com/api/auth/google"
+	let clientID = APIConfig.shared?.GOOGLE_CLIENT_ID
 
 	func signIn() {
 		guard let presentingViewController = getRootViewController() else {
@@ -63,7 +61,8 @@ class GoogleAuthService: ObservableObject {
 	}
 
 	private func sendTokenToBackend(idToken: String) {
-		guard let url = URL(string: backendURL) else {
+		let backendUrl = "http://localhost:8080/auth/google?plateform=mobile"
+		guard let url = URL(string: backendUrl) else {
 			errorMessage = "URL invalide"
 			return
 		}

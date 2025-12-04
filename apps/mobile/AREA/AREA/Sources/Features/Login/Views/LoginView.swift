@@ -10,6 +10,7 @@ import SwiftUI
 
 struct LoginView: View {
 	@ObservedObject var viewModel: LoginViewModel
+	@StateObject var authService = GoogleAuthService()
 	var onShowRegister: () -> Void
 
 	var body: some View {
@@ -64,6 +65,22 @@ struct LoginView: View {
 			}
 
 			Spacer()
+
+			Button(action: {
+				authService.signIn()
+			}) {
+				HStack {
+					Image(systemName: "globe")
+					Text("Se connecter avec Google")
+				}
+				.frame(maxWidth: .infinity)
+				.padding()
+				.background(Color.blue)
+				.foregroundColor(.white)
+				.cornerRadius(10)
+			}
+			.disabled(authService.isLoading)
+			.opacity(authService.isLoading ? 0.6 : 1)
 
 			Button(
 				action: {

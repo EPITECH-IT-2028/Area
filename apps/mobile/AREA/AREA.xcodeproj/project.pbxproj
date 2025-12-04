@@ -16,9 +16,22 @@
 		5D5444A42ECB6D720081D5C9 /* AREA.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AREA.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		5DBE59BC2EE04DBE00EFA570 /* Exceptions for "AREA" folder in "AREA" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 5D5444A32ECB6D720081D5C9 /* AREA */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		5D5444A62ECB6D720081D5C9 /* AREA */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				5DBE59BC2EE04DBE00EFA570 /* Exceptions for "AREA" folder in "AREA" target */,
+			);
 			path = AREA;
 			sourceTree = "<group>";
 		};
