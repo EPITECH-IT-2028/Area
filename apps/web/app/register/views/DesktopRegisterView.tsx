@@ -143,7 +143,11 @@ export default function DesktopRegisterView() {
                 </Button>
 
                 <div className="flex space-x-2">
-                  <Button variant="outline" className="grow">
+                  <Button
+                    variant="outline"
+                    className="grow"
+                    aria-label="Sign Up with Google"
+                  >
                     <svg
                       className="h-4 w-4"
                       aria-hidden="true"
@@ -162,7 +166,11 @@ export default function DesktopRegisterView() {
                     Sign Up with Google
                   </Button>
 
-                  <Button variant="outline" className="grow">
+                  <Button
+                    variant="outline"
+                    className="grow"
+                    aria-label="Sign Up with GitHub"
+                  >
                     <svg
                       className="h-4 w-4"
                       aria-hidden="true"

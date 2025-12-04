@@ -128,7 +128,11 @@ export default function MobileRegisterView() {
             </div>
 
             <div className="flex justify-center space-x-2 pt-2">
-              <Button variant="outline" className="size-10 rounded-full">
+              <Button
+                variant="outline"
+                className="size-10 rounded-full"
+                aria-label="Sign Up with Google"
+              >
                 <svg
                   className="h-4 w-4"
                   aria-hidden="true"
@@ -146,7 +150,11 @@ export default function MobileRegisterView() {
                 </svg>
               </Button>
 
-              <Button variant="outline" className="size-10 rounded-full">
+              <Button
+                variant="outline"
+                className="size-10 rounded-full"
+                aria-label="Sign Up with GitHub"
+              >
                 <svg
                   className="h-4 w-4"
                   aria-hidden="true"

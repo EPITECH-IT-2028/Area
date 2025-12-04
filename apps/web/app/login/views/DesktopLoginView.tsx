@@ -58,6 +58,8 @@ export default function DesktopLoginView() {
                     type="email"
                     placeholder="Enter your email"
                     className="bg-zinc-50"
+                    autoComplete="email"
+                    aria-label="email"
                   />
                 </div>
 
@@ -72,6 +74,8 @@ export default function DesktopLoginView() {
                       type={passwordVisibility ? "text" : "password"}
                       placeholder="Enter your password"
                       className="bg-zinc-50 pr-10"
+                      autoComplete="current-password"
+                      aria-label="password"
                     />
                     <button
                       type="button"
@@ -106,7 +110,11 @@ export default function DesktopLoginView() {
                 </Button>
 
                 <div className="flex space-x-2">
-                  <Button variant="outline" className="grow">
+                  <Button
+                    variant="outline"
+                    className="grow"
+                    aria-label="Log In with Google"
+                  >
                     <svg
                       className="h-4 w-4"
                       aria-hidden="true"
@@ -125,7 +133,11 @@ export default function DesktopLoginView() {
                     Log In with Google
                   </Button>
 
-                  <Button variant="outline" className="grow">
+                  <Button
+                    variant="outline"
+                    className="grow"
+                    aria-label="Log In with GitHub"
+                  >
                     <svg
                       className="h-4 w-4"
                       aria-hidden="true"

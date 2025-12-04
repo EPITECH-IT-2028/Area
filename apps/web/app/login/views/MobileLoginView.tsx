@@ -91,7 +91,11 @@ export default function MobileLoginView() {
             </div>
 
             <div className="flex justify-center space-x-2 pt-2">
-              <Button variant="outline" className="size-10 rounded-full">
+              <Button
+                variant="outline"
+                className="size-10 rounded-full"
+                aria-label="Log In with Google"
+              >
                 <svg
                   className="h-4 w-4"
                   aria-hidden="true"
@@ -109,7 +113,11 @@ export default function MobileLoginView() {
                 </svg>
               </Button>
 
-              <Button variant="outline" className="size-10 rounded-full">
+              <Button
+                variant="outline"
+                className="size-10 rounded-full"
+                aria-label="Log In with GitHub"
+              >
                 <svg
                   className="h-4 w-4"
                   aria-hidden="true"
