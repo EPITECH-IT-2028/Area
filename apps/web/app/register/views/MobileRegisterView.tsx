@@ -69,7 +69,13 @@ export default function MobileRegisterView() {
                 onChange={(e) => setEmail(e.target.value)}
                 autoComplete="email"
                 aria-label="email"
+                aria-invalid={response?.success === false}
               />
+              {response?.success === false && (
+                <FieldError className="mt-1 ml-1">
+                  {response.message}
+                </FieldError>
+              )}
             </div>
 
             <div>
