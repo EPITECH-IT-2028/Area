@@ -293,6 +293,23 @@
         }
       }
     },
+    "Register.BadUrlResponse" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bad URL Response:"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mauvaise réponse URL:"
+          }
+        }
+      }
+    },
     "Register.ConfirmedPasswordField.Title" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -306,6 +323,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Confirmer le mot de passe"
+          }
+        }
+      }
+    },
+    "Register.DecodingIssue" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Decoding issue:"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erreur de décodage:"
           }
         }
       }
@@ -469,13 +503,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Your password must be at least 10 characters long."
+            "value" : "Your password must be at least 8 characters long."
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Le mot de passe doit contenir au moins 10 caractères."
+            "value" : "Le mot de passe doit contenir au moins 8 caractères."
           }
         }
       }
@@ -493,6 +527,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "S’inscrire"
+          }
+        }
+      }
+    },
+    "Register.UnknownError" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unknown error"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erreur inconnue"
           }
         }
       }

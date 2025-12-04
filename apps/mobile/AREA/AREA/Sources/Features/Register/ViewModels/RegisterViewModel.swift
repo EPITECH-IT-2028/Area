@@ -88,21 +88,24 @@ class RegisterViewModel: ObservableObject {
 		} catch let error as NetworkError {
 			switch error {
 			case .badURLResponse(let underlyingError):
-				print("Underlying error: \(underlyingError)")
 				errorMessage =
-					"Bad URL Response: \(underlyingError.localizedDescription)"
+					"\(LocalizedStringResource.registerBadUrlResponse) \(underlyingError.localizedDescription)"
 				status = .failure
 			case .decodingError(let underlyingError):
-				print("Underlying error: \(underlyingError)")
-				errorMessage = "Decoding issue: \(underlyingError.localizedDescription)"
+				errorMessage =
+					"\(LocalizedStringResource.registerDecodingIssue) \(underlyingError.localizedDescription)"
 				status = .failure
 			default:
-				errorMessage = error.localizedDescription
+				errorMessage = String(
+					localized: LocalizedStringResource.registerUnknownError
+				)
 				status = .failure
 			}
 			throw error
 		} catch {
-			errorMessage = error.localizedDescription
+			errorMessage = String(
+				localized: LocalizedStringResource.registerUnknownError
+			)
 			status = .failure
 			throw error
 		}
@@ -119,23 +122,23 @@ class RegisterViewModel: ObservableObject {
 
 		do {
 			try AuthState.shared.authenticate(accessToken: accessToken)
-			isRegister = true
-			status = .success
-			errorMessage = nil
-			name = ""
-			email = ""
-			password = ""
-			confirmPassword = ""
 		} catch {
-			print("Keychain error: \(error.localizedDescription)")
+			isRegister = false
+			status = .failure
+			errorMessage = error.localizedDescription
+			return
 		}
+		isRegister = true
+		status = .success
+		errorMessage = nil
+		name = ""
+		email = ""
+		password = ""
+		confirmPassword = ""
 	}
 
 	/// This function is used to validate the format of the email
 	func textFieldValidatorEmail(_ string: String) -> Bool {
-		if string.count > 100 {
-			return false
-		}
 		let emailFormat =
 			"(?:[\\p{L}0-9!#$%\\&'*+/=?\\^_`{|}~-]+(?:\\.[\\p{L}0-9!#$%\\&'*+/=?\\^_`{|}"
 			+ "~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\"
@@ -150,7 +153,7 @@ class RegisterViewModel: ObservableObject {
 
 	/// This function returns an error message when the user has not a strong password
 	func validatePassword(_ password: String) -> String? {
-		if password.count < 8 {
+		if password.count < Constants.passwordMin {
 			return String(localized: LocalizedStringResource.registerPasswordTooShort)
 		}
 
