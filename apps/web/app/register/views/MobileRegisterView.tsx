@@ -5,6 +5,7 @@ import { useRegisterViewModel } from "@/app/register/viewModels/registerViewMode
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { FieldError } from "@/components/ui/field";
 import { Eye, EyeClosed } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";

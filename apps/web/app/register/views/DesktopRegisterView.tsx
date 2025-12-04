@@ -6,10 +6,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { FieldError } from "@/components/ui/field";
 import { Eye, EyeClosed } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { FieldError } from "@/components/ui/field";
 
 export default function DesktopRegisterView() {
   const {
