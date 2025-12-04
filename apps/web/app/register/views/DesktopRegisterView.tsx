@@ -22,6 +22,9 @@ export default function DesktopRegisterView() {
     handleSubmit,
     response,
     passwordErrors,
+    isNameError,
+    isEmailError,
+    isPasswordError,
   } = useRegisterViewModel();
   const [passwordVisibility, setPasswordVisibility] = useState(false);
 
@@ -74,6 +77,7 @@ export default function DesktopRegisterView() {
                     onChange={(e) => setName(e.target.value)}
                     autoComplete="name"
                     aria-label="name"
+                    aria-invalid={isNameError}
                   />
                 </div>
 
@@ -90,9 +94,10 @@ export default function DesktopRegisterView() {
                     onChange={(e) => setEmail(e.target.value)}
                     autoComplete="email"
                     aria-label="email"
-                    aria-invalid={response?.success === false}
+                    aria-invalid={isEmailError}
                   />
-                  {response?.success === false && (
+                  {(response?.status_code === 400 ||
+                    response?.status_code === 409) && (
                     <FieldError className="mt-2">{response.message}</FieldError>
                   )}
                 </div>
@@ -111,7 +116,7 @@ export default function DesktopRegisterView() {
                       onChange={(e) => setPassword(e.target.value)}
                       autoComplete="new-password"
                       aria-label="password"
-                      aria-invalid={passwordErrors.length > 0}
+                      aria-invalid={isPasswordError}
                     />
                     <button
                       type="button"

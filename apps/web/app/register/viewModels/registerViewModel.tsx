@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import useRegister from "../hooks/useRegister";
+import { toast } from "sonner";
 
 function getPasswordValidationErrors(p: string): string[] {
   if (p.length <= 0) {
@@ -31,18 +32,38 @@ export function useRegisterViewModel() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordErrors, setPasswordErrors] = useState<string[]>([]);
+  const [hasSubmitted, setHasSubmitted] = useState(false);
 
   useEffect(() => {
     setPasswordErrors(getPasswordValidationErrors(password));
   }, [password]);
 
   const handleSubmit = () => {
+    setHasSubmitted(true);
     const errors = getPasswordValidationErrors(password);
     setPasswordErrors(errors);
+
+    if (!name || !email || !password) {
+      toast.error("All fields are required.");
+      return;
+    }
+
+    if (errors) {
+      toast.error("Please use a stronger password.");
+    }
+
     if (errors.length === 0) {
       register({ name, email, password }).then();
     }
   };
+
+  const isNameError = hasSubmitted && !name;
+  const isEmailError =
+    (hasSubmitted && !email) ||
+    response?.status_code === 400 ||
+    response?.status_code === 409;
+  const isPasswordError =
+    (hasSubmitted && !password) || passwordErrors.length > 0;
 
   return {
     name,
@@ -54,5 +75,8 @@ export function useRegisterViewModel() {
     handleSubmit,
     response,
     passwordErrors,
+    isNameError,
+    isEmailError,
+    isPasswordError,
   };
 }
