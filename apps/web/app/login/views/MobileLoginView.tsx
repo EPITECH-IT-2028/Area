@@ -8,10 +8,19 @@ import { Eye, EyeClosed } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useLoginViewModel } from "@/app/login/viewModels/loginViewModel";
+import { FieldError } from "@/components/ui/field";
 
 export default function MobileLoginView() {
-  const { email, setEmail, password, setPassword, handleSubmit, response } =
-    useLoginViewModel();
+  const {
+    email,
+    setEmail,
+    password,
+    setPassword,
+    handleSubmit,
+    response,
+    isEmailError,
+    isPasswordError,
+  } = useLoginViewModel();
   const [passwordVisibility, setPasswordVisibility] = useState(false);
 
   return (
@@ -47,7 +56,11 @@ export default function MobileLoginView() {
                 onChange={(e) => setEmail(e.target.value)}
                 autoComplete="email"
                 aria-label="email"
+                aria-invalid={isEmailError}
               />
+              {response?.status_code === 400 && (
+                <FieldError className="mt-2">{response.message}</FieldError>
+              )}
             </div>
 
             <div>
@@ -61,6 +74,7 @@ export default function MobileLoginView() {
                   onChange={(e) => setPassword(e.target.value)}
                   autoComplete="current-password"
                   aria-label="password"
+                  aria-invalid={isPasswordError}
                 />
                 <button
                   type="button"
@@ -78,6 +92,9 @@ export default function MobileLoginView() {
                 </button>
               </div>
             </div>
+            {response?.status_code === 401 && (
+              <FieldError className="mt-2">{response.message}</FieldError>
+            )}
           </div>
 
           <div className="mt-12 space-y-2">

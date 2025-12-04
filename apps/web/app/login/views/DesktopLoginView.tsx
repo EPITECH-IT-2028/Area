@@ -5,14 +5,23 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { FieldError } from "@/components/ui/field";
 import { Eye, EyeClosed } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useLoginViewModel } from "@/app/login/viewModels/loginViewModel";
 
 export default function DesktopLoginView() {
-  const { email, setEmail, password, setPassword, handleSubmit, response } =
-    useLoginViewModel();
+  const {
+    email,
+    setEmail,
+    password,
+    setPassword,
+    handleSubmit,
+    response,
+    isEmailError,
+    isPasswordError,
+  } = useLoginViewModel();
   const [passwordVisibility, setPasswordVisibility] = useState(false);
 
   return (
@@ -65,9 +74,12 @@ export default function DesktopLoginView() {
                     onChange={(e) => setEmail(e.target.value)}
                     autoComplete="email"
                     aria-label="email"
+                    aria-invalid={isEmailError}
                   />
+                  {response?.status_code === 400 && (
+                    <FieldError className="mt-2">{response.message}</FieldError>
+                  )}
                 </div>
-
                 {/* Password Field */}
                 <div>
                   <Label htmlFor="password" className="mb-2">
@@ -83,6 +95,7 @@ export default function DesktopLoginView() {
                       onChange={(e) => setPassword(e.target.value)}
                       autoComplete="current-password"
                       aria-label="password"
+                      aria-invalid={isPasswordError}
                     />
                     <button
                       type="button"
@@ -100,6 +113,9 @@ export default function DesktopLoginView() {
                     </button>
                   </div>
                 </div>
+                {response?.status_code === 401 && (
+                  <FieldError className="-mt-2">{response.message}</FieldError>
+                )}
               </div>
 
               {/* Forgot Password */}
