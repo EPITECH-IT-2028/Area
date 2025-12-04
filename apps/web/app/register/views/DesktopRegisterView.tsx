@@ -69,6 +69,8 @@ export default function DesktopRegisterView() {
                     className="bg-zinc-50"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
+                    autoComplete="name"
+                    aria-label="name"
                   />
                 </div>
 
@@ -83,6 +85,8 @@ export default function DesktopRegisterView() {
                     className="bg-zinc-50"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
+                    autoComplete="email"
+                    aria-label="email"
                   />
                 </div>
 
@@ -98,6 +102,8 @@ export default function DesktopRegisterView() {
                       className="bg-zinc-50 pr-10"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
+                      autoComplete="new-password"
+                      aria-label="password"
                       aria-invalid={passwordErrors.length > 0}
                     />
                     <button

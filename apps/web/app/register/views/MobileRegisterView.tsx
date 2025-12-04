@@ -79,9 +79,9 @@ export default function MobileRegisterView() {
                   className="h-12 bg-zinc-50 pr-10"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  aria-invalid={passwordErrors.length > 0}
-                  autoComplete="current-password"
+                  autoComplete="new-password"
                   aria-label="password"
+                  aria-invalid={passwordErrors.length > 0}
                 />
                 <button
                   type="button"
