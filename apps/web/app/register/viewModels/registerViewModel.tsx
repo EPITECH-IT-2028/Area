@@ -48,7 +48,7 @@ export function useRegisterViewModel() {
       return;
     }
 
-    if (errors) {
+    if (errors.length > 0) {
       toast.error("Please use a stronger password.");
     }
 
