@@ -15,6 +15,7 @@ class LoginViewModel: ObservableObject {
 	@Published var isLoggedIn: Bool
 	@Published var errorMessage: String? = nil
 	@Published var status: LoginStatus = .success
+	var authService = GoogleAuthService()
 
 	enum LoginStatus {
 		case success
@@ -27,6 +28,16 @@ class LoginViewModel: ObservableObject {
 		self.isLoggedIn = false
 	}
 
+	func googleLogin() {
+		authService.signIn()
+		
+		if (authService.isAuthenticated == true) {
+			isLoggedIn = true
+			status = .success
+			errorMessage = nil
+		}
+	}
+	
 	@MainActor
 	func login() async throws {
 		let response: LoginResponseData = try await LoginAction(

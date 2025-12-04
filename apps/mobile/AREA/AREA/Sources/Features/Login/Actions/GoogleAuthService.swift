@@ -99,6 +99,8 @@ class GoogleAuthService: ObservableObject {
 					let json = try? JSONSerialization.jsonObject(with: data)
 						as? [String: Any]
 				{
+					print(data)
+					print(json)
 					if let token = json["token"] as? String {
 						UserDefaults.standard.set(token, forKey: "authToken")
 						self.isAuthenticated = true
