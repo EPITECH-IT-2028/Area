@@ -13,8 +13,6 @@ function useLogin() {
           json: credentials,
         })
         .json<LoginResponse>();
-      // TODO: remove debug log
-      console.log("Response: ", response);
       setResponse(response);
     } catch (error) {
       console.log(error);

@@ -14,12 +14,8 @@ function useRegister() {
           json: credentials,
         })
         .json<RegisterResponse>();
-      // TODO: remove debug log
-      console.log("Response: ", response);
       setResponse(response);
     } catch (error) {
-      console.log(error);
-
       if (error instanceof HTTPError) {
         if (error.response.status == 409) {
           setResponse({
