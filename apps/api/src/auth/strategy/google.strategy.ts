@@ -26,7 +26,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
     accessToken: string,
     refreshToken: string,
     profile: Profile,
-  ): Promise<any> {
+  ) {
     let platform = 'web';
 
     try {
@@ -81,6 +81,9 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
       throw new Error('Google service not found');
     }
 
-    return user;
+    return {
+      ...user,
+      platform,
+    };
   }
 }
