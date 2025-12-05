@@ -65,6 +65,42 @@ struct LoginView: View {
 
 			Spacer()
 
+			Button(action: {
+				Task {
+					await viewModel.githubLogin()
+				}
+			}) {
+				HStack {
+					Image(systemName: "globe")
+					Text(LocalizedStringResource.loginLoginWithGitHub)
+				}
+				.frame(maxWidth: .infinity)
+				.padding()
+				.background(Color.blue)
+				.foregroundColor(.white)
+				.cornerRadius(10)
+			}
+			.disabled(viewModel.githubAuthAction.isLoading)
+			.opacity(viewModel.githubAuthAction.isLoading ? 0.6 : 1)
+
+			Button(action: {
+				Task {
+					await viewModel.googleLogin()
+				}
+			}) {
+				HStack {
+					Image(systemName: "globe")
+					Text(LocalizedStringResource.loginLoginWithGoogle)
+				}
+				.frame(maxWidth: .infinity)
+				.padding()
+				.background(Color.blue)
+				.foregroundColor(.white)
+				.cornerRadius(10)
+			}
+			.disabled(viewModel.googleAuthAction.isLoading)
+			.opacity(viewModel.googleAuthAction.isLoading ? 0.6 : 1)
+
 			Button(
 				action: {
 					onShowRegister()

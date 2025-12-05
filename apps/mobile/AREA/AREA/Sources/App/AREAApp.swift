@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import GoogleSignIn
 import SwiftData
 import SwiftUI
 

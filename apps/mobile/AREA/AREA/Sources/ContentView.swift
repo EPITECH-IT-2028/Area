@@ -5,6 +5,7 @@
 //  Created by Arthur GUERINAULT on 17/11/2025.
 //
 
+import GoogleSignIn
 import SimpleKeychain
 import SwiftUI
 
@@ -58,6 +59,9 @@ struct ContentView: View {
 					}
 				}
 			}
+		}
+		.onOpenURL { url in
+			GIDSignIn.sharedInstance.handle(url)
 		}
 		.onAppear {
 			DispatchQueue.main.asyncAfter(

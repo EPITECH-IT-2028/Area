@@ -17,14 +17,27 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
       clientSecret: configService.getOrThrow<string>('GOOGLE_CLIENT_SECRET'),
       callbackURL: configService.getOrThrow<string>('GOOGLE_CALLBACK_URL'),
       scope: ['email', 'profile'],
+      passReqToCallback: true,
     });
   }
 
   async validate(
+    req: any,
     accessToken: string,
     refreshToken: string,
     profile: Profile,
-  ): Promise<any> {
+  ) {
+    let platform = 'web';
+
+    try {
+      if (req.query.state) {
+        const state = JSON.parse(req.query.state);
+        platform = state.platform || 'web';
+      }
+    } catch (e) {
+      console.error('Error: ', e);
+    }
+
     const { name, emails } = profile;
 
     const email = emails && emails.length > 0 ? emails[0].value : null;
@@ -68,6 +81,9 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
       throw new Error('Google service not found');
     }
 
-    return user;
+    return {
+      ...user,
+      platform,
+    };
   }
 }
