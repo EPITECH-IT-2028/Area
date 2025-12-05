@@ -48,7 +48,6 @@ class GitHubAuthAction: NSObject, ObservableObject {
 			else {
 				return
 			}
-			print(token)
 			DispatchQueue.main.async {
 				
 				self.isAuthenticated = true
