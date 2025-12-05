@@ -4,6 +4,7 @@ import { Strategy, Profile } from 'passport-google-oauth20';
 import { ConfigService } from '@nestjs/config';
 import { UsersService } from '../../users/users.service';
 import { UserServicesService } from '../../user-services/user-services.service';
+import { Request } from 'express';
 
 @Injectable()
 export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
@@ -22,20 +23,20 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
   }
 
   async validate(
-    req: any,
+    req: Request,
     accessToken: string,
     refreshToken: string,
     profile: Profile,
   ) {
     let platform = 'web';
-
     try {
-      if (req.query.state) {
-        const state = JSON.parse(req.query.state);
-        platform = state.platform || 'web';
+      const state = req.query.state;
+      if (typeof state === 'string') {
+        const parsed = JSON.parse(state) as { platform?: string };
+        platform = parsed.platform || 'web';
       }
     } catch (e) {
-      console.error('Error: ', e);
+      console.error('Error parsing OAuth state:', e);
     }
 
     const { name, emails } = profile;

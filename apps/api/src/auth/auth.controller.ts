@@ -47,6 +47,15 @@ class LoginDto {
   password: string;
 }
 
+interface RequestWithUser extends Request {
+  user?: {
+    id: string;
+    email: string;
+    name: string;
+    platform?: string;
+  };
+}
+
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
@@ -80,7 +89,7 @@ export class AuthController {
   @Get('google/callback')
   @UseGuards(GoogleOauthGuard)
   googleAuthCallback(
-    @Req() req: any,
+    @Req() req: RequestWithUser,
     @Res({ passthrough: false }) res: Response,
   ): void {
     const platform = req.user?.platform || 'web';
@@ -99,7 +108,7 @@ export class AuthController {
   @Get('github/callback')
   @UseGuards(GithubOauthGuard)
   githubAuthCallback(
-    @Req() req: any,
+    @Req() req: RequestWithUser,
     @Res({ passthrough: false }) res: Response,
   ): void {
     const platform = req.user?.platform || 'web';
@@ -113,12 +122,15 @@ export class AuthController {
   }
 
   private handleOAuthCallback(
-    req: any,
+    req: RequestWithUser,
     res: Response,
     platform: string | undefined,
-    loginMethod: (user: any) => AuthResponse,
+    loginMethod: (user: {
+      id: string;
+      email: string;
+      name: string;
+    }) => AuthResponse,
   ) {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     if (!req.user) {
       redirectToApp(
         platform || 'web',
@@ -130,7 +142,6 @@ export class AuthController {
     }
 
     try {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       const result = loginMethod(req.user);
       if (!result || !result.access_token) {
         redirectToApp(
