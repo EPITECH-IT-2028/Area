@@ -83,8 +83,9 @@ export class AuthController {
   googleAuthCallback(
     @Req() req: any,
     @Res({ passthrough: false }) res: Response,
-    @Query('platform') platform?: string,
   ): void {
+    const platform = req.user?.platform || 'web';
+
     this.handleOAuthCallback(
       req,
       res,
@@ -102,8 +103,9 @@ export class AuthController {
   githubAuthCallback(
     @Req() req: any,
     @Res({ passthrough: false }) res: Response,
-    @Query('platform') platform?: string,
   ): void {
+    const platform = req.user?.platform || 'web';
+
     this.handleOAuthCallback(
       req,
       res,

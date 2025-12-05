@@ -17,10 +17,27 @@ export class GithubStrategy extends PassportStrategy(Strategy, 'github') {
       clientSecret: configService.getOrThrow<string>('GITHUB_CLIENT_SECRET'),
       callbackURL: configService.getOrThrow<string>('GITHUB_CALLBACK_URL'),
       scope: ['user:email'],
+      passReqToCallback: true,
     });
   }
 
-  async validate(accessToken: string, refreshToken: string, profile: Profile) {
+  async validate(
+    req: any,
+    accessToken: string,
+    refreshToken: string,
+    profile: Profile,
+  ) {
+    let platform = 'web';
+
+    try {
+      if (req.query.state) {
+        const state = JSON.parse(req.query.state);
+        platform = state.platform || 'web';
+      }
+    } catch (e) {
+      console.error('Error: ', e);
+    }
+
     const { displayName, emails, username } = profile;
 
     const email = emails && emails.length > 0 ? emails[0].value : null;
@@ -61,6 +78,9 @@ export class GithubStrategy extends PassportStrategy(Strategy, 'github') {
       throw new Error('GitHub service not found');
     }
 
-    return user;
+    return {
+      ...user,
+      platform,
+    };
   }
 }
