@@ -11,7 +11,7 @@ import SwiftUI
 extension Font {
 	static let defaultFont = Font.system(
 		size: 16,
-		weight: .bold,
+		weight: .regular,
 		design: .default
 	)
 	static let titleFont = Font.largeTitle.bold()

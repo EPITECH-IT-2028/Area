@@ -10,6 +10,7 @@ import SwiftUI
 
 struct LoginView: View {
 	@ObservedObject var viewModel: LoginViewModel
+	var onShowRegister: () -> Void
 
 	var body: some View {
 		VStack {
@@ -66,6 +67,16 @@ struct LoginView: View {
 
 			Button(
 				action: {
+					onShowRegister()
+				},
+				label: {
+					Text(LocalizedStringResource.loginNoAccountRegisterTitle)
+						.font(.system(size: 12, weight: .regular, design: .default))
+				}
+			)
+
+			Button(
+				action: {
 					Task {
 						do {
 							try await viewModel.login()
@@ -99,8 +110,4 @@ struct LoginView: View {
 			}
 		}
 	}
-}
-
-#Preview {
-	LoginView(viewModel: LoginViewModel())
 }
