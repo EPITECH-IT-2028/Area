@@ -68,3 +68,17 @@ enum LoginError: Error, LocalizedError {
 		}
 	}
 }
+
+enum AuthError: Error, LocalizedError {
+	case keychainSetFailed
+	case keychainDeleteFailed
+
+	var errorDescription: String? {
+		switch self {
+		case .keychainSetFailed:
+			return "Failed to set the access token in the keychain."
+		case .keychainDeleteFailed:
+			return "Failed to delete the access token from the keychain."
+		}
+	}
+}
