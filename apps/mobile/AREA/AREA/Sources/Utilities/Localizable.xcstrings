@@ -310,6 +310,23 @@
         }
       }
     },
+    "OAuth2.ErrorPresentationArchor" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No UIWindowScene available for presentation anchor."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pas d’UIWindowScene disponible pour l’ancre de présentation."
+          }
+        }
+      }
+    },
     "Register.AlreadyHaveAccount.Title" : {
       "extractionState" : "manual",
       "localizations" : {

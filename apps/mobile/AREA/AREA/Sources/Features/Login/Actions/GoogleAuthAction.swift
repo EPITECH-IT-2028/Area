@@ -20,11 +20,11 @@ class GoogleAuthAction: NSObject, ObservableObject {
 	}
 
 	func signIn() {
-		var components = URLComponents(string: "http://localhost:8080/auth/google")!
+		var components = URLComponents(string: Constants.googleOAuth2ServerPath)!
 		components.queryItems = [
 			URLQueryItem(
-				name: "platform",
-				value: "mobile"
+				name: Constants.keyForOauth2,
+				value: Constants.valueForOauth2
 			)
 		]
 
@@ -32,7 +32,7 @@ class GoogleAuthAction: NSObject, ObservableObject {
 
 		self.session = ASWebAuthenticationSession(
 			url: authURL,
-			callbackURLScheme: "AREA"
+			callbackURLScheme: Constants.callbackURLScheme
 		) { callbackURL, error in
 			guard let callbackURL = callbackURL,
 				let components = URLComponents(
@@ -40,7 +40,7 @@ class GoogleAuthAction: NSObject, ObservableObject {
 					resolvingAgainstBaseURL: true
 				),
 				let tokenItem = components.queryItems?.first(where: {
-					$0.name == "token"
+					$0.name == Constants.tokenString
 				}),
 				let token = tokenItem.value
 
@@ -67,6 +67,6 @@ extension GoogleAuthAction: ASWebAuthenticationPresentationContextProviding {
 		{
 			return ASPresentationAnchor(windowScene: windowScene)
 		}
-		fatalError("No UIWindowScene available for presentation anchor.")
+		fatalError(String(localized: LocalizedStringResource.oauth2ErrorPresentationArchor))
 	}
 }

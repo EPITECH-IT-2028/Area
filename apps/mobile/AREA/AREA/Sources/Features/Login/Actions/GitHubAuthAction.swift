@@ -20,11 +20,11 @@ class GitHubAuthAction: NSObject, ObservableObject {
 	}
 
 	func signIn() {
-		var components = URLComponents(string: "http://localhost:8080/auth/github")!
+		var components = URLComponents(string: Constants.githubOAuth2ServerPath)!
 		components.queryItems = [
 			URLQueryItem(
-				name: "platform",
-				value: "mobile"
+				name: Constants.keyForOauth2,
+				value: Constants.valueForOauth2
 			)
 		]
 
@@ -41,7 +41,7 @@ class GitHubAuthAction: NSObject, ObservableObject {
 					resolvingAgainstBaseURL: true
 				),
 				let tokenItem = components.queryItems?.first(where: {
-					$0.name == "token"
+					$0.name == Constants.tokenString
 				}),
 				let token = tokenItem.value
 
@@ -69,6 +69,6 @@ extension GitHubAuthAction: ASWebAuthenticationPresentationContextProviding {
 		{
 			return ASPresentationAnchor(windowScene: windowScene)
 		}
-		fatalError("No UIWindowScene available for presentation anchor.")
+		fatalError(String(localized: LocalizedStringResource.oauth2ErrorPresentationArchor))
 	}
 }
