@@ -18,7 +18,6 @@ struct BuilderAPI {
 		components.host = host
 		components.port = port
 		components.path = path
-
 		guard let url = components.url else {
 			throw NetworkError.urlBuildFailed
 		}
@@ -26,7 +25,11 @@ struct BuilderAPI {
 		return url
 	}
 
-	func buildRequest<T: Encodable>(url: URL, method: String, parameters: T? = nil)
+	func buildRequest<T: Encodable>(
+		url: URL,
+		method: String,
+		parameters: T
+	)
 		throws -> URLRequest
 	{
 		var request = URLRequest(url: url)
@@ -34,12 +37,23 @@ struct BuilderAPI {
 		request.addValue("application/json", forHTTPHeaderField: "Content-Type")
 		request.addValue("application/json", forHTTPHeaderField: "Accept")
 		do {
-			if parameters != nil {
-				request.httpBody = try JSONEncoder().encode(parameters)
-			}
+			request.httpBody = try JSONEncoder().encode(parameters)
 		} catch {
 			throw NetworkError.encodingFailed(underlyingError: error)
 		}
+		return request
+	}
+
+	func buildRequest(
+		url: URL,
+		method: String
+	)
+		throws -> URLRequest
+	{
+		var request = URLRequest(url: url)
+		request.httpMethod = method
+		request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+		request.addValue("application/json", forHTTPHeaderField: "Accept")
 		return request
 	}
 }

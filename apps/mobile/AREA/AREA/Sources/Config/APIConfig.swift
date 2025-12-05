@@ -8,6 +8,7 @@ import Foundation
 
 struct APIConfig: Decodable {
 	let GOOGLE_CLIENT_ID: String
+	let GITHUB_CLIENT_ID: String
 
 	static let shared: APIConfig? = {
 		do {

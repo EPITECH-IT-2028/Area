@@ -67,12 +67,12 @@ struct LoginView: View {
 
 			Button(action: {
 				Task {
-					await viewModel.googleLogin()
+					await viewModel.githubLogin()
 				}
 			}) {
 				HStack {
 					Image(systemName: "globe")
-					Text("Se connecter avec Google")
+					Text(LocalizedStringResource.loginLoginWithGitHub)
 				}
 				.frame(maxWidth: .infinity)
 				.padding()
@@ -80,8 +80,26 @@ struct LoginView: View {
 				.foregroundColor(.white)
 				.cornerRadius(10)
 			}
-			.disabled(viewModel.authService.isLoading)
-			.opacity(viewModel.authService.isLoading ? 0.6 : 1)
+			.disabled(viewModel.githubAuthAction.isLoading)
+			.opacity(viewModel.githubAuthAction.isLoading ? 0.6 : 1)
+
+			Button(action: {
+				Task {
+					await viewModel.googleLogin()
+				}
+			}) {
+				HStack {
+					Image(systemName: "globe")
+					Text(LocalizedStringResource.loginLoginWithGoogle)
+				}
+				.frame(maxWidth: .infinity)
+				.padding()
+				.background(Color.blue)
+				.foregroundColor(.white)
+				.cornerRadius(10)
+			}
+			.disabled(viewModel.googleAuthAction.isLoading)
+			.opacity(viewModel.googleAuthAction.isLoading ? 0.6 : 1)
 
 			Button(
 				action: {

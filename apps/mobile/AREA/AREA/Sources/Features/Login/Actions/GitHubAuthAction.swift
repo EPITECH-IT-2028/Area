@@ -1,5 +1,5 @@
 //
-//  GoogleAuthAuthAction.swift
+//  GitHubAuthAction.swift
 //  AREA
 //
 //  Created by Arthur GUERINAULT on 05/12/2025.
@@ -9,7 +9,7 @@ internal import AuthenticationServices
 internal import Combine
 import Foundation
 
-class GoogleAuthAction: NSObject, ObservableObject {
+class GitHubAuthAction: NSObject, ObservableObject {
 	@Published var isAuthenticated = false
 	@Published var errorMessage: String?
 	@Published var isLoading = false
@@ -20,7 +20,7 @@ class GoogleAuthAction: NSObject, ObservableObject {
 	}
 
 	func signIn() {
-		var components = URLComponents(string: "http://localhost:8080/auth/google")!
+		var components = URLComponents(string: "http://localhost:8080/auth/github")!
 		components.queryItems = [
 			URLQueryItem(
 				name: "platform",
@@ -30,6 +30,7 @@ class GoogleAuthAction: NSObject, ObservableObject {
 
 		guard let authURL = components.url else { return }
 
+		print(authURL)
 		self.session = ASWebAuthenticationSession(
 			url: authURL,
 			callbackURLScheme: "AREA"
@@ -47,7 +48,9 @@ class GoogleAuthAction: NSObject, ObservableObject {
 			else {
 				return
 			}
+			print(token)
 			DispatchQueue.main.async {
+				
 				self.isAuthenticated = true
 				try? AuthState.shared.authenticate(accessToken: token)
 			}
@@ -57,7 +60,7 @@ class GoogleAuthAction: NSObject, ObservableObject {
 	}
 }
 
-extension GoogleAuthAction: ASWebAuthenticationPresentationContextProviding {
+extension GitHubAuthAction: ASWebAuthenticationPresentationContextProviding {
 	func presentationAnchor(for session: ASWebAuthenticationSession)
 		-> ASPresentationAnchor
 	{
