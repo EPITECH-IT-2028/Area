@@ -1,6 +1,8 @@
-import { useState, useEffect } from "react";
-import useRegister from "../hooks/useRegister";
+import { useEffect, useState } from "react";
+
 import { toast } from "sonner";
+
+import useRegister from "../hooks/useRegister";
 
 function getPasswordValidationErrors(p: string): string[] {
   if (p.length <= 0) {

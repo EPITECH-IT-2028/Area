@@ -1,15 +1,18 @@
 "use client";
 
 import { useState } from "react";
-import { useRegisterViewModel } from "@/app/register/viewModels/registerViewModel";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
-import { FieldError } from "@/components/ui/field";
-import { Eye, EyeClosed } from "lucide-react";
+
 import Image from "next/image";
 import Link from "next/link";
+
+import { useRegisterViewModel } from "@/app/register/viewModels/registerViewModel";
+import { Eye, EyeClosed } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
+import { FieldError } from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Separator } from "@/components/ui/separator";
 
 export default function DesktopRegisterView() {
   const {

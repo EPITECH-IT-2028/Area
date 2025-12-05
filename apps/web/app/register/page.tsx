@@ -1,4 +1,5 @@
 import type { Viewport } from "next";
+
 import ContentView from "@/app/register/views/ContentView";
 
 export const viewport: Viewport = {

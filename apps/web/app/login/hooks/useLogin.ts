@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { LoginResponse } from "@/app/login/models/loginResponse";
+
 import { LoginRequest } from "@/app/login/models/loginRequest";
+import { LoginResponse } from "@/app/login/models/loginResponse";
 import api from "@/lib/api";
 import { HTTPError } from "ky";
 import { toast } from "sonner";
