@@ -85,7 +85,6 @@ export class AuthController {
     @Res({ passthrough: false }) res: Response,
   ): void {
     const platform = req.user?.platform || 'web';
-
     this.handleOAuthCallback(
       req,
       res,
