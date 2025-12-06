@@ -48,7 +48,6 @@ The project is organized as a monorepo with the following structure:
   - **api/**: Backend application built with NestJS. It includes modules for authentication, user management, and GraphQL services.
   - **mobile/**: Mobile application developed entirely in Swift for iOS.
   - **web/**: Frontend application built with Next.js, providing the user interface for the project.
-- **client_web/docs**: Documentation and assets for the web client.
 - **hasura/**: Contains Hasura configurations, metadata, migrations, and seeds for managing the database and GraphQL API.
 - **packages/**: Shared configurations and utilities.
   - **eslint-config/**: Shared ESLint configurations for consistent code formatting.
