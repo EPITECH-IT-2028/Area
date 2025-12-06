@@ -86,7 +86,7 @@ This command starts both the backend and frontend applications in development mo
 - [Next.js](https://nextjs.org/): A React framework for building server-side rendered and static web applications. It supports features like API routes, image optimization, and incremental static regeneration.
 
 ### Mobile
-- **Swift**: A powerful and intuitive programming language for iOS development. It offers modern features like type safety, memory management, and interoperability with Objective-C.
+- [Swift](https://www.swift.org/): A powerful and intuitive programming language for iOS development. It offers modern features like type safety, memory management, and interoperability with Objective-C.
 
 ### Database
 - [PostgreSQL](https://www.postgresql.org/): A powerful, open-source object-relational database system known for its reliability, feature robustness, and performance. It supports advanced data types, full-text search, and JSON/JSONB storage.
