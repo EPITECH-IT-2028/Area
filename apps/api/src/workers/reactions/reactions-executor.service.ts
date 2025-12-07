@@ -24,6 +24,10 @@ export class ReactionExecutor {
   }
 
   private async sendDiscordWebhook(area: Areas, actionData: any) {
+    if (!area.reaction_config) {
+      throw new Error('Reaction configuration is missing.');
+    }
+    
     const webhookUrl = area.reaction_config.webhook_url;
     if (!webhookUrl) {
       throw new Error('Discord webhook URL is not configured.');
