@@ -8,6 +8,9 @@ export class ReactionExecutor {
   constructor() {}
 
   async execute(area: Areas, actionData: any) {
+    if (!actionData || typeof actionData !== 'object') {
+      throw new Error('Invalid action data provided for reaction execution.');
+    }
     this.logger.log(`⚡ Executing reaction '${area.reaction.name}' for area '${area.name}'.`);
 
     try {
@@ -20,6 +23,7 @@ export class ReactionExecutor {
       }
     } catch (error) {
       this.logger.error(`❌ Failed to execute reaction for area '${area.name}':`, error);
+      throw error;
     }
   }
 
@@ -34,24 +38,32 @@ export class ReactionExecutor {
 
     const webhookUrl = area.reaction_config.webhook_url as string;
 
-    const template = area.reaction_config.message_template || 'Event triggered with data: {{subject}}';
+    const template = area.reaction_config.message_template || 'Event triggered: {{subject}} from {{from}}';
     const message = this.replaceVariables(template, actionData);
 
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 10000);
 
-    const response = await fetch(webhookUrl, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ content: message, username: 'AREA Bot' }),
-      signal: controller.signal,
-    });
-
-    clearTimeout(timeoutId);
-
-    if (!response.ok) {
-      throw new Error(`Discord webhook failed with status ${response.status}: ${response.statusText}`);
+    try {
+      const response = await fetch(webhookUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ content: message, username: 'AREA Bot' }),
+        signal: controller.signal,
+      });
+    
+      if (!response.ok) {
+        throw new Error(`Discord webhook failed with status ${response.status}: ${response.statusText}`);
+      }
+    } catch (error) {
+      if (error.name === 'AbortError') {
+        throw new Error('Discord webhook request timed out after 10 seconds.');
+      }
+      throw error;
+    } finally {
+      clearTimeout(timeoutId);
     }
+    
     this.logger.log('✅ Discord notification sent successfully.');
   }
 
