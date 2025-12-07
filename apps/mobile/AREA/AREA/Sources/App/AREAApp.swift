@@ -6,15 +6,15 @@
 //
 
 import Foundation
-
-import SwiftUI
 import SwiftData
+import SwiftUI
 
 @main
 struct AREAApp: App {
 	var body: some Scene {
-			WindowGroup {
-					ContentView()
-			}
+		WindowGroup {
+			ContentView()
+				.environmentObject(AuthState.shared)
 		}
 	}
+}

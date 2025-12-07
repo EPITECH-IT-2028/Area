@@ -22,6 +22,9 @@ struct Constants {
 	static let portMin: UInt16 = 0
 	static let portMax: UInt16 = 65535
 
+	// Register password
+	static let passwordMin: Int = 8
+
 	// Splash screen animation duration
 	static let splashScreenAnimationDuration: TimeInterval = 1.5
 
@@ -31,6 +34,7 @@ struct Constants {
 
 	// Server paths
 	static let loginServerPath = "/auth/login"
+	static let registerServerPath = "/auth/register"
 
 	// Keychain values
 	static let keychainJWTKey = "jwt"

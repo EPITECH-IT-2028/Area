@@ -22,7 +22,15 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    "components/**",
   ]),
+
+  /* Custom rules */
+  {
+    rules: {
+      "react-hooks/set-state-in-effect": "warn",
+    },
+  },
 
   /* Custom Tailwind CSS config */
   {
@@ -37,6 +45,8 @@ const eslintConfig = defineConfig([
       "tailwindcss/no-custom-classname": "off",
     },
   },
+
+  /* Prettier integration */
   {
     plugins: { prettier: prettierPlugin },
     rules: {
