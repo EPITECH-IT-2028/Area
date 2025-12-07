@@ -1,8 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { GraphQLService } from '../graphql/graphql.service';
-import gql from 'graphql-tag';
-import { GetAllActiveAreasQuery } from 'src/graphql/queries/areas/areas';
 import { AreasService } from 'src/areas/areas.service';
 import { Areas } from 'src/generated/graphql';
 import { EmailWorker } from './actions/email.worker';
@@ -11,7 +9,6 @@ import { EmailWorker } from './actions/email.worker';
 export class GlobalWorkerService {
   private readonly logger = new Logger(GlobalWorkerService.name);
 
-  // Map des workers par type d'action
   private readonly actionWorkers = new Map<string, any>();
 
   constructor(
@@ -19,11 +16,7 @@ export class GlobalWorkerService {
     private readonly areasService: AreasService,
     private readonly emailWorker: EmailWorker,
   ) {
-    // Enregistrer les workers par nom d'action
     this.actionWorkers.set('new_email', this.emailWorker);
-    // this.actionWorkers.set('new_push', this.githubWorker);
-    // this.actionWorkers.set('new_issue', this.githubWorker);
-    // Ajouter d'autres mappings...
   }
 
   @Cron(CronExpression.EVERY_MINUTE)
