@@ -25,7 +25,7 @@ export class CreateAreaDto {
 
   @IsBoolean()
   @IsOptional()
-  is_active?: boolean = true;
+  is_active?: boolean;
 
   @IsUUID()
   @IsNotEmpty()

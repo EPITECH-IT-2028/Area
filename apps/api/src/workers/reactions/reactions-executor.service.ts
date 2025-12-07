@@ -28,19 +28,26 @@ export class ReactionExecutor {
       throw new Error('Reaction configuration is missing.');
     }
 
-    const webhookUrl = area.reaction_config.webhook_url;
-    if (!webhookUrl) {
+    if (typeof area.reaction_config !== 'object' || !area.reaction_config.webhook_url) {
       throw new Error('Discord webhook URL is not configured.');
     }
 
+    const webhookUrl = area.reaction_config.webhook_url as string;
+
     const template = area.reaction_config.message_template || 'Event triggered with data: {{subject}}';
     const message = this.replaceVariables(template, actionData);
+
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 10000);
 
     const response = await fetch(webhookUrl, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ content: message, username: 'AREA Bot' }),
+      signal: controller.signal,
     });
+
+    clearTimeout(timeoutId);
 
     if (!response.ok) {
       throw new Error(`Discord webhook failed with status ${response.status}: ${response.statusText}`);

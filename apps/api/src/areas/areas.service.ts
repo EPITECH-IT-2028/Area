@@ -28,7 +28,7 @@ export class AreasService {
     try {
       const data = await this.graphqlService.adminMutation<{
         insert_areas_one: Areas;
-      }>(CreateAreaQuery, { ...createAreaDto, user_id: userId });
+      }>(CreateAreaQuery, { ...createAreaDto, is_active: createAreaDto.is_active ?? true, user_id: userId });
 
       return data.insert_areas_one;
     } catch (error) {
