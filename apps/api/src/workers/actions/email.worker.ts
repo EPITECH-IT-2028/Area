@@ -81,7 +81,7 @@ export class EmailWorker {
     return userService.access_token;
   }
 
-    private async refreshAccessToken(userService: any, areaName: string): Promise<string | null> {
+  private async refreshAccessToken(userService: any, areaName: string): Promise<string | null> {
     const logPrefix = `[${areaName}]`;
 
     if (!userService.refresh_token) {
