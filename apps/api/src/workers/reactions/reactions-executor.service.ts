@@ -27,7 +27,7 @@ export class ReactionExecutor {
     if (!area.reaction_config) {
       throw new Error('Reaction configuration is missing.');
     }
-    
+
     const webhookUrl = area.reaction_config.webhook_url;
     if (!webhookUrl) {
       throw new Error('Discord webhook URL is not configured.');
@@ -52,7 +52,8 @@ export class ReactionExecutor {
     let result = template;
     for (const key in data) {
       if (Object.prototype.hasOwnProperty.call(data, key)) {
-        const regex = new RegExp(`{{${key}}}`, 'g');
+        const escapedKey = key.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        const regex = new RegExp(`\\{\\{${escapedKey}\\}\\}`, 'g');
         result = result.replace(regex, String(data[key]));
       }
     }
