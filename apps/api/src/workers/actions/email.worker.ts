@@ -144,21 +144,32 @@ export class EmailWorker {
 
       const emails: EmailData[] = [];
       for (const message of data.messages) {
-        const emailResponse = await fetch(
-            `https://www.googleapis.com/gmail/v1/users/me/messages/${message.id}`,
-            { headers: { Authorization: `Bearer ${token}` } },
-        );
+        try {
+          const emailResponse = await fetch(
+              `https://www.googleapis.com/gmail/v1/users/me/messages/${message.id}`,
+              { headers: { Authorization: `Bearer ${token}` } },
+          );
 
-        const emailData = await emailResponse.json();
+          if (!emailResponse.ok) {
+            this.logger.error(`Failed to fetch email ${message.id}: ${emailResponse.status}`);
+            continue;
+          }
 
-        const headers = emailData.payload.headers;
-        emails.push({
-            id: emailData.id,
-            from: headers.find((h: any) => h.name === 'From')?.value || 'Unknown',
-            subject: headers.find((h: any) => h.name === 'Subject')?.value || 'No Subject',
-            snippet: emailData.snippet,
-        });
+          const emailData = await emailResponse.json();
+
+          const headers = emailData.payload.headers;
+          emails.push({
+              id: emailData.id,
+              from: headers.find((h: any) => h.name === 'From')?.value || 'Unknown',
+              subject: headers.find((h: any) => h.name === 'Subject')?.value || 'No Subject',
+              snippet: emailData.snippet,
+          });
+        } catch (error) {
+          this.logger.error(`Error fetching email ${message.id}:`, error);
+          continue;
+        }
       }
+
       return emails;
 
     } catch (error) {
