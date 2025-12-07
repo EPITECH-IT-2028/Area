@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { GraphQLService } from '../graphql/graphql.service';
 import { AreasService } from 'src/areas/areas.service';
@@ -24,7 +24,17 @@ export class GlobalWorkerService {
     this.logger.log('🔄 Starting global worker cycle...');
 
     try {
-      const areas = await this.areasService.getAllActiveAreas();
+      let areas: Areas[];
+      try {
+        areas = await this.areasService.getAllActiveAreas();
+      } catch (error) {
+        if (error instanceof NotFoundException) {
+          this.logger.log('📋 No active areas found');
+          return;
+        }
+        throw error;
+      }
+      
       this.logger.log(`📋 Found ${areas.length} active areas`);
 
       const areasByAction = this.groupAreasByAction(areas);
