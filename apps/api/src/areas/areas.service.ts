@@ -23,13 +23,13 @@ export class AreasService {
 
     return result.areas;
   }
-  
-  async create(input: CreateAreaDto): Promise<Areas> {
+
+  async create(createAreaDto: CreateAreaDto, userId: string): Promise<Areas> {
     try {
       const data = await this.graphqlService.adminMutation<{
         insert_areas_one: Areas;
-      }>(CreateAreaQuery, input);
-      
+      }>(CreateAreaQuery, { ...createAreaDto, user_id: userId });
+
       return data.insert_areas_one;
     } catch (error) {
       throw new Error(`Failed to create area: ${error}`);

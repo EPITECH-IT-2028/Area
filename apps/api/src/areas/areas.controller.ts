@@ -15,10 +15,6 @@ import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { IsBoolean, IsNotEmpty, IsOptional, IsString, IsUUID, IsObject } from 'class-validator';
 
 export class CreateAreaDto {
-  @IsUUID()
-  @IsNotEmpty()
-  user_id: string;
-
   @IsString()
   @IsNotEmpty()
   name: string;
@@ -64,8 +60,9 @@ export class AreasController {
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  async create(@Body() createAreaDto: CreateAreaDto) {
-    const area = await this.areasService.create(createAreaDto);
+  async create(@Body() createAreaDto: CreateAreaDto, @Request() req: any) {
+    const userId = req.user.sub as string;
+    const area = await this.areasService.create(createAreaDto, userId);
     return {
       success: true,
       data: area,
