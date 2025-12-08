@@ -6,7 +6,10 @@ import { Request } from 'express';
 export class GoogleOauthGuard extends AuthGuard('google') {
   getAuthenticateOptions(context: ExecutionContext) {
     const request = context.switchToHttp().getRequest<Request>();
-    const platform = request.query.platform || 'web';
+    const platformParam = request.query.platform;
+    const platform = ['web', 'mobile'].includes(platformParam as string)
+      ? platformParam
+      : 'web';
 
     return {
       state: JSON.stringify({ platform }),

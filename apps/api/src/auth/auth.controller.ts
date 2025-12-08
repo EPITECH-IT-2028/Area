@@ -20,6 +20,7 @@ import type { Response } from 'express';
 import { AuthService, AuthResponse } from './auth.service';
 import { GoogleOauthGuard } from './guards/google-auth.guard';
 import { GithubOauthGuard } from './guards/github-auth.guard';
+import { Request } from 'express';
 
 class RegisterDto {
   @IsEmail()
@@ -125,11 +126,7 @@ export class AuthController {
     req: RequestWithUser,
     res: Response,
     platform: string | undefined,
-    loginMethod: (user: {
-      id: string;
-      email: string;
-      name: string;
-    }) => AuthResponse,
+    loginMethod: (user: RequestWithUser['user']) => AuthResponse,
   ) {
     if (!req.user) {
       redirectToApp(

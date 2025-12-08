@@ -5,6 +5,7 @@ import { ConfigService } from '@nestjs/config';
 import { UsersService } from '../../users/users.service';
 import { UserServicesService } from '../../user-services/user-services.service';
 import { Request } from 'express';
+import { parsePlatformFromState } from 'src/utils/parsePlatform';
 
 @Injectable()
 export class GithubStrategy extends PassportStrategy(Strategy, 'github') {
@@ -28,17 +29,7 @@ export class GithubStrategy extends PassportStrategy(Strategy, 'github') {
     refreshToken: string,
     profile: Profile,
   ) {
-    let platform = 'web';
-    try {
-      const state = req.query.state;
-      if (typeof state === 'string') {
-        const parsed = JSON.parse(state) as { platform?: string };
-        platform = parsed.platform || 'web';
-      }
-    } catch (e) {
-      console.error('Error parsing OAuth state:', e);
-    }
-
+    const platform = parsePlatformFromState(req);
     const { displayName, emails, username } = profile;
 
     const email = emails && emails.length > 0 ? emails[0].value : null;
