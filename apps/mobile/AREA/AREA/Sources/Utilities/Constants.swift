@@ -35,6 +35,7 @@ struct Constants {
 	// Server paths
 	static let loginServerPath = "/auth/login"
 	static let registerServerPath = "/auth/register"
+	static let getUserPath = "/users"
 	static let githubOAuth2ServerPath = "http://localhost:8080/auth/github"
 	static let googleOAuth2ServerPath = "http://localhost:8080/auth/google"
 	
