@@ -6,7 +6,6 @@ import {
   HttpStatus,
   Get,
   UseGuards,
-  Query,
   Req,
   Res,
 } from '@nestjs/common';
@@ -21,6 +20,7 @@ import type { Response } from 'express';
 import { AuthService, AuthResponse } from './auth.service';
 import { GoogleOauthGuard } from './guards/google-auth.guard';
 import { GithubOauthGuard } from './guards/github-auth.guard';
+import { Request } from 'express';
 
 class RegisterDto {
   @IsEmail()
@@ -46,6 +46,15 @@ class LoginDto {
   @IsString()
   @IsNotEmpty()
   password: string;
+}
+
+interface RequestWithUser extends Request {
+  user?: {
+    id: string;
+    email: string;
+    name: string;
+    platform?: string;
+  };
 }
 
 @Controller('auth')
@@ -81,10 +90,10 @@ export class AuthController {
   @Get('google/callback')
   @UseGuards(GoogleOauthGuard)
   googleAuthCallback(
-    @Req() req: any,
+    @Req() req: RequestWithUser,
     @Res({ passthrough: false }) res: Response,
-    @Query('platform') platform?: string,
   ): void {
+    const platform = req.user?.platform || 'web';
     this.handleOAuthCallback(
       req,
       res,
@@ -100,10 +109,11 @@ export class AuthController {
   @Get('github/callback')
   @UseGuards(GithubOauthGuard)
   githubAuthCallback(
-    @Req() req: any,
+    @Req() req: RequestWithUser,
     @Res({ passthrough: false }) res: Response,
-    @Query('platform') platform?: string,
   ): void {
+    const platform = req.user?.platform || 'web';
+
     this.handleOAuthCallback(
       req,
       res,
@@ -113,12 +123,11 @@ export class AuthController {
   }
 
   private handleOAuthCallback(
-    req: any,
+    req: RequestWithUser,
     res: Response,
     platform: string | undefined,
-    loginMethod: (user: any) => AuthResponse,
+    loginMethod: (user: RequestWithUser['user']) => AuthResponse,
   ) {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     if (!req.user) {
       redirectToApp(
         platform || 'web',
@@ -130,7 +139,6 @@ export class AuthController {
     }
 
     try {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       const result = loginMethod(req.user);
       if (!result || !result.access_token) {
         redirectToApp(
