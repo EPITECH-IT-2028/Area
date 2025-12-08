@@ -4,6 +4,8 @@ import { Strategy, Profile } from 'passport-google-oauth20';
 import { ConfigService } from '@nestjs/config';
 import { UsersService } from '../../users/users.service';
 import { UserServicesService } from '../../user-services/user-services.service';
+import { Request } from 'express';
+import { parsePlatformFromState } from 'src/utils/parsePlatform';
 
 @Injectable()
 export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
@@ -17,14 +19,18 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
       clientSecret: configService.getOrThrow<string>('GOOGLE_CLIENT_SECRET'),
       callbackURL: configService.getOrThrow<string>('GOOGLE_CALLBACK_URL'),
       scope: ['email', 'profile'],
+      passReqToCallback: true,
     });
   }
 
   async validate(
+    req: Request,
     accessToken: string,
     refreshToken: string,
     profile: Profile,
-  ): Promise<any> {
+  ) {
+    const platform = parsePlatformFromState(req);
+
     const { name, emails } = profile;
 
     const email = emails && emails.length > 0 ? emails[0].value : null;
@@ -68,6 +74,9 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
       throw new Error('Google service not found');
     }
 
-    return user;
+    return {
+      ...user,
+      platform,
+    };
   }
 }
