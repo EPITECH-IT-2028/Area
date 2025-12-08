@@ -19,41 +19,68 @@ class GoogleAuthAction: NSObject, ObservableObject {
 		super.init()
 	}
 
-	func signIn() {
-		var components = URLComponents(string: Constants.googleOAuth2ServerPath)!
-		components.queryItems = [
-			URLQueryItem(
-				name: Constants.keyForOauth2,
-				value: Constants.valueForOauth2
-			)
-		]
+	func signIn() async throws -> String {
+		return try await withCheckedThrowingContinuation { continuation in
+			isLoading = true
+			var components = URLComponents(string: Constants.googleOAuth2ServerPath)!
+			components.queryItems = [
+				URLQueryItem(
+					name: Constants.keyForOauth2,
+					value: Constants.valueForOauth2
+				)
+			]
 
-		guard let authURL = components.url else { return }
-
-		self.session = ASWebAuthenticationSession(
-			url: authURL,
-			callbackURLScheme: Constants.callbackURLScheme
-		) { callbackURL, error in
-			guard let callbackURL = callbackURL,
-				let components = URLComponents(
-					url: callbackURL,
-					resolvingAgainstBaseURL: true
-				),
-				let tokenItem = components.queryItems?.first(where: {
-					$0.name == Constants.tokenString
-				}),
-				let token = tokenItem.value
-
-			else {
+			guard let authURL = components.url else {
+				self.errorMessage = "Invalid URL"
+				continuation.resume(throwing: NSError(domain: "GoogleAuthAction", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"]))
 				return
 			}
-			DispatchQueue.main.async {
-				self.isAuthenticated = true
-				try? AuthState.shared.authenticate(accessToken: token)
+
+			self.session = ASWebAuthenticationSession(
+				url: authURL,
+				callbackURLScheme: Constants.callbackURLScheme
+			) { callbackURL, error in
+				defer { self.session = nil }
+
+				if let error = error {
+					DispatchQueue.main.async {
+						self.errorMessage = error.localizedDescription
+					}
+					continuation.resume(throwing: error)
+					return
+				}
+
+				guard let callbackURL = callbackURL,
+					  let components = URLComponents(
+						url: callbackURL,
+						resolvingAgainstBaseURL: true
+					  ),
+					  let tokenItem = components.queryItems?.first(where: {
+							$0.name == Constants.tokenString
+					  }),
+					  let token = tokenItem.value else {
+					DispatchQueue.main.async {
+						self.errorMessage = "Missing token in callback URL"
+					}
+					continuation.resume(throwing: NSError(domain: "GoogleAuthAction", code: -2, userInfo: [NSLocalizedDescriptionKey: "Missing token in callback URL"]))
+					return
+				}
+
+				DispatchQueue.main.async {
+					do {
+						try AuthState.shared.authenticate(accessToken: token)
+						self.isAuthenticated = true
+						self.isLoading = false
+					} catch {
+						self.errorMessage = "Failed to save authentication"
+						self.isLoading = false
+					}
+				}
+				continuation.resume(returning: token)
 			}
+			self.session?.presentationContextProvider = self
+			self.session?.start()
 		}
-		self.session?.presentationContextProvider = self
-		self.session?.start()
 	}
 }
 
@@ -67,6 +94,6 @@ extension GoogleAuthAction: ASWebAuthenticationPresentationContextProviding {
 		{
 			return ASPresentationAnchor(windowScene: windowScene)
 		}
-		fatalError(String(localized: LocalizedStringResource.oauth2ErrorPresentationArchor))
+		return ASPresentationAnchor()
 	}
 }

@@ -31,30 +31,28 @@ class LoginViewModel: ObservableObject {
 	}
 
 	func googleLogin() async {
-		googleAuthAction.signIn()
-
-		if googleAuthAction.isAuthenticated == true {
+		do {
+			try await googleAuthAction.signIn()
 			isLoggedIn = true
 			status = .success
 			errorMessage = nil
-		} else {
-			errorMessage = googleAuthAction.errorMessage
+		} catch {
 			isLoggedIn = false
 			status = .failure
+			errorMessage = error.localizedDescription.isEmpty ? googleAuthAction.errorMessage : error.localizedDescription
 		}
 	}
 
 	func githubLogin() async {
-		githubAuthAction.signIn()
-
-		if githubAuthAction.isAuthenticated == true {
+		do {
+			try await githubAuthAction.signIn()
 			isLoggedIn = true
 			status = .success
 			errorMessage = nil
-		} else {
-			errorMessage = githubAuthAction.errorMessage
+		} catch {
 			isLoggedIn = false
 			status = .failure
+			errorMessage = error.localizedDescription.isEmpty ? githubAuthAction.errorMessage : error.localizedDescription
 		}
 	}
 
@@ -87,3 +85,4 @@ class LoginViewModel: ObservableObject {
 		}
 	}
 }
+

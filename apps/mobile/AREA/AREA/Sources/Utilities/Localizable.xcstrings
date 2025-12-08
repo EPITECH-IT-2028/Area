@@ -458,7 +458,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Client ID Google manquant dans la configuration."
+            "value" : "Client Id Google manquant dans la configuration."
           }
         }
       }
@@ -469,7 +469,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Missing root view for google connexion."
+            "value" : "Missing root view for google connection."
           }
         },
         "fr" : {
@@ -492,7 +492,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Impossible de récupérer l'ID Token Google."
+            "value" : "Impossible de récupérer l'Id Token Google."
           }
         }
       }

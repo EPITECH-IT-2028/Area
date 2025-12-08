@@ -19,43 +19,79 @@ class GitHubAuthAction: NSObject, ObservableObject {
 		super.init()
 	}
 
-	func signIn() {
-		var components = URLComponents(string: Constants.githubOAuth2ServerPath)!
-		components.queryItems = [
-			URLQueryItem(
-				name: Constants.keyForOauth2,
-				value: Constants.valueForOauth2
-			)
-		]
+	func signIn() async throws -> String {
+		return try await withCheckedThrowingContinuation { continuation in
+			isLoading = true
+			var components = URLComponents(string: Constants.githubOAuth2ServerPath)!
+			components.queryItems = [
+				URLQueryItem(
+					name: Constants.keyForOauth2,
+					value: Constants.valueForOauth2
+				)
+			]
 
-		guard let authURL = components.url else { return }
-
-		print(authURL)
-		self.session = ASWebAuthenticationSession(
-			url: authURL,
-			callbackURLScheme: "AREA"
-		) { callbackURL, error in
-			guard let callbackURL = callbackURL,
-				let components = URLComponents(
-					url: callbackURL,
-					resolvingAgainstBaseURL: true
-				),
-				let tokenItem = components.queryItems?.first(where: {
-					$0.name == Constants.tokenString
-				}),
-				let token = tokenItem.value
-
-			else {
+			guard let authURL = components.url else {
+				let error = NSError(
+					domain: "GitHubAuthAction",
+					code: -1,
+					userInfo: [NSLocalizedDescriptionKey: "Invalid auth URL"]
+				)
+				self.errorMessage = error.localizedDescription
+				continuation.resume(throwing: error)
 				return
 			}
-			DispatchQueue.main.async {
-				
-				self.isAuthenticated = true
-				try? AuthState.shared.authenticate(accessToken: token)
+
+			self.session = ASWebAuthenticationSession(
+				url: authURL,
+				callbackURLScheme: "AREA"
+			) { callbackURL, error in
+				defer {
+					self.session = nil
+				}
+
+				if let error = error {
+					DispatchQueue.main.async {
+						self.errorMessage = error.localizedDescription
+					}
+					continuation.resume(throwing: error)
+					return
+				}
+
+				guard let callbackURL = callbackURL,
+					let components = URLComponents(
+						url: callbackURL,
+						resolvingAgainstBaseURL: true
+					),
+					let tokenItem = components.queryItems?.first(where: {
+						$0.name == Constants.tokenString
+					}),
+					let token = tokenItem.value
+				else {
+					let error = NSError(
+						domain: "GitHubAuthAction",
+						code: -2,
+						userInfo: [NSLocalizedDescriptionKey: "Token missing in callback"]
+					)
+					DispatchQueue.main.async {
+						self.errorMessage = error.localizedDescription
+					}
+					continuation.resume(throwing: error)
+					return
+				}
+
+				DispatchQueue.main.async {
+					do {
+						try AuthState.shared.authenticate(accessToken: token)
+						self.isAuthenticated = true
+						self.isLoading = false
+					} catch {
+						self.errorMessage = "Failed to save authentication"
+					}
+				}
 			}
+			self.session?.presentationContextProvider = self
+			self.session?.start()
 		}
-		self.session?.presentationContextProvider = self
-		self.session?.start()
 	}
 }
 
@@ -69,6 +105,6 @@ extension GitHubAuthAction: ASWebAuthenticationPresentationContextProviding {
 		{
 			return ASPresentationAnchor(windowScene: windowScene)
 		}
-		fatalError(String(localized: LocalizedStringResource.oauth2ErrorPresentationArchor))
+		return ASPresentationAnchor()
 	}
 }
