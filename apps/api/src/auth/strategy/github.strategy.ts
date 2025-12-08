@@ -4,6 +4,8 @@ import { Strategy, Profile } from 'passport-github2';
 import { ConfigService } from '@nestjs/config';
 import { UsersService } from '../../users/users.service';
 import { UserServicesService } from '../../user-services/user-services.service';
+import { Request } from 'express';
+import { parsePlatformFromState } from 'src/utils/parsePlatform';
 
 @Injectable()
 export class GithubStrategy extends PassportStrategy(Strategy, 'github') {
@@ -17,10 +19,17 @@ export class GithubStrategy extends PassportStrategy(Strategy, 'github') {
       clientSecret: configService.getOrThrow<string>('GITHUB_CLIENT_SECRET'),
       callbackURL: configService.getOrThrow<string>('GITHUB_CALLBACK_URL'),
       scope: ['user:email'],
+      passReqToCallback: true,
     });
   }
 
-  async validate(accessToken: string, refreshToken: string, profile: Profile) {
+  async validate(
+    req: Request,
+    accessToken: string,
+    refreshToken: string,
+    profile: Profile,
+  ) {
+    const platform = parsePlatformFromState(req);
     const { displayName, emails, username } = profile;
 
     const email = emails && emails.length > 0 ? emails[0].value : null;
@@ -61,6 +70,9 @@ export class GithubStrategy extends PassportStrategy(Strategy, 'github') {
       throw new Error('GitHub service not found');
     }
 
-    return user;
+    return {
+      ...user,
+      platform,
+    };
   }
 }
