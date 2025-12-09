@@ -6,14 +6,25 @@
 //
 
 import Foundation
+import SimpleKeychain
 
 struct SplashScreenAction {
 	func verifyToken() async throws -> Bool {
 		let builder = BuilderAPI()
 		let url = try builder.buildURL(path: Constants.getUserPath)
+		guard
+			let tokenData = try? KeychainManager.shared.keychain.data(
+				forKey: Constants.keychainJWTKey
+			),
+			let token = String(data: tokenData, encoding: .utf8)
+		else {
+			throw NetworkError.missingToken
+		}
+
 		let request = try builder.buildRequest(
 			url: url,
-			method: "GET"
+			method: "GET",
+			token: token
 		)
 
 		let (data, urlResponse) = try await URLSession.shared.data(for: request)
