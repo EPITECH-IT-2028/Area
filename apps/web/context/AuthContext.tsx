@@ -42,16 +42,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   useEffect(() => {
+    const storedUser = localStorage.getItem("user");
     const storedToken = localStorage.getItem("access_token");
 
     if (
-      !storedToken &&
+      (!storedUser || !storedToken) &&
       window.location.pathname !== "/login" &&
       window.location.pathname !== "/register"
     ) {
       router.push("/login");
     } else if (
-      storedToken &&
+      (storedUser || storedToken) &&
       (window.location.pathname === "/login" ||
         window.location.pathname === "/register")
     ) {
