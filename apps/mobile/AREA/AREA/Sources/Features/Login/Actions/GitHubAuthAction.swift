@@ -22,7 +22,9 @@ class GitHubAuthAction: NSObject, ObservableObject {
 
 	func signIn() async throws -> String {
 		return try await withCheckedThrowingContinuation { continuation in
-			isLoading = true
+			DispatchQueue.main.async {
+				self.isLoading = true
+			}
 			guard
 				var components = URLComponents(string: Constants.githubOAuth2ServerPath)
 			else {
@@ -111,9 +113,15 @@ class GitHubAuthAction: NSObject, ObservableObject {
 						self.isLoading = false
 						continuation.resume(returning: token)
 					} catch {
-						self.errorMessage = "Failed to save authentication"
-						self.isLoading = false
-						continuation.resume(throwing: error)
+						continuation.resume(
+							throwing: NSError(
+								domain: "GitHubAuthAction",
+								code: -3,
+								userInfo: [
+									NSLocalizedDescriptionKey: "Failed to save authentication"
+								]
+							)
+						)
 					}
 				}
 			}
@@ -126,10 +134,9 @@ class GitHubAuthAction: NSObject, ObservableObject {
 				continuation.resume(
 					throwing: NSError(
 						domain: "GitHubAuthAction",
-						code: -3,
+						code: -4,
 						userInfo: [
-							NSLocalizedDescriptionKey:
-								"Failed to start authentication session"
+							NSLocalizedDescriptionKey: "Failed to save authentication"
 						]
 					)
 				)
