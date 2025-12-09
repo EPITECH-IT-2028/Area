@@ -90,6 +90,7 @@ class GitHubAuthAction: NSObject, ObservableObject {
 				else {
 					DispatchQueue.main.async {
 						self.errorMessage = "Missing token in callback URL"
+						self.isLoading = false
 					}
 					continuation.resume(
 						throwing: NSError(

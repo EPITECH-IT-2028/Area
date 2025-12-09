@@ -41,29 +41,27 @@ struct SettingsView: View {
 							LocalizedStringResource.settingsLogoutConfirm,
 							role: .destructive
 						) {
-							do {
-								Task {
-									do {
-										try authState.logout()
-									} catch let error as AuthError {
-										logoutError = error
-										showLogoutError = true
-									}
+							Task {
+								do {
+									try authState.logout()
+								} catch let error as AuthError {
+									logoutError = error
+									showLogoutError = true
 								}
-							}
-						}
-						.alert(
-							LocalizedStringResource.settingsErrorLogout,
-							isPresented: $showLogoutError
-						) {
-							Button(Constants.ok, role: .cancel) {}
-						} message: {
-							if let error = logoutError {
-								Text(error.localizedDescription)
 							}
 						}
 					}
 				}
+			}
+		}
+		.alert(
+			LocalizedStringResource.settingsErrorLogout,
+			isPresented: $showLogoutError
+		) {
+			Button(Constants.ok, role: .cancel) {}
+		} message: {
+			if let error = logoutError {
+				Text(error.localizedDescription)
 			}
 		}
 	}
