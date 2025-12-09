@@ -1,5 +1,7 @@
 import { useState } from "react";
 
+import { useRouter } from "next/navigation";
+
 import { RegisterRequest } from "@/app/register/models/registerRequest";
 import { RegisterResponse } from "@/app/register/models/registerResponse";
 import api from "@/lib/api";
@@ -8,6 +10,7 @@ import { toast } from "sonner";
 
 function useRegister() {
   const [response, setResponse] = useState<RegisterResponse>();
+  const router = useRouter();
 
   async function register(
     credentials: RegisterRequest,
@@ -21,6 +24,7 @@ function useRegister() {
       setResponse(response);
       if (response.success) {
         toast.success(response?.message);
+        router.push("/");
       }
       return response;
     } catch (error) {
@@ -53,6 +57,7 @@ function useRegister() {
         toast.error(message);
       } else {
         toast.error("A network error occurred. Please check your connection.");
+        throw error;
       }
       return errorResponse;
     }

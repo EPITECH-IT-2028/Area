@@ -1,14 +1,16 @@
 import { useState } from "react";
 
+import { useRouter } from "next/navigation";
+
 import { LoginRequest } from "@/app/login/models/loginRequest";
 import { LoginResponse } from "@/app/login/models/loginResponse";
-import { RegisterResponse } from "@/app/register/models/registerResponse";
 import api from "@/lib/api";
 import { HTTPError } from "ky";
 import { toast } from "sonner";
 
 function useLogin() {
   const [response, setResponse] = useState<LoginResponse>();
+  const router = useRouter();
 
   async function login(
     credentials: LoginRequest,
@@ -22,6 +24,7 @@ function useLogin() {
       setResponse(response);
       if (response.success) {
         toast.success(response?.message);
+        router.push("/");
       }
       return response;
     } catch (error) {
@@ -54,6 +57,7 @@ function useLogin() {
         toast.error(message);
       } else {
         toast.error("A network error occurred. Please check your connection.");
+        throw error;
       }
       return errorResponse;
     }
