@@ -121,7 +121,7 @@ class GitHubAuthAction: NSObject, ObservableObject {
 								code: -3,
 								userInfo: [
 									NSLocalizedDescriptionKey:
-										"Failed to save authentication session"
+										"Failed to save authentication "
 								]
 							)
 						)
