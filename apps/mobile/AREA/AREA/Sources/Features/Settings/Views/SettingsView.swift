@@ -10,6 +10,8 @@ import SwiftUI
 struct SettingsView: View {
 	@EnvironmentObject var authState: AuthState
 	@State var wantToLogout: Bool = false
+	@State var logoutError: AuthError?
+	@State var showLogoutError: Bool = false
 	var body: some View {
 		VStack {
 			NavigationStack {
@@ -40,9 +42,24 @@ struct SettingsView: View {
 							role: .destructive
 						) {
 							do {
-								try authState.logout()
-							} catch let error {
-								print(error)
+								Task {
+									do {
+										try authState.logout()
+									} catch let error as AuthError {
+										logoutError = error
+										showLogoutError = true
+									}
+								}
+							}
+						}
+						.alert(
+							LocalizedStringResource.settingsErrorLogout,
+							isPresented: $showLogoutError
+						) {
+							Button(Constants.ok, role: .cancel) {}
+						} message: {
+							if let error = logoutError {
+								Text(error.localizedDescription)
 							}
 						}
 					}

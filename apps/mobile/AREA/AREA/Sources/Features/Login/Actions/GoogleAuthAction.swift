@@ -1,5 +1,5 @@
 //
-//  GoogleAuthAuthAction.swift
+//  GoogleAuthAction.swift
 //  AREA
 //
 //  Created by Arthur GUERINAULT on 05/12/2025.

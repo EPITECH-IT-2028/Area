@@ -21,7 +21,7 @@ struct SplashScreenAction {
 		guard let response = urlResponse as? HTTPURLResponse else {
 			throw NetworkError.badURLResponse(
 				underlyingError: NSError(
-					domain: "LoginAction",
+					domain: "SplashScreenAction",
 					code: -1,
 					userInfo: [
 						NSLocalizedDescriptionKey: "Response is not an HTTP response"
@@ -36,7 +36,7 @@ struct SplashScreenAction {
 			)
 			throw NetworkError.badURLResponse(
 				underlyingError: NSError(
-					domain: "LoginAction",
+					domain: "SplashScreenAction",
 					code: response.statusCode,
 					userInfo: [
 						NSLocalizedDescriptionKey: errorMessage,

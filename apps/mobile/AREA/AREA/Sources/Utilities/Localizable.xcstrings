@@ -139,6 +139,9 @@
         }
       }
     },
+    "Key" : {
+      "extractionState" : "manual"
+    },
     "Login.EmailField.Title" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -702,6 +705,23 @@
         }
       }
     },
+    "Settings.ErrorLogout" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "An error occurred when trying to log you out."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Une erreur s’est produite pendant la tentative de déconnexion."
+          }
+        }
+      }
+    },
     "Settings.Logout" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -748,7 +768,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Confimer"
+            "value" : "Confirmer"
           }
         }
       }

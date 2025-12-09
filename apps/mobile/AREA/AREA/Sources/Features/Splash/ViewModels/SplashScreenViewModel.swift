@@ -20,10 +20,11 @@ class SplashScreenViewModel: ObservableObject {
 			let isTokenValid = try await action.verifyToken()
 			if !isTokenValid {
 				try AuthState.shared.logout()
-			} else {
 			}
+			return
 		} catch {
 			print(error)
+			try? AuthState.shared.logout()
 		}
 	}
 }

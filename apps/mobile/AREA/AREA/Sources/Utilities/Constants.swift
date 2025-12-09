@@ -38,18 +38,21 @@ struct Constants {
 	static let getUserPath = "/users"
 	static let githubOAuth2ServerPath = "http://localhost:8080/auth/github"
 	static let googleOAuth2ServerPath = "http://localhost:8080/auth/google"
-	
+
 	// OAuth2 query items
 	static let keyForOauth2 = "platform"
 	static let valueForOauth2 = "mobile"
-	
+
 	// OAuth2 token string
 	static let tokenString = "token"
-	
+
 	// OAuth2 Callback url
 	static let callbackURLScheme = "AREA"
 
 	// Keychain values
 	static let keychainJWTKey = "jwt"
+
+	// Confirm both language
+	static let ok = "OK"
 
 }

@@ -63,7 +63,7 @@ class GitHubAuthAction: NSObject, ObservableObject {
 
 			self.session = ASWebAuthenticationSession(
 				url: authURL,
-				callbackURLScheme: "AREA"
+				callbackURLScheme: Constants.callbackURLScheme
 			) { callbackURL, error in
 				defer {
 					self.session = nil
