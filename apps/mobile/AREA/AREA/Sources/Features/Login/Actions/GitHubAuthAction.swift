@@ -113,12 +113,15 @@ class GitHubAuthAction: NSObject, ObservableObject {
 						self.isLoading = false
 						continuation.resume(returning: token)
 					} catch {
+						self.errorMessage = "Failed to save authentication"
+						self.isLoading = false
 						continuation.resume(
 							throwing: NSError(
 								domain: "GitHubAuthAction",
 								code: -3,
 								userInfo: [
-									NSLocalizedDescriptionKey: "Failed to start authentication session"
+									NSLocalizedDescriptionKey:
+										"Failed to save authentication session"
 								]
 							)
 						)
@@ -136,7 +139,7 @@ class GitHubAuthAction: NSObject, ObservableObject {
 						domain: "GitHubAuthAction",
 						code: -4,
 						userInfo: [
-							NSLocalizedDescriptionKey: "Failed to save authentication"
+							NSLocalizedDescriptionKey: "Failed to start authentication"
 						]
 					)
 				)

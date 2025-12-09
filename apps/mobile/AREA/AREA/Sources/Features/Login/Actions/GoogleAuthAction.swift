@@ -111,12 +111,15 @@ class GoogleAuthAction: NSObject, ObservableObject {
 						self.isLoading = false
 						continuation.resume(returning: token)
 					} catch {
+						self.errorMessage = "Failed to save authentication"
+						self.isLoading = false
 						continuation.resume(
 							throwing: NSError(
 								domain: "GoogleAuthAction",
 								code: -3,
 								userInfo: [
-									NSLocalizedDescriptionKey: "Failed to start authentication session"
+									NSLocalizedDescriptionKey:
+										"Failed to save authentication session"
 								]
 							)
 						)
