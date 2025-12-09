@@ -8,6 +8,7 @@
 internal import Combine
 import Foundation
 import SimpleKeychain
+import WebKit
 
 class LoginViewModel: ObservableObject {
 	@Published var email: String
@@ -15,6 +16,8 @@ class LoginViewModel: ObservableObject {
 	@Published var isLoggedIn: Bool
 	@Published var errorMessage: String? = nil
 	@Published var status: LoginStatus = .success
+	var googleAuthAction = GoogleAuthAction()
+	var githubAuthAction = GitHubAuthAction()
 
 	enum LoginStatus {
 		case success
@@ -25,6 +28,32 @@ class LoginViewModel: ObservableObject {
 		self.email = email
 		self.password = password
 		self.isLoggedIn = false
+	}
+
+	func googleLogin() async {
+		do {
+			try await googleAuthAction.signIn()
+			isLoggedIn = true
+			status = .success
+			errorMessage = nil
+		} catch {
+			isLoggedIn = false
+			status = .failure
+			errorMessage = error.localizedDescription.isEmpty ? googleAuthAction.errorMessage : error.localizedDescription
+		}
+	}
+
+	func githubLogin() async {
+		do {
+			try await githubAuthAction.signIn()
+			isLoggedIn = true
+			status = .success
+			errorMessage = nil
+		} catch {
+			isLoggedIn = false
+			status = .failure
+			errorMessage = error.localizedDescription.isEmpty ? githubAuthAction.errorMessage : error.localizedDescription
+		}
 	}
 
 	@MainActor
@@ -56,3 +85,4 @@ class LoginViewModel: ObservableObject {
 		}
 	}
 }
+
