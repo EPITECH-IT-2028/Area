@@ -116,7 +116,7 @@ class GoogleAuthAction: NSObject, ObservableObject {
 								domain: "GoogleAuthAction",
 								code: -3,
 								userInfo: [
-									NSLocalizedDescriptionKey: "Failed to save authentication"
+									NSLocalizedDescriptionKey: "Failed to start authentication session"
 								]
 							)
 						)
