@@ -46,7 +46,8 @@ struct BuilderAPI {
 
 	func buildRequest(
 		url: URL,
-		method: String
+		method: String,
+		token: String? = nil
 	)
 		throws -> URLRequest
 	{
@@ -54,6 +55,9 @@ struct BuilderAPI {
 		request.httpMethod = method
 		request.addValue("application/json", forHTTPHeaderField: "Content-Type")
 		request.addValue("application/json", forHTTPHeaderField: "Accept")
+		if let token = token {
+			request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+		}
 		return request
 	}
 }

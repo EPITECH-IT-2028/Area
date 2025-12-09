@@ -22,7 +22,9 @@ class GitHubAuthAction: NSObject, ObservableObject {
 
 	func signIn() async throws -> String {
 		return try await withCheckedThrowingContinuation { continuation in
-			isLoading = true
+			DispatchQueue.main.async {
+				self.isLoading = true
+			}
 			guard
 				var components = URLComponents(string: Constants.githubOAuth2ServerPath)
 			else {
@@ -63,7 +65,7 @@ class GitHubAuthAction: NSObject, ObservableObject {
 
 			self.session = ASWebAuthenticationSession(
 				url: authURL,
-				callbackURLScheme: "AREA"
+				callbackURLScheme: Constants.callbackURLScheme
 			) { callbackURL, error in
 				defer {
 					self.session = nil
@@ -90,6 +92,7 @@ class GitHubAuthAction: NSObject, ObservableObject {
 				else {
 					DispatchQueue.main.async {
 						self.errorMessage = "Missing token in callback URL"
+						self.isLoading = false
 					}
 					continuation.resume(
 						throwing: NSError(
@@ -112,7 +115,16 @@ class GitHubAuthAction: NSObject, ObservableObject {
 					} catch {
 						self.errorMessage = "Failed to save authentication"
 						self.isLoading = false
-						continuation.resume(throwing: error)
+						continuation.resume(
+							throwing: NSError(
+								domain: "GitHubAuthAction",
+								code: -3,
+								userInfo: [
+									NSLocalizedDescriptionKey:
+										"Failed to save authentication "
+								]
+							)
+						)
 					}
 				}
 			}
@@ -125,10 +137,9 @@ class GitHubAuthAction: NSObject, ObservableObject {
 				continuation.resume(
 					throwing: NSError(
 						domain: "GitHubAuthAction",
-						code: -3,
+						code: -4,
 						userInfo: [
-							NSLocalizedDescriptionKey:
-								"Failed to start authentication session"
+							NSLocalizedDescriptionKey: "Failed to start authentication"
 						]
 					)
 				)

@@ -1,5 +1,5 @@
 //
-//  GoogleAuthAuthAction.swift
+//  GoogleAuthAction.swift
 //  AREA
 //
 //  Created by Arthur GUERINAULT on 05/12/2025.
@@ -22,7 +22,9 @@ class GoogleAuthAction: NSObject, ObservableObject {
 
 	func signIn() async throws -> String {
 		return try await withCheckedThrowingContinuation { continuation in
-			isLoading = true
+			DispatchQueue.main.async {
+				self.isLoading = true
+			}
 			guard
 				var components = URLComponents(string: Constants.googleOAuth2ServerPath)
 			else {
@@ -88,6 +90,7 @@ class GoogleAuthAction: NSObject, ObservableObject {
 				else {
 					DispatchQueue.main.async {
 						self.errorMessage = "Missing token in callback URL"
+						self.isLoading = false
 					}
 					continuation.resume(
 						throwing: NSError(
@@ -106,12 +109,22 @@ class GoogleAuthAction: NSObject, ObservableObject {
 						try AuthState.shared.authenticate(accessToken: token)
 						self.isAuthenticated = true
 						self.isLoading = false
+						continuation.resume(returning: token)
 					} catch {
 						self.errorMessage = "Failed to save authentication"
 						self.isLoading = false
+						continuation.resume(
+							throwing: NSError(
+								domain: "GoogleAuthAction",
+								code: -3,
+								userInfo: [
+									NSLocalizedDescriptionKey:
+										"Failed to save authentication"
+								]
+							)
+						)
 					}
 				}
-				continuation.resume(returning: token)
 			}
 			self.session?.presentationContextProvider = self
 			if self.session?.start() != true {
@@ -122,7 +135,7 @@ class GoogleAuthAction: NSObject, ObservableObject {
 				continuation.resume(
 					throwing: NSError(
 						domain: "GoogleAuthAction",
-						code: -3,
+						code: -4,
 						userInfo: [
 							NSLocalizedDescriptionKey:
 								"Failed to start authentication session"

@@ -32,6 +32,7 @@ enum NetworkError: Error, LocalizedError {
 	case urlBuildFailed
 	case missingResponseData
 	case missingAccessToken
+	case missingToken
 	case encodingFailed(underlyingError: Error)
 	case decodingError(underlyingError: Error)
 
@@ -54,6 +55,8 @@ enum NetworkError: Error, LocalizedError {
 			return "The network request returned a response with no data."
 		case .missingAccessToken:
 			return "The network request was missing an access token."
+		case .missingToken:
+			return "The network request was missing a token."
 		}
 	}
 }

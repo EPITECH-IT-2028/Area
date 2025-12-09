@@ -8,12 +8,18 @@
 import SwiftUI
 
 struct SplashScreenView: View {
+	@StateObject var viewModel = SplashScreenViewModel()
 	var body: some View {
 		ZStack {
 			Color.black.ignoresSafeArea()
 			Text(LocalizedStringResource.splashScreenTitle)
 				.font(.title)
 				.foregroundStyle(Color.white)
+		}
+		.onAppear {
+			Task {
+				await viewModel.isTokenValid()
+			}
 		}
 	}
 }
