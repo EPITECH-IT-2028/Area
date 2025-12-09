@@ -46,7 +46,10 @@ export class DiscordWebhookHandler {
       const response = await fetch(webhookUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ content: message, username: 'AREA Bot' }),
+        body: JSON.stringify({
+          content: message,
+          username: area.reaction_config.username || 'Area Bot',
+        }),
         signal: controller.signal,
       });
 

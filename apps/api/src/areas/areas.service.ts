@@ -70,6 +70,12 @@ export class AreasService {
 
       return data.insert_areas_one;
     } catch (error) {
+      if (
+        error instanceof BadRequestException ||
+        error instanceof NotFoundException
+      ) {
+        throw error;
+      }
       throw new Error(`Failed to create area: ${error}`);
     }
   }

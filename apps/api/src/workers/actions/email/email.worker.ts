@@ -74,6 +74,7 @@ export class EmailWorker implements IActionWorker {
       }
     } catch (error) {
       this.logger.error(`Error processing area '${area.name}':`, error);
+      throw error;
     }
   }
 }

@@ -163,8 +163,10 @@ export class GmailService {
       const emailData = (await response.json()) as GmailMessageResponse;
       const headers = emailData.payload.headers;
 
-      const fromHeader = headers.find((h) => h.name === 'From');
-      const subjectHeader = headers.find((h) => h.name === 'Subject');
+      const fromHeader = headers.find((h) => h.name.toLowerCase() === 'from');
+      const subjectHeader = headers.find(
+        (h) => h.name.toLocaleLowerCase() === 'Subject',
+      );
 
       return {
         id: emailData.id,
