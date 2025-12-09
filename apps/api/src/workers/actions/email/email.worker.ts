@@ -56,7 +56,7 @@ export class EmailWorker implements IActionWorker {
 
       const emails = await this.gmailService.fetchNewEmails(
         token,
-        area.action_config,
+        area.action_config ?? {},
       );
 
       this.logger.log(
