@@ -1,18 +1,22 @@
 import {
   Controller,
   Get,
-  Delete,
-  Param,
   UseGuards,
-  Request,
   HttpStatus,
   HttpCode,
   Post,
   Body,
+  Req,
 } from '@nestjs/common';
 import { AreasService } from './areas.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import { IsBoolean, IsNotEmpty, IsOptional, IsString, IsUUID, IsObject } from 'class-validator';
+import {
+  IsBoolean,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  IsObject,
+} from 'class-validator';
 
 export class CreateAreaDto {
   @IsString()
@@ -27,17 +31,17 @@ export class CreateAreaDto {
   @IsOptional()
   is_active?: boolean;
 
-  @IsUUID()
+  @IsString()
   @IsNotEmpty()
-  action_id: string;
+  action_name: string;
 
   @IsObject()
   @IsOptional()
   action_config?: Record<string, any>;
 
-  @IsUUID()
+  @IsString()
   @IsNotEmpty()
-  reaction_id: string;
+  reaction_name: string;
 
   @IsObject()
   @IsOptional()
@@ -49,7 +53,7 @@ export class CreateAreaDto {
 export class AreasController {
   constructor(private readonly areasService: AreasService) {}
 
-  @Get('active')
+  @Get()
   async getAllActiveAreas() {
     const areas = await this.areasService.getAllActiveAreas();
     return {
@@ -60,8 +64,9 @@ export class AreasController {
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  async create(@Body() createAreaDto: CreateAreaDto, @Request() req: any) {
-    const userId = req.user.sub as string;
+  async create(@Body() createAreaDto: CreateAreaDto, @Req() req: any) {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    const userId = req.user.id as string;
     const area = await this.areasService.create(createAreaDto, userId);
     return {
       success: true,

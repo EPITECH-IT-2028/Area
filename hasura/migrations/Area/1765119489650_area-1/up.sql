@@ -1,5 +1,6 @@
+-- Insert Google service
 INSERT INTO services (name, display_name, description, icon_url, auth_type, base_url, is_active, config)
-VALUES 
+VALUES
   (
     'google',
     'Google',
@@ -15,6 +16,20 @@ VALUES
         "scopes": ["email", "profile", "https://www.googleapis.com/auth/gmail.modify"]
       }
     }'::jsonb
+  )
+ON CONFLICT (name) DO NOTHING;
+
+INSERT INTO services (name, display_name, description, icon_url, auth_type, base_url, is_active, config)
+VALUES
+  (
+    'discord_webhook',
+    'Discord Webhook',
+    'Service Discord pour envoyer des messages via webhook',
+    'https://discord.com/assets/f8389ca1a741a115313bede9ac02e2c0.svg',
+    'none',
+    'https://discord.com/api/webhooks',
+    true,
+    '{}'::jsonb
   )
 ON CONFLICT (name) DO NOTHING;
 

@@ -41,6 +41,48 @@ export const GetAllActiveAreasQuery = gql`
   }
 `;
 
+export const GetActionByNameQuery = gql`
+  query GetActionByName($name: String!) {
+    actions(
+      where: { name: { _eq: $name }, is_active: { _eq: true } }
+      limit: 1
+    ) {
+      id
+      name
+      display_name
+      event_type
+      description
+      config_schema
+      service {
+        id
+        name
+        display_name
+      }
+    }
+  }
+`;
+
+export const GetReactionByNameQuery = gql`
+  query GetReactionByName($name: String!) {
+    reactions(
+      where: { name: { _eq: $name }, is_active: { _eq: true } }
+      limit: 1
+    ) {
+      id
+      name
+      display_name
+      action_type
+      description
+      config_schema
+      service {
+        id
+        name
+        display_name
+      }
+    }
+  }
+`;
+
 export const CreateAreaQuery = gql`
   mutation CreateArea(
     $user_id: uuid!

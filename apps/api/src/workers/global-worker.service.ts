@@ -1,18 +1,17 @@
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
-import { GraphQLService } from '../graphql/graphql.service';
 import { AreasService } from 'src/areas/areas.service';
 import { Areas } from 'src/generated/graphql';
-import { EmailWorker } from './actions/email.worker';
+import { EmailWorker } from './actions/email/email.worker';
+import { IActionWorker } from './interfaces/worker.interface';
 
 @Injectable()
 export class GlobalWorkerService {
   private readonly logger = new Logger(GlobalWorkerService.name);
 
-  private readonly actionWorkers = new Map<string, any>();
+  private readonly actionWorkers = new Map<string, IActionWorker>();
 
   constructor(
-    private readonly graphqlService: GraphQLService,
     private readonly areasService: AreasService,
     private readonly emailWorker: EmailWorker,
   ) {
@@ -21,7 +20,7 @@ export class GlobalWorkerService {
 
   @Cron(CronExpression.EVERY_MINUTE)
   async processAllAreas() {
-    this.logger.log('🔄 Starting global worker cycle...');
+    this.logger.log('Starting global worker cycle...');
 
     try {
       let areas: Areas[];
@@ -29,13 +28,13 @@ export class GlobalWorkerService {
         areas = await this.areasService.getAllActiveAreas();
       } catch (error) {
         if (error instanceof NotFoundException) {
-          this.logger.log('📋 No active areas found');
+          this.logger.log('No active areas found');
           return;
         }
         throw error;
       }
-      
-      this.logger.log(`📋 Found ${areas.length} active areas`);
+
+      this.logger.log(`Found ${areas.length} active areas`);
 
       const areasByAction = this.groupAreasByAction(areas);
 
@@ -43,9 +42,9 @@ export class GlobalWorkerService {
         await this.dispatchToWorker(actionName, actionAreas);
       }
 
-      this.logger.log('✅ Global worker cycle completed');
+      this.logger.log('Global worker cycle completed');
     } catch (error) {
-      this.logger.error('❌ Error in global worker:', error);
+      this.logger.error('Error in global worker:', error);
     }
   }
 
@@ -69,16 +68,18 @@ export class GlobalWorkerService {
     const worker = this.actionWorkers.get(actionName);
 
     if (!worker) {
-      this.logger.warn(`⚠️  No worker registered for action: ${actionName}`);
+      this.logger.warn(`No worker registered for action: ${actionName}`);
       return;
     }
 
-    this.logger.log(`🚀 Dispatching ${areas.length} areas to ${actionName} worker`);
+    this.logger.log(
+      `Dispatching ${areas.length} areas to ${actionName} worker`,
+    );
 
     try {
       await worker.process(areas);
     } catch (error) {
-      this.logger.error(`❌ Error in ${actionName} worker:`, error);
+      this.logger.error(`Error in ${actionName} worker:`, error);
     }
   }
 }
