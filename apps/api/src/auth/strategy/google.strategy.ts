@@ -1,11 +1,20 @@
 import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
-import { Strategy, Profile } from 'passport-google-oauth20';
+import {
+  Strategy,
+  Profile,
+  StrategyOptionsWithRequest,
+} from 'passport-google-oauth20';
 import { ConfigService } from '@nestjs/config';
 import { UsersService } from '../../users/users.service';
 import { UserServicesService } from '../../user-services/user-services.service';
 import { Request } from 'express';
 import { parsePlatformFromState } from 'src/utils/parsePlatform';
+
+interface ExtendedStrategyOptions extends StrategyOptionsWithRequest {
+  accessType?: string;
+  prompt?: string;
+}
 
 @Injectable()
 export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
@@ -18,9 +27,15 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
       clientID: configService.getOrThrow<string>('GOOGLE_CLIENT_ID'),
       clientSecret: configService.getOrThrow<string>('GOOGLE_CLIENT_SECRET'),
       callbackURL: configService.getOrThrow<string>('GOOGLE_CALLBACK_URL'),
-      scope: ['email', 'profile'],
+      scope: [
+        'email',
+        'profile',
+        'https://www.googleapis.com/auth/gmail.modify',
+      ],
+      accessType: 'offline',
+      prompt: 'consent',
       passReqToCallback: true,
-    });
+    } as ExtendedStrategyOptions);
   }
 
   async validate(
