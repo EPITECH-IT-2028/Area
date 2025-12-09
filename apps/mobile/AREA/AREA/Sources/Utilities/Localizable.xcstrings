@@ -310,7 +310,7 @@
         }
       }
     },
-    "OAuth2.ErrorPresentationArchor" : {
+    "OAuth2.ErrorPresentationAnchor" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
@@ -452,13 +452,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Google Client Id missing in configuration."
+            "value" : "Google client ID is missing in configuration."
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Client Id Google manquant dans la configuration."
+            "value" : "ID client Google manquant dans la configuration."
           }
         }
       }
@@ -486,13 +486,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Unable to retrieve the Google Id token."
+            "value" : "Unable to retrieve the Google ID token."
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Impossible de récupérer l'Id Token Google."
+            "value" : "Impossible de récupérer l'ID token Google."
           }
         }
       }
