@@ -39,6 +39,12 @@ class GitHubAuthAction: NSObject, ObservableObject {
 				)
 				return
 			}
+			components.queryItems = [
+				URLQueryItem(
+					name: Constants.keyForOauth2,
+					value: Constants.valueForOauth2
+				)
+			]
 
 			guard let authURL = components.url else {
 				DispatchQueue.main.async {
