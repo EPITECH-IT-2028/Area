@@ -4,12 +4,14 @@ import { useRouter } from "next/navigation";
 
 import { LoginRequest } from "@/app/login/models/loginRequest";
 import { LoginResponse } from "@/app/login/models/loginResponse";
+import { useAuth } from "@/context/AuthContext";
 import api from "@/lib/api";
 import { HTTPError } from "ky";
 import { toast } from "sonner";
 
 function useLogin() {
   const [response, setResponse] = useState<LoginResponse>();
+  const { login: contextLogin } = useAuth();
   const router = useRouter();
 
   async function login(
@@ -24,6 +26,7 @@ function useLogin() {
       setResponse(response);
       if (response.success) {
         toast.success(response?.message);
+        contextLogin(response.data);
         router.push("/");
       }
       return response;

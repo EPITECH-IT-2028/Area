@@ -4,12 +4,14 @@ import { useRouter } from "next/navigation";
 
 import { RegisterRequest } from "@/app/register/models/registerRequest";
 import { RegisterResponse } from "@/app/register/models/registerResponse";
+import { useAuth } from "@/context/AuthContext";
 import api from "@/lib/api";
 import { HTTPError } from "ky";
 import { toast } from "sonner";
 
 function useRegister() {
   const [response, setResponse] = useState<RegisterResponse>();
+  const { login: contextLogin } = useAuth();
   const router = useRouter();
 
   async function register(
@@ -24,6 +26,7 @@ function useRegister() {
       setResponse(response);
       if (response.success) {
         toast.success(response?.message);
+        contextLogin(response.data);
         router.push("/");
       }
       return response;
