@@ -27,7 +27,7 @@ function useLogin() {
       if (response.success) {
         toast.success(response?.message);
         contextLogin(response.data);
-        router.push("/");
+        router.push("/dashboard");
       }
       return response;
     } catch (error) {

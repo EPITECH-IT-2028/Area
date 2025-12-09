@@ -8,14 +8,13 @@ import React, {
   useState,
 } from "react";
 
-import { useRouter } from "next/navigation";
-
 import { LoginResponse } from "@/app/login/models/loginResponse";
 
 interface AuthContextType {
   user: LoginResponse["data"]["user"] | null;
   accessToken: string | null;
   isAuthenticated: boolean;
+  isLoading: boolean;
   login: (authData: LoginResponse["data"]) => void;
   logout: () => void;
 }
@@ -25,7 +24,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<AuthContextType["user"]>(null);
   const [accessToken, setAccessToken] = useState<string | null>(null);
-  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(true);
 
   const setData = useEffectEvent(() => {
     const storedUser = localStorage.getItem("user");
@@ -35,30 +34,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setUser(JSON.parse(storedUser));
       setAccessToken(storedToken);
     }
+    setIsLoading(false);
   });
 
   useEffect(() => {
     setData();
   }, []);
-
-  useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    const storedToken = localStorage.getItem("access_token");
-
-    if (
-      (!storedUser || !storedToken) &&
-      window.location.pathname !== "/login" &&
-      window.location.pathname !== "/register"
-    ) {
-      router.push("/login");
-    } else if (
-      (storedUser || storedToken) &&
-      (window.location.pathname === "/login" ||
-        window.location.pathname === "/register")
-    ) {
-      router.push("/");
-    }
-  }, [router]);
 
   const login = (authData: LoginResponse["data"]) => {
     setUser(authData.user);
@@ -73,7 +54,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setAccessToken(null);
     localStorage.removeItem("user");
     localStorage.removeItem("access_token");
-    router.push("/login");
   };
 
   return (
@@ -82,6 +62,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         user,
         accessToken,
         isAuthenticated: Boolean(user) && Boolean(accessToken),
+        isLoading,
         login,
         logout,
       }}
