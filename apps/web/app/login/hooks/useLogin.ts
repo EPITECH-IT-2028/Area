@@ -2,6 +2,7 @@ import { useState } from "react";
 
 import { LoginRequest } from "@/app/login/models/loginRequest";
 import { LoginResponse } from "@/app/login/models/loginResponse";
+import { RegisterResponse } from "@/app/register/models/registerResponse";
 import api from "@/lib/api";
 import { HTTPError } from "ky";
 import { toast } from "sonner";
@@ -9,7 +10,9 @@ import { toast } from "sonner";
 function useLogin() {
   const [response, setResponse] = useState<LoginResponse>();
 
-  async function login(credentials: LoginRequest) {
+  async function login(
+    credentials: LoginRequest,
+  ): Promise<LoginResponse | undefined> {
     try {
       const response = await api
         .post("auth/login", {
@@ -20,51 +23,39 @@ function useLogin() {
       if (response.success) {
         toast.success(response?.message);
       }
+      return response;
     } catch (error) {
+      let errorResponse: LoginResponse | undefined;
       if (error instanceof HTTPError) {
-        if (error.response.status === 400) {
-          const message = "Please enter a valid email address.";
-          setResponse({
-            success: false,
-            data: {
-              access_token: "",
-              user: {
-                id: "",
-                email: "",
-                name: "",
-              },
-            },
-            message,
-            status_code: 400,
-          });
-          toast.error(message);
+        const status = error.response.status;
+        let message = "An unexpected error occurred. Please try again later.";
+
+        if (status === 400) {
+          message = "Please enter a valid email address.";
+        } else if (status === 401) {
+          message = "Wrong credentials, please try again.";
         }
 
-        if (error.response.status === 401) {
-          const message = "Wrong credentials, please try again.";
-          setResponse({
-            success: false,
-            data: {
-              access_token: "",
-              user: {
-                id: "",
-                email: "",
-                name: "",
-              },
+        errorResponse = {
+          success: false,
+          data: {
+            access_token: "",
+            user: {
+              id: "",
+              email: "",
+              name: "",
             },
-            message,
-            status_code: 401,
-          });
-          toast.error(message);
-        } else if (
-          error.response.status !== 401 &&
-          error.response.status !== 400
-        ) {
-          toast.error("An unexpected error occurred. Please try again later.");
-        }
+          },
+          message,
+          status_code: status,
+        };
+
+        setResponse(errorResponse);
+        toast.error(message);
       } else {
         toast.error("A network error occurred. Please check your connection.");
       }
+      return errorResponse;
     }
   }
 

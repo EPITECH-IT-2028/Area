@@ -21,9 +21,9 @@ export function useLoginViewModel() {
       return;
     }
 
-    login({ email, password }).then(() => {
-      if (response && response.success) {
-        storeToken(response.data.access_token);
+    login({ email, password }).then((res) => {
+      if (res && res.success) {
+        storeToken(res.data.access_token);
       }
     });
   };

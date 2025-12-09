@@ -36,26 +36,32 @@ export function useRegisterViewModel() {
   const [passwordErrors, setPasswordErrors] = useState<string[]>([]);
   const [hasSubmitted, setHasSubmitted] = useState(false);
 
+  const storeToken = (token: string) => {
+    localStorage.setItem("access_token", token);
+  };
+
   useEffect(() => {
     setPasswordErrors(getPasswordValidationErrors(password));
   }, [password]);
 
   const handleSubmit = () => {
     setHasSubmitted(true);
-    const errors = getPasswordValidationErrors(password);
-    setPasswordErrors(errors);
 
     if (!name || !email || !password) {
       toast.error("All fields are required.");
       return;
     }
 
-    if (errors.length > 0) {
+    if (passwordErrors.length > 0) {
       toast.error("Please use a stronger password.");
     }
 
-    if (errors.length === 0) {
-      register({ name, email, password }).then();
+    if (passwordErrors.length === 0) {
+      register({ name, email, password }).then((res) => {
+        if (res && res.success) {
+          storeToken(res.data.access_token);
+        }
+      });
     }
   };
 
