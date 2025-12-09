@@ -8,6 +8,7 @@
 internal import AuthenticationServices
 internal import Combine
 import Foundation
+import UIKit
 
 class GoogleAuthAction: NSObject, ObservableObject {
 	@Published var isAuthenticated = false
@@ -22,7 +23,22 @@ class GoogleAuthAction: NSObject, ObservableObject {
 	func signIn() async throws -> String {
 		return try await withCheckedThrowingContinuation { continuation in
 			isLoading = true
-			var components = URLComponents(string: Constants.googleOAuth2ServerPath)!
+			guard
+				var components = URLComponents(string: Constants.googleOAuth2ServerPath)
+			else {
+				DispatchQueue.main.async {
+					self.errorMessage = "Invalid URL"
+					self.isLoading = false
+				}
+				continuation.resume(
+					throwing: NSError(
+						domain: "GoogleAuthAction",
+						code: -1,
+						userInfo: [NSLocalizedDescriptionKey: "Invalid URL"]
+					)
+				)
+				return
+			}
 			components.queryItems = [
 				URLQueryItem(
 					name: Constants.keyForOauth2,
@@ -31,8 +47,17 @@ class GoogleAuthAction: NSObject, ObservableObject {
 			]
 
 			guard let authURL = components.url else {
-				self.errorMessage = "Invalid URL"
-				continuation.resume(throwing: NSError(domain: "GoogleAuthAction", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"]))
+				DispatchQueue.main.async {
+					self.errorMessage = "Invalid URL"
+					self.isLoading = false
+				}
+				continuation.resume(
+					throwing: NSError(
+						domain: "GoogleAuthAction",
+						code: -1,
+						userInfo: [NSLocalizedDescriptionKey: "Invalid URL"]
+					)
+				)
 				return
 			}
 
@@ -45,24 +70,34 @@ class GoogleAuthAction: NSObject, ObservableObject {
 				if let error = error {
 					DispatchQueue.main.async {
 						self.errorMessage = error.localizedDescription
+						self.isLoading = false
 					}
 					continuation.resume(throwing: error)
 					return
 				}
 
 				guard let callbackURL = callbackURL,
-					  let components = URLComponents(
+					let components = URLComponents(
 						url: callbackURL,
 						resolvingAgainstBaseURL: true
-					  ),
-					  let tokenItem = components.queryItems?.first(where: {
-							$0.name == Constants.tokenString
-					  }),
-					  let token = tokenItem.value else {
+					),
+					let tokenItem = components.queryItems?.first(where: {
+						$0.name == Constants.tokenString
+					}),
+					let token = tokenItem.value
+				else {
 					DispatchQueue.main.async {
 						self.errorMessage = "Missing token in callback URL"
 					}
-					continuation.resume(throwing: NSError(domain: "GoogleAuthAction", code: -2, userInfo: [NSLocalizedDescriptionKey: "Missing token in callback URL"]))
+					continuation.resume(
+						throwing: NSError(
+							domain: "GoogleAuthAction",
+							code: -2,
+							userInfo: [
+								NSLocalizedDescriptionKey: "Missing token in callback URL"
+							]
+						)
+					)
 					return
 				}
 
@@ -79,7 +114,22 @@ class GoogleAuthAction: NSObject, ObservableObject {
 				continuation.resume(returning: token)
 			}
 			self.session?.presentationContextProvider = self
-			self.session?.start()
+			if self.session?.start() != true {
+				DispatchQueue.main.async {
+					self.errorMessage = "Failed to start authentication session"
+					self.isLoading = false
+				}
+				continuation.resume(
+					throwing: NSError(
+						domain: "GoogleAuthAction",
+						code: -3,
+						userInfo: [
+							NSLocalizedDescriptionKey:
+								"Failed to start authentication session"
+						]
+					)
+				)
+			}
 		}
 	}
 }
