@@ -1,0 +1,38 @@
+meta {
+  name: Create AREA
+  type: http
+  seq: 4
+}
+
+post {
+  url: http://localhost:8080/areas
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: 
+}
+
+body:json {
+  {
+    "name": "Test Email",
+    "description": "Envoie le mail sur github",
+    "action_name": "new_email",
+    "action_config": {
+      "from": "nonodu260@gmail.com",
+      "subject_contains": "test"
+    },
+    "reaction_name": "send_webhook_message",
+    "reaction_config": {
+      "webhook_url": "https://discord.com/api/webhooks/1445813431126069391/byF3KAUcyhlnatbpzo91sZqaN25IMXYEND6FwQezJIyNfkP2Av81hennNzaxGwA-xbZ9",
+      "message_template": "🚨 **Email Important Reçu !** - **De** : `{{from}}` - **Sujet** : `{{subject}}` - **Snippet** : {{snippet}}"
+    },
+    "is_active": true
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
