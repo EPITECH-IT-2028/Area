@@ -15,6 +15,8 @@ class LoginViewModel: ObservableObject {
 	@Published var isLoggedIn: Bool
 	@Published var errorMessage: String? = nil
 	@Published var status: LoginStatus = .success
+	var googleAuthAction = GoogleAuthAction()
+	var githubAuthAction = GitHubAuthAction()
 
 	enum LoginStatus {
 		case success
@@ -28,6 +30,38 @@ class LoginViewModel: ObservableObject {
 	}
 
 	@MainActor
+	func googleLogin() async {
+		do {
+			try await googleAuthAction.signIn()
+			isLoggedIn = true
+			status = .success
+			errorMessage = nil
+		} catch {
+			isLoggedIn = false
+			status = .failure
+			errorMessage =
+				error.localizedDescription.isEmpty
+				? googleAuthAction.errorMessage : error.localizedDescription
+		}
+	}
+
+	@MainActor
+	func githubLogin() async {
+		do {
+			try await githubAuthAction.signIn()
+			isLoggedIn = true
+			status = .success
+			errorMessage = nil
+		} catch {
+			isLoggedIn = false
+			status = .failure
+			errorMessage =
+				error.localizedDescription.isEmpty
+				? githubAuthAction.errorMessage : error.localizedDescription
+		}
+	}
+
+	@MainActor
 	func login() async throws {
 		let response: LoginResponseData = try await LoginAction(
 			parameters: LoginRequest(
@@ -35,9 +69,7 @@ class LoginViewModel: ObservableObject {
 				password: password
 			)
 		).call()
-		isLoggedIn = true
-		status = .success
-		errorMessage = nil
+
 		guard let data = response.data else {
 			throw NetworkError.missingResponseData
 		}
@@ -45,12 +77,16 @@ class LoginViewModel: ObservableObject {
 			throw NetworkError.missingAccessToken
 		}
 		do {
-			try KeychainManager.shared.keychain.set(
-				accessToken,
-				forKey: Constants.keychainJWTKey
-			)
+			try AuthState.shared.authenticate(accessToken: accessToken)
+			isLoggedIn = true
+			status = .success
+			errorMessage = nil
+			email = ""
+			password = ""
 		} catch {
 			print("Keychain error: \(error.localizedDescription)")
+			status = .failure
+			errorMessage = error.localizedDescription
 		}
 	}
 }

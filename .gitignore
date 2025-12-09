@@ -47,6 +47,9 @@ DerivedData/
 *.moved-aside
 *.xccheckout
 *.playground*
+*.plist
+xcuserdata/
+APIConfig.json
 
 # XCode/Dependency managers
 Carthage/Build/

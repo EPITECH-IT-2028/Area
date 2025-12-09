@@ -5,19 +5,17 @@
 //  Created by Arthur GUERINAULT on 17/11/2025.
 //
 
+import GoogleSignIn
 import SimpleKeychain
 import SwiftUI
 
 struct ContentView: View {
-	@StateObject private var viewModel = LoginViewModel()
+	@EnvironmentObject var authState: AuthState
+	@StateObject private var loginViewModel = LoginViewModel()
+	@StateObject private var registerViewModel = RegisterViewModel()
 	@State private var showSplash = true
+	@State private var showingRegister = false
 	private let fadeOutDuration: TimeInterval = 0.5
-
-	private var isUserAuthenticated: Bool {
-		(try? KeychainManager.shared.keychain.hasItem(
-			forKey: Constants.keychainJWTKey
-		)) == true
-	}
 
 	var body: some View {
 		ZStack {
@@ -29,8 +27,7 @@ struct ContentView: View {
 						value: showSplash
 					)
 			} else {
-				if isUserAuthenticated
-				{
+				if authState.isAuthenticated {
 					TabView {
 						Tab(Constants.homeString, systemImage: Constants.homeIconString) {
 							HomeView()
@@ -49,9 +46,22 @@ struct ContentView: View {
 						}
 					}
 				} else {
-					LoginView(viewModel: viewModel)
+					if showingRegister {
+						RegisterView(
+							viewModel: registerViewModel,
+							onShowRegister: { showingRegister = false }
+						)
+					} else {
+						LoginView(
+							viewModel: loginViewModel,
+							onShowRegister: { showingRegister = true }
+						)
+					}
 				}
 			}
+		}
+		.onOpenURL { url in
+			GIDSignIn.sharedInstance.handle(url)
 		}
 		.onAppear {
 			DispatchQueue.main.asyncAfter(
@@ -68,4 +78,5 @@ struct ContentView: View {
 
 #Preview {
 	ContentView()
+		.environmentObject(AuthState.shared)
 }

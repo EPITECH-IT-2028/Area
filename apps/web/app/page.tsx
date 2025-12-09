@@ -1,9 +1,7 @@
 export default function Home() {
   return (
-    <div>
-      <main>
-        <h1>Area</h1>
-      </main>
-    </div>
+    <main className="flex min-h-screen items-center justify-center">
+      <h1 className="text-4xl select-none">AREA</h1>
+    </main>
   );
 }

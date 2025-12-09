@@ -8,18 +8,16 @@
 import Foundation
 
 struct BuilderAPI {
-	func buildURL() throws -> URL {
+	func buildURL(path: String) throws -> URL {
 		let scheme = SettingsUD.serverScheme
 		let host = SettingsUD.serverHost
 		let port = SettingsUD.serverPort
-		let path = Constants.loginServerPath
 
 		var components = URLComponents()
 		components.scheme = scheme
 		components.host = host
 		components.port = port
 		components.path = path
-
 		guard let url = components.url else {
 			throw NetworkError.urlBuildFailed
 		}
@@ -27,7 +25,11 @@ struct BuilderAPI {
 		return url
 	}
 
-	func buildRequest<T: Encodable>(url: URL, method: String, parameters: T)
+	func buildRequest<T: Encodable>(
+		url: URL,
+		method: String,
+		parameters: T
+	)
 		throws -> URLRequest
 	{
 		var request = URLRequest(url: url)
@@ -42,4 +44,20 @@ struct BuilderAPI {
 		return request
 	}
 
+	func buildRequest(
+		url: URL,
+		method: String,
+		token: String? = nil
+	)
+		throws -> URLRequest
+	{
+		var request = URLRequest(url: url)
+		request.httpMethod = method
+		request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+		request.addValue("application/json", forHTTPHeaderField: "Accept")
+		if let token = token {
+			request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+		}
+		return request
+	}
 }

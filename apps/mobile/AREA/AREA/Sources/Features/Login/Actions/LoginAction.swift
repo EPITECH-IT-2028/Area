@@ -14,7 +14,7 @@ struct LoginAction {
 	// This function is used to log the user in using the email and password
 	func call() async throws -> LoginResponseData {
 		let builder = BuilderAPI()
-		let url = try builder.buildURL()
+		let url = try builder.buildURL(path: Constants.loginServerPath)
 		let request = try builder.buildRequest(
 			url: url,
 			method: "POST",

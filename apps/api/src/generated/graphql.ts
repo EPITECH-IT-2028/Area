@@ -3741,6 +3741,84 @@ export type Uuid_Comparison_Exp = {
   _nin?: InputMaybe<Array<Scalars['uuid']['input']>>;
 };
 
+export type GetAllActiveAreasQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetAllActiveAreasQuery = {
+  __typename?: 'query_root';
+  areas: Array<{
+    __typename?: 'areas';
+    id: string;
+    user_id: string;
+    name: string;
+    action_id: string;
+    action_config?: any | null;
+    reaction_id: string;
+    reaction_config?: any | null;
+    action: {
+      __typename?: 'actions';
+      id: string;
+      name: string;
+      event_type: string;
+      service: { __typename?: 'services'; name: string };
+    };
+    reaction: {
+      __typename?: 'reactions';
+      id: string;
+      name: string;
+      action_type: string;
+      service: { __typename?: 'services'; name: string };
+    };
+    user: {
+      __typename?: 'users';
+      user_services: Array<{
+        __typename?: 'user_services';
+        id: string;
+        access_token?: string | null;
+        refresh_token?: string | null;
+        token_expiry?: string | null;
+        service: { __typename?: 'services'; name: string };
+      }>;
+    };
+  }>;
+};
+
+export type CreateAreaMutationVariables = Exact<{
+  user_id: Scalars['uuid']['input'];
+  name: Scalars['String']['input'];
+  description?: InputMaybe<Scalars['String']['input']>;
+  is_active?: InputMaybe<Scalars['Boolean']['input']>;
+  action_id: Scalars['uuid']['input'];
+  action_config?: InputMaybe<Scalars['jsonb']['input']>;
+  reaction_id: Scalars['uuid']['input'];
+  reaction_config?: InputMaybe<Scalars['jsonb']['input']>;
+}>;
+
+export type CreateAreaMutation = {
+  __typename?: 'mutation_root';
+  insert_areas_one?: {
+    __typename?: 'areas';
+    id: string;
+    name: string;
+    is_active?: boolean | null;
+    created_at?: string | null;
+  } | null;
+};
+
+export type GetServiceByNameQueryVariables = Exact<{
+  name: Scalars['String']['input'];
+}>;
+
+export type GetServiceByNameQuery = {
+  __typename?: 'query_root';
+  services: Array<{
+    __typename?: 'services';
+    id: string;
+    name: string;
+    display_name: string;
+    auth_type: string;
+  }>;
+};
+
 export type GetUserServiceQueryVariables = Exact<{
   userId: Scalars['uuid']['input'];
   serviceId: Scalars['uuid']['input'];
@@ -3785,21 +3863,6 @@ export type GetUserServicesByUserQuery = {
       display_name: string;
       icon_url?: string | null;
     };
-  }>;
-};
-
-export type GetServiceByNameQueryVariables = Exact<{
-  name: Scalars['String']['input'];
-}>;
-
-export type GetServiceByNameQuery = {
-  __typename?: 'query_root';
-  services: Array<{
-    __typename?: 'services';
-    id: string;
-    name: string;
-    display_name: string;
-    auth_type: string;
   }>;
 };
 
@@ -3951,6 +4014,86 @@ export type DeleteUserMutation = {
   delete_users_by_pk?: { __typename?: 'users'; id: string } | null;
 };
 
+export const GetAllActiveAreasDocument = gql`
+  query GetAllActiveAreas {
+    areas(where: { is_active: { _eq: true } }) {
+      id
+      user_id
+      name
+      action_id
+      action_config
+      reaction_id
+      reaction_config
+      action {
+        id
+        name
+        event_type
+        service {
+          name
+        }
+      }
+      reaction {
+        id
+        name
+        action_type
+        service {
+          name
+        }
+      }
+      user {
+        user_services {
+          id
+          access_token
+          refresh_token
+          token_expiry
+          service {
+            name
+          }
+        }
+      }
+    }
+  }
+`;
+export const CreateAreaDocument = gql`
+  mutation CreateArea(
+    $user_id: uuid!
+    $name: String!
+    $description: String
+    $is_active: Boolean
+    $action_id: uuid!
+    $action_config: jsonb
+    $reaction_id: uuid!
+    $reaction_config: jsonb
+  ) {
+    insert_areas_one(
+      object: {
+        user_id: $user_id
+        name: $name
+        description: $description
+        is_active: $is_active
+        action_id: $action_id
+        action_config: $action_config
+        reaction_id: $reaction_id
+        reaction_config: $reaction_config
+      }
+    ) {
+      id
+      name
+      is_active
+      created_at
+    }
+  }
+`;
+export const GetServiceByNameDocument = gql`
+  query GetServiceByName($name: String!) {
+    services(where: { name: { _eq: $name } }, limit: 1) {
+      id
+      name
+      display_name
+      auth_type
+    }
+  }
+`;
 export const GetUserServiceDocument = gql`
   query GetUserService($userId: uuid!, $serviceId: uuid!) {
     user_services(
@@ -3986,16 +4129,6 @@ export const GetUserServicesByUserDocument = gql`
         display_name
         icon_url
       }
-    }
-  }
-`;
-export const GetServiceByNameDocument = gql`
-  query GetServiceByName($name: String!) {
-    services(where: { name: { _eq: $name } }, limit: 1) {
-      id
-      name
-      display_name
-      auth_type
     }
   }
 `;
@@ -4162,6 +4295,60 @@ export function getSdk(
   withWrapper: SdkFunctionWrapper = defaultWrapper,
 ) {
   return {
+    GetAllActiveAreas(
+      variables?: GetAllActiveAreasQueryVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+      signal?: RequestInit['signal'],
+    ): Promise<GetAllActiveAreasQuery> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.request<GetAllActiveAreasQuery>({
+            document: GetAllActiveAreasDocument,
+            variables,
+            requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders },
+            signal,
+          }),
+        'GetAllActiveAreas',
+        'query',
+        variables,
+      );
+    },
+    CreateArea(
+      variables: CreateAreaMutationVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+      signal?: RequestInit['signal'],
+    ): Promise<CreateAreaMutation> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.request<CreateAreaMutation>({
+            document: CreateAreaDocument,
+            variables,
+            requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders },
+            signal,
+          }),
+        'CreateArea',
+        'mutation',
+        variables,
+      );
+    },
+    GetServiceByName(
+      variables: GetServiceByNameQueryVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+      signal?: RequestInit['signal'],
+    ): Promise<GetServiceByNameQuery> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.request<GetServiceByNameQuery>({
+            document: GetServiceByNameDocument,
+            variables,
+            requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders },
+            signal,
+          }),
+        'GetServiceByName',
+        'query',
+        variables,
+      );
+    },
     GetUserService(
       variables: GetUserServiceQueryVariables,
       requestHeaders?: GraphQLClientRequestHeaders,
@@ -4194,24 +4381,6 @@ export function getSdk(
             signal,
           }),
         'GetUserServicesByUser',
-        'query',
-        variables,
-      );
-    },
-    GetServiceByName(
-      variables: GetServiceByNameQueryVariables,
-      requestHeaders?: GraphQLClientRequestHeaders,
-      signal?: RequestInit['signal'],
-    ): Promise<GetServiceByNameQuery> {
-      return withWrapper(
-        (wrappedRequestHeaders) =>
-          client.request<GetServiceByNameQuery>({
-            document: GetServiceByNameDocument,
-            variables,
-            requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders },
-            signal,
-          }),
-        'GetServiceByName',
         'query',
         variables,
       );
