@@ -11,6 +11,7 @@ import React, {
 import { useRouter } from "next/navigation";
 
 import { LoginResponse } from "@/app/login/models/loginResponse";
+import Cookies from "js-cookie";
 
 interface AuthContextType {
   user: LoginResponse["data"]["user"] | null;
@@ -30,8 +31,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const router = useRouter();
 
   const setData = useEffectEvent(() => {
-    const storedUser = localStorage.getItem("user");
-    const storedToken = localStorage.getItem("access_token");
+    const storedUser = Cookies.get("user");
+    const storedToken = Cookies.get("access_token");
 
     if (storedUser && storedToken) {
       try {
@@ -45,13 +46,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           setUser(parsedUser);
           setAccessToken(storedToken);
         } else {
-          localStorage.removeItem("user");
-          localStorage.removeItem("access_token");
+          Cookies.remove("user");
+          Cookies.remove("access_token");
         }
       } catch (error) {
         console.error("Failed to parse stored user data:", error);
-        localStorage.removeItem("user");
-        localStorage.removeItem("access_token");
+        Cookies.remove("user");
+        Cookies.remove("access_token");
       }
     }
     setIsLoading(false);
@@ -72,15 +73,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setUser(authData.user);
     setAccessToken(authData.access_token);
 
-    localStorage.setItem("user", JSON.stringify(authData.user));
-    localStorage.setItem("access_token", authData.access_token);
+    Cookies.set("user", JSON.stringify(authData.user), { expires: 7 });
+    Cookies.set("access_token", authData.access_token, { expires: 7 });
   };
 
   const logout = () => {
     setUser(null);
     setAccessToken(null);
-    localStorage.removeItem("user");
-    localStorage.removeItem("access_token");
+    Cookies.remove("user");
+    Cookies.remove("access_token");
   };
 
   return (
