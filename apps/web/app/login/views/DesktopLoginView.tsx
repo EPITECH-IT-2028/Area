@@ -142,7 +142,10 @@ export default function DesktopLoginView() {
 
             <div className="mt-2 space-y-2">
               <div className="flex space-x-2">
-                <Link href="http://localhost:8080/auth/google" className="grow">
+                <Link
+                  href={`${process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8080"}/auth/oauth/google`}
+                  className="grow"
+                >
                   <Button
                     variant="outline"
                     className="w-full"

@@ -150,7 +150,7 @@ export default function MobileRegisterView() {
 
           <div className="flex justify-center space-x-2 pt-2">
             <Link
-              href="http://localhost:8080/auth/google"
+              href={`${process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8080"}/auth/oauth/google`}
               className="rounded-full"
             >
               <Button
