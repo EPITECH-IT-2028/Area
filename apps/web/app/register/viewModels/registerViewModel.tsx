@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
+
 import { useRouter } from "next/navigation";
+
 import { useAuth } from "@/context/AuthContext";
 import { toast } from "sonner";
 
@@ -59,13 +61,12 @@ export function useRegisterViewModel() {
 
     if (passwordErrors.length > 0) {
       toast.error("Please use a stronger password.");
+      return;
     }
 
-    if (passwordErrors.length === 0) {
-      register({ name, email, password }).catch((error) => {
-        console.log("Registration error:", error);
-      });
-    }
+    register({ name, email, password }).catch((error) => {
+      console.log("Registration error:", error);
+    });
   };
 
   const isNameError = hasSubmitted && !name;
@@ -86,7 +87,7 @@ export function useRegisterViewModel() {
     handleSubmit,
     response,
     passwordErrors,
-  isNameError,
+    isNameError,
     isEmailError,
     isPasswordError,
   };
