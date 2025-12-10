@@ -42,11 +42,19 @@ export default function AuthCallbackPage() {
 
     const fetchUserAndLogin = async () => {
       try {
-        const tokenPayload: JwtPayload = JSON.parse(atob(token.split(".")[1]));
+        const parts = token.split(".");
+        if (parts.length !== 3) {
+          toast.error("Invalid token format");
+          router.push("/login");
+          return;
+        }
+        const tokenPayload: JwtPayload = JSON.parse(atob(parts[1]));
         const userId = tokenPayload.sub;
 
         if (!userId) {
-          throw new Error("User ID not found in token");
+          toast.error("User ID not found in token");
+          router.push("/login");
+          return;
         }
 
         const user = await api
