@@ -75,7 +75,7 @@ export function useRegisterViewModel() {
     response?.status_code === 400 ||
     response?.status_code === 409;
   const isPasswordError =
-    (hasSubmitted && !password) || passwordErrors.length > 0;
+    (hasSubmitted && !password) || (hasSubmitted && passwordErrors.length > 0);
 
   return {
     name,

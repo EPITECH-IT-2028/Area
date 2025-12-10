@@ -113,7 +113,7 @@ export default function MobileRegisterView() {
                   )}
                 </button>
               </div>
-              {passwordErrors.length > 0 && (
+              {isPasswordError && passwordErrors.length > 0 && (
                 <div className="mt-2 text-xs text-destructive">
                   <p className="mb-2">
                     New passwords must meet the password policy requirements. It
