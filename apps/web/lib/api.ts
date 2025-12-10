@@ -1,7 +1,7 @@
 import ky from "ky";
 
 const api = ky.create({
-  prefixUrl: "http://localhost:8080/",
+  prefixUrl: process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080/",
   retry: {
     limit: 1,
   },
