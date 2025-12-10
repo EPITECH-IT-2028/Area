@@ -1,15 +1,30 @@
 "use client";
 
 import { useState } from "react";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
-import { Eye, EyeClosed } from "lucide-react";
+
 import Image from "next/image";
 import Link from "next/link";
 
+import { useLoginViewModel } from "@/app/login/viewModels/loginViewModel";
+import { Eye, EyeClosed } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
+import { FieldError } from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Separator } from "@/components/ui/separator";
+
 export default function DesktopLoginView() {
+  const {
+    email,
+    setEmail,
+    password,
+    setPassword,
+    handleSubmit,
+    response,
+    isEmailError,
+    isPasswordError,
+  } = useLoginViewModel();
   const [passwordVisibility, setPasswordVisibility] = useState(false);
 
   return (
@@ -58,11 +73,16 @@ export default function DesktopLoginView() {
                     type="email"
                     placeholder="Enter your email"
                     className="bg-zinc-50"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                     autoComplete="email"
                     aria-label="email"
+                    aria-invalid={isEmailError}
                   />
+                  {response?.status_code === 400 && (
+                    <FieldError className="mt-2">{response.message}</FieldError>
+                  )}
                 </div>
-
                 {/* Password Field */}
                 <div>
                   <Label htmlFor="password" className="mb-2">
@@ -74,8 +94,11 @@ export default function DesktopLoginView() {
                       type={passwordVisibility ? "text" : "password"}
                       placeholder="Enter your password"
                       className="bg-zinc-50 pr-10"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
                       autoComplete="current-password"
                       aria-label="password"
+                      aria-invalid={isPasswordError}
                     />
                     <button
                       type="button"
@@ -93,6 +116,9 @@ export default function DesktopLoginView() {
                     </button>
                   </div>
                 </div>
+                {response?.status_code === 401 && (
+                  <FieldError className="-mt-2">{response.message}</FieldError>
+                )}
               </div>
 
               {/* Forgot Password */}
@@ -105,7 +131,7 @@ export default function DesktopLoginView() {
 
               {/* Sign In Buttons */}
               <div className="mt-12 space-y-2">
-                <Button type="button" className="w-full">
+                <Button type="button" className="w-full" onClick={handleSubmit}>
                   Log In
                 </Button>
 

@@ -1,13 +1,17 @@
 "use client";
 
 import { useState } from "react";
-import { useRegisterViewModel } from "@/app/register/viewModels/registerViewModel";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
-import { Eye, EyeClosed } from "lucide-react";
+
 import Image from "next/image";
 import Link from "next/link";
+
+import { useRegisterViewModel } from "@/app/register/viewModels/registerViewModel";
+import { Eye, EyeClosed } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
+import { FieldError } from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
+import { Separator } from "@/components/ui/separator";
 
 export default function MobileRegisterView() {
   const {
@@ -17,7 +21,12 @@ export default function MobileRegisterView() {
     setEmail,
     password,
     setPassword,
+    handleSubmit,
+    response,
     passwordErrors,
+    isNameError,
+    isEmailError,
+    isPasswordError,
   } = useRegisterViewModel();
   const [passwordVisibility, setPasswordVisibility] = useState(false);
 
@@ -54,6 +63,7 @@ export default function MobileRegisterView() {
                 onChange={(e) => setName(e.target.value)}
                 autoComplete="name"
                 aria-label="name"
+                aria-invalid={isNameError}
               />
             </div>
 
@@ -67,7 +77,12 @@ export default function MobileRegisterView() {
                 onChange={(e) => setEmail(e.target.value)}
                 autoComplete="email"
                 aria-label="email"
+                aria-invalid={isEmailError}
               />
+              {(response?.status_code === 400 ||
+                response?.status_code === 409) && (
+                <FieldError className="mt-2">{response.message}</FieldError>
+              )}
             </div>
 
             <div>
@@ -81,7 +96,7 @@ export default function MobileRegisterView() {
                   onChange={(e) => setPassword(e.target.value)}
                   autoComplete="new-password"
                   aria-label="password"
-                  aria-invalid={passwordErrors.length > 0}
+                  aria-invalid={isPasswordError}
                 />
                 <button
                   type="button"
@@ -98,7 +113,7 @@ export default function MobileRegisterView() {
                   )}
                 </button>
               </div>
-              {passwordErrors.length > 0 && (
+              {isPasswordError && passwordErrors.length > 0 && (
                 <div className="mt-2 text-xs text-destructive">
                   <p className="mb-2">
                     New passwords must meet the password policy requirements. It
@@ -115,7 +130,11 @@ export default function MobileRegisterView() {
           </div>
 
           <div className="mt-12 space-y-2">
-            <Button type="button" className="h-12 w-full text-lg">
+            <Button
+              type="button"
+              className="h-12 w-full text-lg"
+              onClick={handleSubmit}
+            >
               Sign Up
             </Button>
 

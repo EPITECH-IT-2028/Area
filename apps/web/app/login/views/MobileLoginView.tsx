@@ -1,14 +1,29 @@
 "use client";
 
 import { useState } from "react";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
-import { Eye, EyeClosed } from "lucide-react";
+
 import Image from "next/image";
 import Link from "next/link";
 
+import { useLoginViewModel } from "@/app/login/viewModels/loginViewModel";
+import { Eye, EyeClosed } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
+import { FieldError } from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
+import { Separator } from "@/components/ui/separator";
+
 export default function MobileLoginView() {
+  const {
+    email,
+    setEmail,
+    password,
+    setPassword,
+    handleSubmit,
+    response,
+    isEmailError,
+    isPasswordError,
+  } = useLoginViewModel();
   const [passwordVisibility, setPasswordVisibility] = useState(false);
 
   return (
@@ -40,11 +55,15 @@ export default function MobileLoginView() {
                 type="email"
                 placeholder="Email"
                 className="h-12 bg-zinc-50"
-                // value={email}
-                // onChange={(e) => setEmail(e.target.value)}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 autoComplete="email"
                 aria-label="email"
+                aria-invalid={isEmailError}
               />
+              {response?.status_code === 400 && (
+                <FieldError className="mt-2">{response.message}</FieldError>
+              )}
             </div>
 
             <div>
@@ -54,10 +73,11 @@ export default function MobileLoginView() {
                   type={passwordVisibility ? "text" : "password"}
                   placeholder="Password"
                   className="h-12 bg-zinc-50 pr-10"
-                  // value={password}
-                  // onChange={(e) => setPassword(e.target.value)}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                   autoComplete="current-password"
                   aria-label="password"
+                  aria-invalid={isPasswordError}
                 />
                 <button
                   type="button"
@@ -75,10 +95,17 @@ export default function MobileLoginView() {
                 </button>
               </div>
             </div>
+            {response?.status_code === 401 && (
+              <FieldError className="mt-2">{response.message}</FieldError>
+            )}
           </div>
 
           <div className="mt-12 space-y-2">
-            <Button type="button" className="h-12 w-full text-lg">
+            <Button
+              type="button"
+              className="h-12 w-full text-lg"
+              onClick={handleSubmit}
+            >
               Log In
             </Button>
 

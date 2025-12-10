@@ -1,8 +1,8 @@
 "use client";
 
-import { useMediaQuery } from "@/hooks/useMediaQuery";
 import DesktopRegisterView from "@/app/register/views/DesktopRegisterView";
 import MobileRegisterView from "@/app/register/views/MobileRegisterView";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
 
 export default function ContentView() {
   const isMobile = useMediaQuery("(max-width: 767px)");

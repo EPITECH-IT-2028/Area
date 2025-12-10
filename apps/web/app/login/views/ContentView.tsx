@@ -1,8 +1,8 @@
 "use client";
 
-import { useMediaQuery } from "@/hooks/useMediaQuery";
 import DesktopLoginView from "@/app/login/views/DesktopLoginView";
 import MobileLoginView from "@/app/login/views/MobileLoginView";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
 
 export default function ContentView() {
   const isMobile = useMediaQuery("(max-width: 767px)");
