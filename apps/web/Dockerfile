@@ -15,14 +15,15 @@ COPY . .
 WORKDIR /app/apps/web
 RUN pnpm build
 
-FROM builder AS production
+FROM node:20-alpine AS production
 WORKDIR /app
-COPY --from=dependencies /app/apps/web/package.json ./package.json
-COPY --from=dependencies /app/apps/web/node_modules ./node_modules
+RUN npm install -g pnpm@9.0.0
+COPY apps/web/package.json ./
+RUN pnpm install --prod
 COPY --from=build /app/apps/web/.next ./.next
 COPY --from=build /app/apps/web/public ./public
-COPY apps/web/next.config.ts ./
-RUN npm install -g pnpm@9.0.0
+COPY --from=build /app/apps/web/next.config.ts ./
+COPY apps/web/.env* ./
 
 EXPOSE 8081
 
