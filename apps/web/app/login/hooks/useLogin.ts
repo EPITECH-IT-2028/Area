@@ -54,11 +54,12 @@ function useLogin() {
 
         setResponse(errorResponse);
         toast.error(message);
+        return errorResponse;
       } else {
         toast.error("A network error occurred. Please check your connection.");
+        console.log("A network error occurred during login:", error);
         throw error;
       }
-      return errorResponse;
     }
   }
 

@@ -54,11 +54,12 @@ function useRegister() {
 
         setResponse(errorResponse);
         toast.error(message);
+        return errorResponse;
       } else {
         toast.error("A network error occurred. Please check your connection.");
+        console.error("A network error occurred during registration:", error);
         throw error;
       }
-      return errorResponse;
     }
   }
 
