@@ -9,10 +9,6 @@ export function useLoginViewModel() {
   const [password, setPassword] = useState("");
   const [hasSubmitted, setHasSubmitted] = useState(false);
 
-  const storeToken = (token: string) => {
-    localStorage.setItem("access_token", token);
-  };
-
   const handleSubmit = () => {
     setHasSubmitted(true);
 
@@ -21,15 +17,9 @@ export function useLoginViewModel() {
       return;
     }
 
-    login({ email, password })
-      .then((res) => {
-        if (res && res.success) {
-          storeToken(res.data.access_token);
-        }
-      })
-      .catch((error) => {
-        console.log("Login error:", error);
-      });
+    login({ email, password }).catch((error) => {
+      console.log("Login error:", error);
+    });
   };
 
   const isEmailError =
