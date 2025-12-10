@@ -30,6 +30,11 @@ export default function MobileRegisterView() {
   } = useRegisterViewModel();
   const [passwordVisibility, setPasswordVisibility] = useState(false);
 
+  const handleFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    handleSubmit();
+  };
+
   return (
     <div className="absolute top-0 backdrop-blur-xs ">
       <div className="flex h-36 w-screen flex-col items-center justify-center rounded-b-3xl bg-white/5 ring-[1rem] ring-primary-foreground">
@@ -51,7 +56,7 @@ export default function MobileRegisterView() {
           </p>
         </div>
 
-        <div>
+        <form onSubmit={handleFormSubmit}>
           <div className="space-y-2">
             <div>
               <Input
@@ -129,28 +134,29 @@ export default function MobileRegisterView() {
             </div>
           </div>
 
-          <div className="mt-12 space-y-2">
-            <Button
-              type="button"
-              className="h-12 w-full text-lg"
-              onClick={handleSubmit}
+          <Button type="submit" className="mt-12 h-12 w-full text-lg">
+            Sign Up
+          </Button>
+        </form>
+
+        <div className="mt-8 space-y-2">
+          <div className="my-4 flex items-center">
+            <Separator className="shrink" />
+            <p className="px-2 text-sm text-nowrap text-zinc-700">
+              Or continue with
+            </p>
+            <Separator className="shrink" />
+          </div>
+
+          <div className="flex justify-center space-x-2 pt-2">
+            <Link
+              href={`${process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8080"}/auth/google`}
+              className="rounded-full"
             >
-              Sign Up
-            </Button>
-
-            <div className="my-4 flex items-center">
-              <Separator className="shrink" />
-              <p className="px-2 text-sm text-nowrap text-zinc-700">
-                Or continue with
-              </p>
-              <Separator className="shrink" />
-            </div>
-
-            <div className="flex justify-center space-x-2 pt-2">
               <Button
                 variant="outline"
-                className="size-10 rounded-full"
-                aria-label="Sign Up with Google"
+                aria-label="Log In with Google"
+                className="size-10"
               >
                 <svg
                   className="h-4 w-4"
@@ -168,10 +174,15 @@ export default function MobileRegisterView() {
                   ></path>
                 </svg>
               </Button>
+            </Link>
 
+            <Link
+              href={`${process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8080"}/auth/github`}
+              className="rounded-full"
+            >
               <Button
                 variant="outline"
-                className="size-10 rounded-full"
+                className="size-10"
                 aria-label="Sign Up with GitHub"
               >
                 <svg
@@ -190,18 +201,18 @@ export default function MobileRegisterView() {
                   ></path>
                 </svg>
               </Button>
-            </div>
-          </div>
-
-          <div className="mt-8 text-center text-xs text-zinc-500">
-            Already have an account?{" "}
-            <Link
-              href="/login"
-              className="cursor-pointer font-bold text-zinc-900 hover:underline"
-            >
-              Log In
             </Link>
           </div>
+        </div>
+
+        <div className="mt-8 text-center text-xs text-zinc-500">
+          Already have an account?{" "}
+          <Link
+            href="/login"
+            className="cursor-pointer font-bold text-zinc-900 hover:underline"
+          >
+            Log In
+          </Link>
         </div>
       </div>
     </div>

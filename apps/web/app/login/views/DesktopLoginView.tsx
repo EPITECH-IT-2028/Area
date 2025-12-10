@@ -27,6 +27,11 @@ export default function DesktopLoginView() {
   } = useLoginViewModel();
   const [passwordVisibility, setPasswordVisibility] = useState(false);
 
+  const handleFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    handleSubmit();
+  };
+
   return (
     <div className="absolute left-1/2 w-[90%] max-w-[1400px] -translate-x-1/2 md:top-10 lg:top-1/2 lg:h-[90%] lg:-translate-y-1/2">
       <div className="relative h-full w-full grid-cols-2 grid-rows-1 gap-[12px] overflow-hidden rounded-[4.5rem] p-[12px] shadow-2xl lg:grid">
@@ -61,7 +66,7 @@ export default function DesktopLoginView() {
               </p>
             </div>
 
-            <div>
+            <form onSubmit={handleFormSubmit}>
               <div className="space-y-4">
                 {/* Email Field */}
                 <div>
@@ -130,16 +135,21 @@ export default function DesktopLoginView() {
               </a>
 
               {/* Sign In Buttons */}
-              <div className="mt-12 space-y-2">
-                <Button type="button" className="w-full" onClick={handleSubmit}>
-                  Log In
-                </Button>
+              <Button type="submit" className="mt-12 w-full">
+                Log In
+              </Button>
+            </form>
 
-                <div className="flex space-x-2">
+            <div className="mt-2 space-y-2">
+              <div className="flex space-x-2">
+                <Link
+                  href={`${process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8080"}/auth/google`}
+                  className="grow"
+                >
                   <Button
                     variant="outline"
-                    className="grow"
                     aria-label="Log In with Google"
+                    className="w-full"
                   >
                     <svg
                       className="h-4 w-4"
@@ -158,11 +168,16 @@ export default function DesktopLoginView() {
                     </svg>
                     Log In with Google
                   </Button>
+                </Link>
 
+                <Link
+                  href={`${process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8080"}/auth/github`}
+                  className="grow"
+                >
                   <Button
                     variant="outline"
-                    className="grow"
                     aria-label="Log In with GitHub"
+                    className="w-full"
                   >
                     <svg
                       className="h-4 w-4"
@@ -181,18 +196,18 @@ export default function DesktopLoginView() {
                     </svg>
                     Log In with GitHub
                   </Button>
-                </div>
-              </div>
-
-              <div className="mt-6 text-center text-xs text-zinc-500 md:mb-12 lg:mb-0">
-                Don&apos;t have an account?{" "}
-                <Link
-                  href="/register"
-                  className="cursor-pointer font-bold text-zinc-900 hover:underline"
-                >
-                  Sign Up
                 </Link>
               </div>
+            </div>
+
+            <div className="mt-6 text-center text-xs text-zinc-500 md:mb-12 lg:mb-0">
+              Don&apos;t have an account?{" "}
+              <Link
+                href="/register"
+                className="cursor-pointer font-bold text-zinc-900 hover:underline"
+              >
+                Sign Up
+              </Link>
             </div>
           </div>
         </div>
