@@ -27,7 +27,7 @@ export default function AuthCallbackPage() {
     const error = searchParams.get("error");
 
     if (error) {
-      toast.error("Login : " + error);
+      toast.error("Connection failed, please try again.");
       router.push("/login");
       return;
     }
