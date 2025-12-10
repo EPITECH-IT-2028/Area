@@ -23,7 +23,7 @@ export default function Page() {
         <Button
           onClick={() => {
             logout();
-            toast.error("Logged out");
+            toast.success("Logged out");
           }}
           variant="destructive"
         >
