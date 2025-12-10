@@ -30,6 +30,11 @@ export default function MobileRegisterView() {
   } = useRegisterViewModel();
   const [passwordVisibility, setPasswordVisibility] = useState(false);
 
+  const handleFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    handleSubmit();
+  };
+
   return (
     <div className="absolute top-0 backdrop-blur-xs ">
       <div className="flex h-36 w-screen flex-col items-center justify-center rounded-b-3xl bg-white/5 ring-[1rem] ring-primary-foreground">
@@ -51,7 +56,7 @@ export default function MobileRegisterView() {
           </p>
         </div>
 
-        <div>
+        <form onSubmit={handleFormSubmit}>
           <div className="space-y-2">
             <div>
               <Input
@@ -130,11 +135,7 @@ export default function MobileRegisterView() {
           </div>
 
           <div className="mt-12 space-y-2">
-            <Button
-              type="button"
-              className="h-12 w-full text-lg"
-              onClick={handleSubmit}
-            >
+            <Button type="submit" className="h-12 w-full text-lg">
               Sign Up
             </Button>
 
@@ -197,16 +198,16 @@ export default function MobileRegisterView() {
               </Button>
             </div>
           </div>
+        </form>
 
-          <div className="mt-8 text-center text-xs text-zinc-500">
-            Already have an account?{" "}
-            <Link
-              href="/login"
-              className="cursor-pointer font-bold text-zinc-900 hover:underline"
-            >
-              Log In
-            </Link>
-          </div>
+        <div className="mt-8 text-center text-xs text-zinc-500">
+          Already have an account?{" "}
+          <Link
+            href="/login"
+            className="cursor-pointer font-bold text-zinc-900 hover:underline"
+          >
+            Log In
+          </Link>
         </div>
       </div>
     </div>

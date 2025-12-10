@@ -31,6 +31,11 @@ export default function DesktopRegisterView() {
   } = useRegisterViewModel();
   const [passwordVisibility, setPasswordVisibility] = useState(false);
 
+  const handleFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    handleSubmit();
+  };
+
   return (
     <div className="absolute left-1/2 w-[90%] max-w-[1400px] -translate-x-1/2 md:top-10 lg:top-1/2 lg:h-[90%] lg:-translate-y-1/2">
       <div className="relative h-full w-full grid-cols-2 grid-rows-1 gap-[12px] overflow-hidden rounded-[4.5rem] p-[12px] shadow-2xl lg:grid">
@@ -65,7 +70,7 @@ export default function DesktopRegisterView() {
               </p>
             </div>
 
-            <div>
+            <form onSubmit={handleFormSubmit}>
               <div className="space-y-4">
                 <div>
                   <Label htmlFor="name" className="mb-2">
@@ -153,7 +158,7 @@ export default function DesktopRegisterView() {
               </div>
 
               <div className="mt-12 space-y-2">
-                <Button type="button" className="w-full" onClick={handleSubmit}>
+                <Button type="submit" className="w-full">
                   Sign Up
                 </Button>
 
@@ -210,16 +215,16 @@ export default function DesktopRegisterView() {
                   </Button>
                 </div>
               </div>
+            </form>
 
-              <div className="mt-6 text-center text-xs text-zinc-500 md:mb-12 lg:mb-0">
-                Already have an account?{" "}
-                <Link
-                  href="/login"
-                  className="cursor-pointer font-bold text-zinc-900 hover:underline"
-                >
-                  Log In
-                </Link>
-              </div>
+            <div className="mt-6 text-center text-xs text-zinc-500 md:mb-12 lg:mb-0">
+              Already have an account?{" "}
+              <Link
+                href="/login"
+                className="cursor-pointer font-bold text-zinc-900 hover:underline"
+              >
+                Log In
+              </Link>
             </div>
           </div>
         </div>

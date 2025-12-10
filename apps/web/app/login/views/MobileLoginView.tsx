@@ -26,6 +26,11 @@ export default function MobileLoginView() {
   } = useLoginViewModel();
   const [passwordVisibility, setPasswordVisibility] = useState(false);
 
+  const handleFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    handleSubmit();
+  };
+
   return (
     <div className="absolute top-0 backdrop-blur-xs">
       <div className="flex h-36 w-screen flex-col items-center justify-center rounded-b-3xl bg-white/5 ring-[1rem] ring-primary-foreground">
@@ -47,7 +52,7 @@ export default function MobileLoginView() {
           </p>
         </div>
 
-        <div>
+        <form onSubmit={handleFormSubmit}>
           <div className="space-y-2">
             <div>
               <Input
@@ -101,11 +106,7 @@ export default function MobileLoginView() {
           </div>
 
           <div className="mt-12 space-y-2">
-            <Button
-              type="button"
-              className="h-12 w-full text-lg"
-              onClick={handleSubmit}
-            >
+            <Button type="submit" className="h-12 w-full text-lg">
               Log In
             </Button>
 
@@ -168,16 +169,16 @@ export default function MobileLoginView() {
               </Button>
             </div>
           </div>
+        </form>
 
-          <div className="mt-8 text-center text-xs text-zinc-500">
-            Don&apos;t have an account?{" "}
-            <Link
-              href="/register"
-              className="cursor-pointer font-bold text-zinc-900 hover:underline"
-            >
-              Sign Up
-            </Link>
-          </div>
+        <div className="mt-8 text-center text-xs text-zinc-500">
+          Don&apos;t have an account?{" "}
+          <Link
+            href="/register"
+            className="cursor-pointer font-bold text-zinc-900 hover:underline"
+          >
+            Sign Up
+          </Link>
         </div>
       </div>
     </div>
