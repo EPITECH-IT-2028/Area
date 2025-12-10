@@ -10,3 +10,14 @@ export const GetServiceByNameQuery = gql`
     }
   }
 `;
+
+export const GetAllServicesQuery = gql`
+  query GetAllServices {
+    services {
+      id
+      name
+      display_name
+      auth_type
+    }
+  }
+`;

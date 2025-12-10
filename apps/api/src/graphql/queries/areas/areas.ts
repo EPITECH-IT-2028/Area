@@ -62,6 +62,42 @@ export const GetActionByNameQuery = gql`
   }
 `;
 
+export const GetActionsByServiceQuery = gql`
+  query GetActionsByService($service_name: String!) {
+    actions(where: { service: { name: { _eq: $service_name } } }) {
+      id
+      name
+      display_name
+      event_type
+      description
+      config_schema
+      service {
+        id
+        name
+        display_name
+      }
+    }
+  }
+`;
+
+export const GetReactionsByServiceQuery = gql`
+  query GetReactionsByService($service_name: String!) {
+    reactions(where: { service: { name: { _eq: $service_name } } }) {
+      id
+      name
+      display_name
+      action_type
+      description
+      config_schema
+      service {
+        id
+        name
+        display_name
+      }
+    }
+  }
+`;
+
 export const GetReactionByNameQuery = gql`
   query GetReactionByName($name: String!) {
     reactions(
