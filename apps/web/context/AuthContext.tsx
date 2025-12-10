@@ -8,8 +8,6 @@ import React, {
   useState,
 } from "react";
 
-import { useRouter } from "next/navigation";
-
 import { LoginResponse } from "@/app/login/models/loginResponse";
 import Cookies from "js-cookie";
 
@@ -28,7 +26,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<AuthContextType["user"]>(null);
   const [accessToken, setAccessToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const router = useRouter();
 
   const setData = useEffectEvent(() => {
     const storedUser = Cookies.get("user");
@@ -61,13 +58,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     setData();
   }, []);
-
-  useEffect(() => {
-    const isAuthenticated = Boolean(user) && Boolean(accessToken);
-    if (!isLoading && isAuthenticated) {
-      router.push("/dashboard");
-    }
-  }, [isLoading, user, accessToken, router]);
 
   const login = (authData: LoginResponse["data"]) => {
     setUser(authData.user);

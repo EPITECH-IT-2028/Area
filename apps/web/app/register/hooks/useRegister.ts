@@ -1,5 +1,7 @@
 import { useState } from "react";
 
+import { useRouter } from "next/navigation";
+
 import { RegisterRequest } from "@/app/register/models/registerRequest";
 import { RegisterResponse } from "@/app/register/models/registerResponse";
 import { useAuth } from "@/context/AuthContext";
@@ -10,6 +12,7 @@ import { toast } from "sonner";
 function useRegister() {
   const [response, setResponse] = useState<RegisterResponse>();
   const { login: contextLogin } = useAuth();
+  const router = useRouter();
 
   async function register(
     credentials: RegisterRequest,
@@ -24,6 +27,7 @@ function useRegister() {
       if (response.success) {
         toast.success(response?.message);
         contextLogin(response.data);
+        router.push("/dashboard");
       }
       return response;
     } catch (error) {
