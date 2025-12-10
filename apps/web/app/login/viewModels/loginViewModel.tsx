@@ -21,11 +21,15 @@ export function useLoginViewModel() {
       return;
     }
 
-    login({ email, password }).then((res) => {
-      if (res && res.success) {
-        storeToken(res.data.access_token);
-      }
-    });
+    login({ email, password })
+      .then((res) => {
+        if (res && res.success) {
+          storeToken(res.data.access_token);
+        }
+      })
+      .catch((error) => {
+        console.log("Login error:", error);
+      });
   };
 
   const isEmailError =

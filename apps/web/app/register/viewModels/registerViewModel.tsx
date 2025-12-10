@@ -57,11 +57,15 @@ export function useRegisterViewModel() {
     }
 
     if (passwordErrors.length === 0) {
-      register({ name, email, password }).then((res) => {
-        if (res && res.success) {
-          storeToken(res.data.access_token);
-        }
-      });
+      register({ name, email, password })
+        .then((res) => {
+          if (res && res.success) {
+            storeToken(res.data.access_token);
+          }
+        })
+        .catch((error) => {
+          console.log("Registration error:", error);
+        });
     }
   };
 
