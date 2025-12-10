@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/context/AuthContext";
 import { toast } from "sonner";
 
 import useRegister from "../hooks/useRegister";
@@ -30,6 +31,8 @@ function getPasswordValidationErrors(p: string): string[] {
 
 export function useRegisterViewModel() {
   const { register, response } = useRegister();
+  const { isAuthenticated } = useAuth();
+  const router = useRouter();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -39,6 +42,12 @@ export function useRegisterViewModel() {
   useEffect(() => {
     setPasswordErrors(getPasswordValidationErrors(password));
   }, [password]);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      router.push("/dashboard");
+    }
+  }, [isAuthenticated, router]);
 
   const handleSubmit = () => {
     setHasSubmitted(true);
@@ -77,7 +86,7 @@ export function useRegisterViewModel() {
     handleSubmit,
     response,
     passwordErrors,
-    isNameError,
+  isNameError,
     isEmailError,
     isPasswordError,
   };
