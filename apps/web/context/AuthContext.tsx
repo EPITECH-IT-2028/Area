@@ -34,8 +34,25 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const storedToken = localStorage.getItem("access_token");
 
     if (storedUser && storedToken) {
-      setUser(JSON.parse(storedUser));
-      setAccessToken(storedToken);
+      try {
+        const parsedUser = JSON.parse(storedUser);
+        if (
+          parsedUser &&
+          typeof parsedUser === "object" &&
+          parsedUser.id &&
+          parsedUser.email
+        ) {
+          setUser(parsedUser);
+          setAccessToken(storedToken);
+        } else {
+          localStorage.removeItem("user");
+          localStorage.removeItem("access_token");
+        }
+      } catch (error) {
+        console.error("Failed to parse stored user data:", error);
+        localStorage.removeItem("user");
+        localStorage.removeItem("access_token");
+      }
     }
     setIsLoading(false);
   });
