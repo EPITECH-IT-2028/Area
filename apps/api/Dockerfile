@@ -21,6 +21,7 @@ COPY --from=build /app/apps/api/package.json ./package.json
 RUN npm install -g pnpm@9.0.0
 RUN pnpm install --prod
 COPY --from=build /app/apps/api/dist ./dist
+COPY apps/api/.env* ./
 
 EXPOSE 8080
 
