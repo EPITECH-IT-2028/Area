@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 
 import { useRouter, useSearchParams } from "next/navigation";
 
-import { LoginResponse } from "@/app/auth/models/loginResponse";
+import { OAuthResponse } from "@/app/auth/models/oauthResponse";
 import { useAuth } from "@/context/AuthContext";
 import api from "@/lib/api";
 import { toast } from "sonner";
@@ -55,7 +55,7 @@ export default function AuthCallbackPage() {
               Authorization: `Bearer ${token}`,
             },
           })
-          .json<LoginResponse>();
+          .json<OAuthResponse>();
 
         login({
           access_token: token,
