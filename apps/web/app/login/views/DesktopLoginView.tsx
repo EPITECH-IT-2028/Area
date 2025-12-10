@@ -143,13 +143,13 @@ export default function DesktopLoginView() {
             <div className="mt-2 space-y-2">
               <div className="flex space-x-2">
                 <Link
-                  href={`${process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8080"}/auth/oauth/google`}
-                    className="grow"
-                  >
-                    <Button
-                      variant="outline"
-                      aria-label="Log In with Google"
-                      className="w-full"
+                  href={`${process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8080"}/auth/google`}
+                  className="grow"
+                >
+                  <Button
+                    variant="outline"
+                    aria-label="Log In with Google"
+                    className="w-full"
                   >
                     <svg
                       className="h-4 w-4"
@@ -170,7 +170,10 @@ export default function DesktopLoginView() {
                   </Button>
                 </Link>
 
-                <Link href="http://localhost:8080/auth/github" className="grow">
+                <Link
+                  href={`${process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8080"}/auth/github`}
+                  className="grow"
+                >
                   <Button
                     variant="outline"
                     aria-label="Log In with GitHub"
