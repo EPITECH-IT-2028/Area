@@ -63,8 +63,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setUser(authData.user);
     setAccessToken(authData.access_token);
 
-    Cookies.set("user", JSON.stringify(authData.user), { expires: 7 });
-    Cookies.set("access_token", authData.access_token, { expires: 7 });
+    Cookies.set("user", JSON.stringify(authData.user), {
+      expires: 7,
+      secure: true,
+      sameSite: "strict",
+    });
+    Cookies.set("access_token", authData.access_token, {
+      expires: 7,
+      secure: true,
+      sameSite: "strict",
+    });
   };
 
   const logout = () => {
