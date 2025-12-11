@@ -18,6 +18,7 @@ export const GetAllServicesQuery = gql`
       name
       display_name
       auth_type
+      icon_url
     }
   }
 `;

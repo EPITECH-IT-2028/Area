@@ -10,12 +10,16 @@ import { GetAllServicesQuery } from 'src/graphql/queries/services/services';
 export class AboutService {
   constructor(private readonly graphqlService: GraphQLService) {}
 
-  async getAboutInfo(clientHost: string) {
+  async getAboutInfo(clientIp: string) {
     const getServices = async () => {
       const result = await this.graphqlService.adminQuery<{
-        services: { name: string }[];
+        services: { name: string; display_name: string; icon_url: string }[];
       }>(GetAllServicesQuery, {});
-      return result.services.map((service) => service.name);
+      return result.services.map((service) => ({
+        name: service.name,
+        display_name: service.display_name,
+        icon_url: service.icon_url,
+      }));
     };
 
     const services = await getServices();
@@ -42,11 +46,13 @@ export class AboutService {
 
     const servicesWithDetails = await Promise.all(
       services.map(async (serviceName) => {
-        const actions = await getActionsService(serviceName);
-        const reactions = await getReactionsService(serviceName);
+        const actions = await getActionsService(serviceName.name);
+        const reactions = await getReactionsService(serviceName.name);
 
         return {
-          name: serviceName,
+          name: serviceName.name,
+          display_name: serviceName.display_name,
+          icon_url: serviceName.icon_url,
           actions,
           reactions,
         };
@@ -55,7 +61,7 @@ export class AboutService {
 
     return {
       client: {
-        host: clientHost,
+        host: clientIp,
       },
       server: {
         current_time: Date.now(),
