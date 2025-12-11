@@ -1,6 +1,12 @@
+import React from "react";
+
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import React from "react";
+
+import { AuthProvider } from "@/context/AuthContext";
+
+import { Toaster } from "@/components/ui/sonner";
+
 import "./globals.css";
 
 const geistSans = Geist({
@@ -31,7 +37,10 @@ export default function RootLayout({
       <body
         className={`font-sf-pro ${geistSans.variable} ${geistMono.variable} bg-primary-foreground antialiased`}
       >
-        {children}
+        <AuthProvider>
+          {children}
+          <Toaster position="bottom-center" richColors />
+        </AuthProvider>
       </body>
     </html>
   );

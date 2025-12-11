@@ -1,13 +1,17 @@
 "use client";
 
 import { useState } from "react";
-import { useRegisterViewModel } from "@/app/register/viewModels/registerViewModel";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
-import { Eye, EyeClosed } from "lucide-react";
+
 import Image from "next/image";
 import Link from "next/link";
+
+import { useRegisterViewModel } from "@/app/register/viewModels/registerViewModel";
+import { Eye, EyeClosed } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
+import { FieldError } from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
+import { Separator } from "@/components/ui/separator";
 
 export default function MobileRegisterView() {
   const {
@@ -17,9 +21,19 @@ export default function MobileRegisterView() {
     setEmail,
     password,
     setPassword,
+    handleSubmit,
+    response,
     passwordErrors,
+    isNameError,
+    isEmailError,
+    isPasswordError,
   } = useRegisterViewModel();
   const [passwordVisibility, setPasswordVisibility] = useState(false);
+
+  const handleFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    handleSubmit();
+  };
 
   return (
     <div className="absolute top-0 backdrop-blur-xs ">
@@ -42,7 +56,7 @@ export default function MobileRegisterView() {
           </p>
         </div>
 
-        <div>
+        <form onSubmit={handleFormSubmit}>
           <div className="space-y-2">
             <div>
               <Input
@@ -54,6 +68,7 @@ export default function MobileRegisterView() {
                 onChange={(e) => setName(e.target.value)}
                 autoComplete="name"
                 aria-label="name"
+                aria-invalid={isNameError}
               />
             </div>
 
@@ -67,7 +82,12 @@ export default function MobileRegisterView() {
                 onChange={(e) => setEmail(e.target.value)}
                 autoComplete="email"
                 aria-label="email"
+                aria-invalid={isEmailError}
               />
+              {(response?.status_code === 400 ||
+                response?.status_code === 409) && (
+                <FieldError className="mt-2">{response.message}</FieldError>
+              )}
             </div>
 
             <div>
@@ -81,7 +101,7 @@ export default function MobileRegisterView() {
                   onChange={(e) => setPassword(e.target.value)}
                   autoComplete="new-password"
                   aria-label="password"
-                  aria-invalid={passwordErrors.length > 0}
+                  aria-invalid={isPasswordError}
                 />
                 <button
                   type="button"
@@ -98,7 +118,7 @@ export default function MobileRegisterView() {
                   )}
                 </button>
               </div>
-              {passwordErrors.length > 0 && (
+              {isPasswordError && passwordErrors.length > 0 && (
                 <div className="mt-2 text-xs text-destructive">
                   <p className="mb-2">
                     New passwords must meet the password policy requirements. It
@@ -114,24 +134,29 @@ export default function MobileRegisterView() {
             </div>
           </div>
 
-          <div className="mt-12 space-y-2">
-            <Button type="button" className="h-12 w-full text-lg">
-              Sign Up
-            </Button>
+          <Button type="submit" className="mt-12 h-12 w-full text-lg">
+            Sign Up
+          </Button>
+        </form>
 
-            <div className="my-4 flex items-center">
-              <Separator className="shrink" />
-              <p className="px-2 text-sm text-nowrap text-zinc-700">
-                Or continue with
-              </p>
-              <Separator className="shrink" />
-            </div>
+        <div className="mt-8 space-y-2">
+          <div className="my-4 flex items-center">
+            <Separator className="shrink" />
+            <p className="px-2 text-sm text-nowrap text-zinc-700">
+              Or continue with
+            </p>
+            <Separator className="shrink" />
+          </div>
 
-            <div className="flex justify-center space-x-2 pt-2">
+          <div className="flex justify-center space-x-2 pt-2">
+            <Link
+              href={`${process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8080"}/auth/google`}
+              className="rounded-full"
+            >
               <Button
                 variant="outline"
-                className="size-10 rounded-full"
-                aria-label="Sign Up with Google"
+                aria-label="Log In with Google"
+                className="size-10"
               >
                 <svg
                   className="h-4 w-4"
@@ -149,10 +174,15 @@ export default function MobileRegisterView() {
                   ></path>
                 </svg>
               </Button>
+            </Link>
 
+            <Link
+              href={`${process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8080"}/auth/github`}
+              className="rounded-full"
+            >
               <Button
                 variant="outline"
-                className="size-10 rounded-full"
+                className="size-10"
                 aria-label="Sign Up with GitHub"
               >
                 <svg
@@ -171,18 +201,18 @@ export default function MobileRegisterView() {
                   ></path>
                 </svg>
               </Button>
-            </div>
-          </div>
-
-          <div className="mt-8 text-center text-xs text-zinc-500">
-            Already have an account?{" "}
-            <Link
-              href="/login"
-              className="cursor-pointer font-bold text-zinc-900 hover:underline"
-            >
-              Log In
             </Link>
           </div>
+        </div>
+
+        <div className="mt-8 text-center text-xs text-zinc-500">
+          Already have an account?{" "}
+          <Link
+            href="/login"
+            className="cursor-pointer font-bold text-zinc-900 hover:underline"
+          >
+            Log In
+          </Link>
         </div>
       </div>
     </div>

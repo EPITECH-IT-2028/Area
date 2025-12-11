@@ -1,14 +1,18 @@
 "use client";
 
 import { useState } from "react";
-import { useRegisterViewModel } from "@/app/register/viewModels/registerViewModel";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
-import { Eye, EyeClosed } from "lucide-react";
+
 import Image from "next/image";
 import Link from "next/link";
+
+import { useRegisterViewModel } from "@/app/register/viewModels/registerViewModel";
+import { Eye, EyeClosed } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
+import { FieldError } from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Separator } from "@/components/ui/separator";
 
 export default function DesktopRegisterView() {
   const {
@@ -18,9 +22,19 @@ export default function DesktopRegisterView() {
     setEmail,
     password,
     setPassword,
+    handleSubmit,
+    response,
     passwordErrors,
+    isNameError,
+    isEmailError,
+    isPasswordError,
   } = useRegisterViewModel();
   const [passwordVisibility, setPasswordVisibility] = useState(false);
+
+  const handleFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    handleSubmit();
+  };
 
   return (
     <div className="absolute left-1/2 w-[90%] max-w-[1400px] -translate-x-1/2 md:top-10 lg:top-1/2 lg:h-[90%] lg:-translate-y-1/2">
@@ -56,7 +70,7 @@ export default function DesktopRegisterView() {
               </p>
             </div>
 
-            <div>
+            <form onSubmit={handleFormSubmit}>
               <div className="space-y-4">
                 <div>
                   <Label htmlFor="name" className="mb-2">
@@ -71,6 +85,7 @@ export default function DesktopRegisterView() {
                     onChange={(e) => setName(e.target.value)}
                     autoComplete="name"
                     aria-label="name"
+                    aria-invalid={isNameError}
                   />
                 </div>
 
@@ -87,7 +102,12 @@ export default function DesktopRegisterView() {
                     onChange={(e) => setEmail(e.target.value)}
                     autoComplete="email"
                     aria-label="email"
+                    aria-invalid={isEmailError}
                   />
+                  {(response?.status_code === 400 ||
+                    response?.status_code === 409) && (
+                    <FieldError className="mt-2">{response.message}</FieldError>
+                  )}
                 </div>
 
                 <div>
@@ -104,7 +124,7 @@ export default function DesktopRegisterView() {
                       onChange={(e) => setPassword(e.target.value)}
                       autoComplete="new-password"
                       aria-label="password"
-                      aria-invalid={passwordErrors.length > 0}
+                      aria-invalid={isPasswordError}
                     />
                     <button
                       type="button"
@@ -121,7 +141,7 @@ export default function DesktopRegisterView() {
                       )}
                     </button>
                   </div>
-                  {passwordErrors.length > 0 && (
+                  {isPasswordError && passwordErrors.length > 0 && (
                     <div className="mt-2 text-xs text-destructive">
                       <p className="mb-2">
                         New passwords must meet the password policy
@@ -137,15 +157,20 @@ export default function DesktopRegisterView() {
                 </div>
               </div>
 
-              <div className="mt-12 space-y-2">
-                <Button type="button" className="w-full">
-                  Sign Up
-                </Button>
+              <Button type="submit" className="mt-12 w-full">
+                Sign Up
+              </Button>
+            </form>
 
-                <div className="flex space-x-2">
+            <div className="mt-2 space-y-2">
+              <div className="flex space-x-2">
+                <Link
+                  href={`${process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8080"}/auth/google`}
+                  className="grow"
+                >
                   <Button
                     variant="outline"
-                    className="grow"
+                    className="w-full"
                     aria-label="Sign Up with Google"
                   >
                     <svg
@@ -165,10 +190,15 @@ export default function DesktopRegisterView() {
                     </svg>
                     Sign Up with Google
                   </Button>
+                </Link>
 
+                <Link
+                  href={`${process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8080"}/auth/github`}
+                  className="grow"
+                >
                   <Button
                     variant="outline"
-                    className="grow"
+                    className="w-full"
                     aria-label="Sign Up with GitHub"
                   >
                     <svg
@@ -188,18 +218,18 @@ export default function DesktopRegisterView() {
                     </svg>
                     Sign Up with GitHub
                   </Button>
-                </div>
-              </div>
-
-              <div className="mt-6 text-center text-xs text-zinc-500 md:mb-12 lg:mb-0">
-                Already have an account?{" "}
-                <Link
-                  href="/login"
-                  className="cursor-pointer font-bold text-zinc-900 hover:underline"
-                >
-                  Log In
                 </Link>
               </div>
+            </div>
+
+            <div className="mt-6 text-center text-xs text-zinc-500 md:mb-12 lg:mb-0">
+              Already have an account?{" "}
+              <Link
+                href="/login"
+                className="cursor-pointer font-bold text-zinc-900 hover:underline"
+              >
+                Log In
+              </Link>
             </div>
           </div>
         </div>
