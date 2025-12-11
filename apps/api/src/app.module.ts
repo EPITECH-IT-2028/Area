@@ -6,6 +6,7 @@ import { UserServicesModule } from './user-services/user-services.module';
 import { AreasModule } from './areas/areas.module';
 import { GraphQLModule } from './graphql/graphql.module';
 import { WorkersModule } from './workers/global-worker.module';
+import { AboutModule } from './about/about.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { WorkersModule } from './workers/global-worker.module';
     UsersModule,
     UserServicesModule,
     AreasModule,
+    AboutModule,
     WorkersModule,
   ],
 })
