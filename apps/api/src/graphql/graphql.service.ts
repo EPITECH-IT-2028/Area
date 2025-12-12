@@ -16,9 +16,18 @@ export class GraphQLService {
       );
     }
 
-    this.client = new GraphQLClient(endpoint);
+    const baseConfig = {
+      jsonSerializer: {
+        parse: JSON.parse,
+        stringify: JSON.stringify,
+      },
+      excludeOperationName: false,
+    };
+
+    this.client = new GraphQLClient(endpoint, baseConfig);
 
     this.adminClient = new GraphQLClient(endpoint, {
+      ...baseConfig,
       headers: {
         'x-hasura-admin-secret':
           this.configService.get<string>('HASURA_GRAPHQL_ADMIN_SECRET') || '',
@@ -53,6 +62,10 @@ export class GraphQLService {
     const userClient = new GraphQLClient(
       this.configService.get<string>('HASURA_GRAPHQL_ENDPOINT') || '',
       {
+        jsonSerializer: {
+          parse: JSON.parse,
+          stringify: JSON.stringify,
+        },
         headers: {
           'x-hasura-role': 'user',
           'x-hasura-user-id': userId,
