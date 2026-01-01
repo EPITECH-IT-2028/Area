@@ -3,27 +3,25 @@ RUN npm install -g pnpm@9.0.0
 
 FROM builder AS dependencies
 WORKDIR /app
-COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
-COPY apps/web/package.json ./apps/web/
+COPY package.json pnpm-lock.yaml* ./
 RUN pnpm install
 
 FROM builder AS build
 WORKDIR /app
 COPY --from=dependencies /app/node_modules ./node_modules
-COPY --from=dependencies /app/apps/web/node_modules ./apps/web/node_modules
 COPY . .
-WORKDIR /app/apps/web
 RUN pnpm build
 
 FROM node:20-alpine AS production
 WORKDIR /app
 RUN npm install -g pnpm@9.0.0
-COPY apps/web/package.json ./
+COPY package.json ./
 RUN pnpm install --prod
-COPY --from=build /app/apps/web/.next ./.next
-COPY --from=build /app/apps/web/public ./public
-COPY --from=build /app/apps/web/next.config.ts ./
-COPY apps/web/.env* ./
+
+COPY --from=build /app/.next ./.next
+COPY --from=build /app/public ./public
+COPY --from=build /app/next.config.mjs ./
+COPY .env* ./
 
 EXPOSE 8081
 
