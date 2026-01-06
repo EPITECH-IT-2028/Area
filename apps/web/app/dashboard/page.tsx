@@ -40,6 +40,19 @@ export default function Page() {
             </div>
           </div>
         </header>
+
+         <main className="container mx-auto px-4 py-8">
+          <div className="mb-8">
+            <h1 className="text-4xl font-bold mb-2">
+              Hello, {user?.name || "User"} !
+            </h1>
+            <p className="text-muted-foreground text-lg">
+              Here's an overview of your automations
+            </p>
+          </div>
+
+          
+        </main>
       </div>
     </ProtectedRoute>
   );
