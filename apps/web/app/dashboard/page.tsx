@@ -4,7 +4,6 @@ import { useAuth } from "@/context/AuthContext";
 import { toast } from "sonner";
 
 import ProtectedRoute from "@/components/ProtectedRoute";
-
 import { Button } from "@/components/ui/button";
 
 export default function Page() {
@@ -12,24 +11,36 @@ export default function Page() {
 
   return (
     <ProtectedRoute>
-      <main className="flex min-h-screen flex-col items-center justify-center gap-6">
-        <div className="mb-8 flex flex-col items-center space-y-2">
-          <h1 className="translate-x-4 text-4xl font-bold select-none">
-            Hello, {user?.name || "User"} ! 👋
-          </h1>
-          <div className="text-muted-foreground">{user?.email}</div>
-        </div>
+      <div className="min-h-screen bg-background">
 
-        <Button
-          onClick={() => {
-            logout();
-            toast.success("Logged out");
-          }}
-          variant="destructive"
-        >
-          Logout
-        </Button>
-      </main>
+        <header className="border-b bg-card">
+          <div className="container mx-auto px-4 py-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-4">
+                <h2 className="text-2xl font-bold">AREA Dashboard</h2>
+              </div>
+              <div className="flex items-center gap-4">
+                <div className="text-right">
+                  <p className="text-sm font-medium">{user?.name || "User"}</p>
+                  <p className="text-xs text-muted-foreground">
+                    {user?.email}
+                  </p>
+                </div>
+                <Button
+                  onClick={() => {
+                    logout();
+                    toast.success("Logged out");
+                  }}
+                  variant="destructive"
+                  size="sm"
+                >
+                  Logout
+                </Button>
+              </div>
+            </div>
+          </div>
+        </header>
+      </div>
     </ProtectedRoute>
   );
 }
