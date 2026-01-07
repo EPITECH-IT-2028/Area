@@ -1,0 +1,20 @@
+meta {
+  name: Get about.json
+  type: http
+  seq: 6
+}
+
+get {
+  url: http://localhost:8080/about.json
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: 
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
