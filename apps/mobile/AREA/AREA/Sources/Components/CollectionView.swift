@@ -33,6 +33,7 @@ struct CollectionView: View {
 				.padding()
 				.navigationTitle(LocalizedStringResource.servicesTitle)
 			}
+			.background(Color(UIColor.systemGroupedBackground))
 		}
 	}
 }
