@@ -9,6 +9,7 @@ import SwiftUI
 
 struct SplashScreenView: View {
 	@StateObject var viewModel = SplashScreenViewModel()
+	@EnvironmentObject var serviceStore: ServiceStore
 	var body: some View {
 		ZStack {
 			Color.black.ignoresSafeArea()
@@ -18,7 +19,7 @@ struct SplashScreenView: View {
 		}
 		.onAppear {
 			Task {
-				await viewModel.isTokenValid()
+				await viewModel.retrieveServices(store: serviceStore)
 			}
 		}
 	}

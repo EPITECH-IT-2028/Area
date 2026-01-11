@@ -11,7 +11,9 @@ import SwiftUI
 struct HomeView: View {
 	@EnvironmentObject var authState: AuthState
 	var body: some View {
-		Text("Home")
+		NavigationStack {
+
+		}.navigationTitle("Home")
 	}
 }
 

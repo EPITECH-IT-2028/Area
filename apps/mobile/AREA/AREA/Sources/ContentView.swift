@@ -11,6 +11,7 @@ import SwiftUI
 
 struct ContentView: View {
 	@EnvironmentObject var authState: AuthState
+	@EnvironmentObject var serviceStore: ServiceStore
 	@StateObject private var loginViewModel = LoginViewModel()
 	@StateObject private var registerViewModel = RegisterViewModel()
 	@State private var showSplash = true
@@ -43,6 +44,16 @@ struct ContentView: View {
 							systemImage: Constants.settingsIconString
 						) {
 							SettingsView()
+						}
+					}.onAppear {
+						Task {
+							if serviceStore.services.isEmpty {
+								do {
+									let service = try await serviceStore.fetchServices()
+								} catch {
+									print(error)
+								}
+							}
 						}
 					}
 				} else {
