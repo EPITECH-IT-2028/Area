@@ -388,7 +388,7 @@
 			repositoryURL = "https://github.com/SDWebImage/SDWebImageSVGCoder";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 1.8.0;
+				minimumVersion = 1.7.0;
 			};
 		};
 		5DBE58E42EE03EA100EFA570 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */ = {

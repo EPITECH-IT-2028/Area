@@ -14,7 +14,6 @@ class ServiceStore: ObservableObject {
 
 	@Published var services: [Service] = []
 	@Published var isLoading: Bool = false
-	@Published var errorMessage: String? = nil
 
 	func fromServiceToCardItem() -> [CardItem] {
 		let cardItems = services.map { service in
@@ -50,9 +49,10 @@ class ServiceStore: ObservableObject {
 		let (data, urlResponse) = try await URLSession.shared.data(for: request)
 
 		guard let response = urlResponse as? HTTPURLResponse else {
+			self.isLoading = false
 			throw NetworkError.badURLResponse(
 				underlyingError: NSError(
-					domain: "SplashScreenAction",
+					domain: "ServiceStore",
 					code: -1,
 					userInfo: [
 						NSLocalizedDescriptionKey: "Response is not an HTTP response"
@@ -66,9 +66,10 @@ class ServiceStore: ObservableObject {
 				from: data,
 				statusCode: response.statusCode
 			)
+			self.isLoading = false
 			throw NetworkError.badURLResponse(
 				underlyingError: NSError(
-					domain: "SplashScreenAction",
+					domain: "ServiceStore",
 					code: response.statusCode,
 					userInfo: [
 						NSLocalizedDescriptionKey: errorMessage,
@@ -87,8 +88,10 @@ class ServiceStore: ObservableObject {
 				from: data
 			)
 			self.services = decodedResponse.server.services
+			self.isLoading = false
 			return true
 		} catch {
+			self.isLoading = false
 			throw NetworkError.decodingError(
 				underlyingError: error
 			)

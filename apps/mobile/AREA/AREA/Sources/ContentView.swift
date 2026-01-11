@@ -49,7 +49,7 @@ struct ContentView: View {
 						Task {
 							if serviceStore.services.isEmpty {
 								do {
-									let service = try await serviceStore.fetchServices()
+									_ = try await serviceStore.fetchServices()
 								} catch {
 									print(error)
 								}

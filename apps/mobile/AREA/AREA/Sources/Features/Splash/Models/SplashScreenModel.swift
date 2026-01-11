@@ -23,15 +23,15 @@ struct ServerInfo: Decodable {
 
 struct Service: Decodable, Identifiable {
 	var id: String { name }
-	var name: String
-	var displayName: String
-	var iconUrl: URL?
-	var actions: [ServiceAction]
-	var reactions: [ServiceAction]
+	let name: String
+	let displayName: String
+	let iconUrl: URL?
+	let actions: [ServiceAction]
+	let reactions: [ServiceAction]
 }
 
 struct ServiceAction: Decodable {
 	var id: String { name }
-	var name: String
-	var description: String
+	let name: String
+	let description: String
 }
