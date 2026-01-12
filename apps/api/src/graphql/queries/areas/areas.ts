@@ -11,6 +11,7 @@ export const GetAllActiveAreasQuery = gql`
       action_config
       reaction_id
       reaction_config
+      description
       action {
         id
         name
