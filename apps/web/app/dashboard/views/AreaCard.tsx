@@ -10,11 +10,8 @@ export function AreaCard({ area, getStatusColor }: AreaCardProps) {
     <div className="rounded-xl border bg-card text-card-foreground shadow p-6">
       <div className="flex items-center gap-3 mb-3">
         <h3 className="text-lg font-semibold">{area.name}</h3>
-        <span className={`px-2 py-1 text-xs rounded ${
-            area.is_active ? "bg-green-500 text-white" : "bg-gray-500 text-white"
-          }`}
-        >
-          {area.is_active ? "Active" : "Inactive"}
+        <span className="px-2 py-1 text-xs rounded bg-green-500 text-white">
+          Active
         </span>
       </div>
       {area.description && (
