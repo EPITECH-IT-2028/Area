@@ -36,7 +36,7 @@ export class DiscordWebhookHandler {
 
     const template =
       area.reaction_config.message_template ||
-      'Event triggered: {{subject}} from {{from}}';
+      'Hello,\n\nThis is an automated notification from AREA.\n\n{{data}}\n\nBest regards,\nAREA Team';
     const message = this.replaceVariables(template, actionData);
 
     const controller = new AbortController();

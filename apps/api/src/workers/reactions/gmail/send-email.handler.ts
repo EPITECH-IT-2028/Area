@@ -53,7 +53,7 @@ export class SendEmailHandler {
 		const subject = area.reaction_config.subject || 'AREA Notification';
 		const template =
 			area.reaction_config.body_template ||
-			'Event triggered: {{subject}} from {{from}}';
+			'Hello,\n\nThis is an automated notification from AREA.\n\n{{data}}\n\nBest regards,\nAREA Team';
 		const body = this.replaceVariables(template, actionData);
 
 		try {
