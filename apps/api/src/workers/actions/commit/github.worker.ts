@@ -64,7 +64,6 @@ export class GithubWorker {
             }
           } catch (err) {
             this.logger.error(`[${area.name}] Reaction failed for commit ${commit.sha}:`, err);
-            throw err;
           }
         }
       }
