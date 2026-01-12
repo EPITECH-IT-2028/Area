@@ -14,11 +14,6 @@ export function AreaCard({ area, getStatusColor }: AreaCardProps) {
           Active
         </span>
       </div>
-      {area.description && (
-        <p className="text-sm text-muted-foreground mb-3">
-          {area.description}
-        </p>
-      )}
       <div className="flex flex-wrap items-center gap-2 text-sm p-3 bg-secondary/30 rounded mb-3">
         <span className="font-semibold">If the service</span>
         <span className="px-2 py-1 bg-blue-500/20 rounded">

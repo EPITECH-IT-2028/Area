@@ -1,7 +1,6 @@
 export interface Area {
   id: string;
   name: string;
-  description?: string;
   is_active: boolean;
   action: {
     name: string;
