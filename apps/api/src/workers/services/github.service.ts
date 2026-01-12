@@ -103,6 +103,89 @@ export class GithubService {
     }
   }
 
+  async fetchNewPullRequests(
+    token: string,
+    repository: string,
+    lastTriggeredStr: Maybe<string> | undefined,
+  ): Promise<Array<{ number: number; title: string; body?: string | null; user: { login: string }; html_url: string; created_at: string }>> {
+    const perPage = 50;
+    const [owner, repo] = repository.split('/');
+    if (!owner || !repo) {
+      this.logger.error(`[GitHub] Invalid repository '${repository}'`);
+      return [];
+    }
+
+    const sinceDate = lastTriggeredStr
+      ? new Date(lastTriggeredStr)
+      : new Date(Date.now() - 5 * 60 * 1000);
+    const sinceIso = sinceDate.toISOString();
+
+    this.logger.log(`[GitHub] Fetching pull requests for ${repository} since ${sinceIso}`);
+
+    try {
+      let page = 1;
+      const found: Array<{ number: number; title: string; body?: string | null; user: { login: string }; html_url: string; created_at: string }> = [];
+
+      while (true) {
+        const url = `https://api.github.com/repos/${owner}/${repo}/pulls?state=all&sort=created&direction=asc&per_page=${perPage}&page=${page}`;
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), this.REQUEST_TIMEOUT_MS);
+
+        const res = await fetch(url, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: 'application/vnd.github.v3+json',
+          },
+          signal: controller.signal,
+        });
+
+        clearTimeout(timeoutId);
+
+        if (!res.ok) {
+          const txt = await res.text().catch(() => '');
+          this.logger.error(`[GitHub] PRs fetch error ${res.status}: ${txt}`);
+          break;
+        }
+
+        const data = (await res.json()) as any[];
+
+        if (!Array.isArray(data) || data.length === 0) break;
+
+        for (const item of data) {
+          const createdAt = item.created_at;
+          if (!createdAt) continue;
+
+          if (new Date(createdAt).getTime() <= new Date(sinceIso).getTime()) {
+            continue;
+          }
+
+          found.push({
+            number: item.number,
+            title: item.title,
+            body: item.body ?? null,
+            user: { login: item.user?.login },
+            html_url: item.html_url,
+            created_at: item.created_at,
+          });
+        }
+
+        if (data.length < perPage) break;
+        page += 1;
+        if (page > 10) break;
+      }
+
+      found.sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime());
+      return found;
+    } catch (error) {
+      if ((error as any)?.name === 'AbortError') {
+        this.logger.error(`[GitHub] PRs request timed out after ${this.REQUEST_TIMEOUT_MS}ms for ${repository}`);
+      } else {
+        this.logger.error('[GitHub] Network error fetching PRs:', error);
+      }
+      return [];
+    }
+  }
+
   async createIssue(token: string, repository: string, title: string, body?: string): Promise<any> {
     const url = `https://api.github.com/repos/${repository}/issues`;
     const controller = new AbortController();

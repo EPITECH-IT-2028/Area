@@ -14,6 +14,9 @@ import { GithubWorker } from './actions/commit/github.worker';
 import { GithubService } from './services/github.service';
 import { GithubCreateIssueHandler } from './reactions/github/create-issue.handler';
 import { GithubCreateFileHandler } from './reactions/github/create-file.handler';
+import { OpenMeteoWorker } from './actions/weather/open-meteo.worker';
+import { OpenMeteoService } from './services/open-meteo.service';
+import { GithubPullRequestWorker } from './actions/pull_request/github-pr.worker';
 
 @Module({
   imports: [ScheduleModule.forRoot(), GraphQLModule, AreasModule],
@@ -23,12 +26,15 @@ import { GithubCreateFileHandler } from './reactions/github/create-file.handler'
     GmailService,
     OAuthService,
     GithubWorker,
+    GithubPullRequestWorker,
     GithubService,
     ReactionExecutor,
     DiscordWebhookHandler,
     SendEmailHandler,
     GithubCreateIssueHandler,
     GithubCreateFileHandler,
+    OpenMeteoWorker,
+    OpenMeteoService
   ],
 })
 export class WorkersModule {}

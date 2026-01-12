@@ -5,6 +5,8 @@ import { Areas } from 'src/generated/graphql';
 import { IActionWorker } from './interfaces/worker.interface';
 import { EmailWorker } from './actions/email/email.worker';
 import { GithubWorker } from './actions/commit/github.worker';
+import { GithubPullRequestWorker } from './actions/pull_request/github-pr.worker';
+import { OpenMeteoWorker } from './actions/weather/open-meteo.worker';
 
 @Injectable()
 export class GlobalWorkerService {
@@ -16,9 +18,13 @@ export class GlobalWorkerService {
     private readonly areasService: AreasService,
     private readonly emailWorker: EmailWorker,
     private readonly githubWorker: GithubWorker,
+    private readonly githubPullRequestWorker: GithubPullRequestWorker,
+    private readonly openMeteoWorker: OpenMeteoWorker,
   ) {
     this.actionWorkers.set('new_email', this.emailWorker);
     this.actionWorkers.set('new_commit_push', this.githubWorker);
+    this.actionWorkers.set('new_pull_request', this.githubPullRequestWorker);
+    this.actionWorkers.set('open_meteo', this.openMeteoWorker);
     const registered = [...this.actionWorkers.keys()].join(', ');
     this.logger.log(`Registered action workers: ${registered}`);
   }
