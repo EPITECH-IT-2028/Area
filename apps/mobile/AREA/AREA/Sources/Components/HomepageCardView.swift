@@ -23,7 +23,7 @@ struct HomepageCardView: View {
 					.padding(.horizontal, 5)
 					.minimumScaleFactor(0.6)
 
-				Text("\(item.number)")
+				Text(String(item.number))
 					.font(.system(size: isSquare ? 50 : 60, weight: .heavy))
 					.foregroundStyle(.black)
 

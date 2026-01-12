@@ -57,12 +57,12 @@ class ServiceStore: ObservableObject {
 			token: token
 		)
 
-		self.isLoading = true
+		await MainActor.run { self.isLoading = true }
+		defer { Task { await MainActor.run { self.isLoading = false } } }
 
 		let (data, urlResponse) = try await URLSession.shared.data(for: request)
 
 		guard let response = urlResponse as? HTTPURLResponse else {
-			self.isLoading = false
 			throw NetworkError.badURLResponse(
 				underlyingError: NSError(
 					domain: "ServiceStore",
@@ -79,7 +79,6 @@ class ServiceStore: ObservableObject {
 				from: data,
 				statusCode: response.statusCode
 			)
-			self.isLoading = false
 			throw NetworkError.badURLResponse(
 				underlyingError: NSError(
 					domain: "ServiceStore",
@@ -100,11 +99,11 @@ class ServiceStore: ObservableObject {
 				SplashScreenResponse.self,
 				from: data
 			)
-			self.services = decodedResponse.server.services
-			self.isLoading = false
+			await MainActor.run {
+				self.services = decodedResponse.server.services
+			}
 			return true
 		} catch {
-			self.isLoading = false
 			throw NetworkError.decodingError(
 				underlyingError: error
 			)

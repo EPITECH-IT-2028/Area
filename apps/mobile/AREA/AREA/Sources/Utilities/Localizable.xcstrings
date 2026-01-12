@@ -93,6 +93,23 @@
         }
       }
     },
+    "Error.Happened.Title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "An error just happened, try again."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Une erreur vient de survenir, réessayez."
+          }
+        }
+      }
+    },
     "Error.InvalidHost" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -157,6 +174,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Erreur de trousseau dans RegisterView.onAppear :"
+          }
+        }
+      }
+    },
+    "Error.Title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Error"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erreur"
           }
         }
       }
@@ -742,23 +776,6 @@
         }
       }
     },
-    "Settings" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Settings"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Paramètres"
-          }
-        }
-      }
-    },
     "Settings.ErrorLogout" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -827,6 +844,23 @@
         }
       }
     },
+    "Settings.Title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Settings"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Paramètres"
+          }
+        }
+      }
+    },
     "Settings.UpdateServerPath.Title" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -874,6 +908,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "AREA"
+          }
+        }
+      }
+    },
+    "Tryagain.Title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Try again"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Réessayer"
           }
         }
       }

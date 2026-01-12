@@ -11,6 +11,8 @@ import SwiftUI
 struct HomeView: View {
 	@EnvironmentObject var authState: AuthState
 	@EnvironmentObject var serviceStore: ServiceStore
+	@State private var errorMessage: String?
+	@State private var showError = false
 
 	var body: some View {
 		let stats: [HomepageCard] = [
@@ -52,8 +54,14 @@ struct HomeView: View {
 				do {
 					_ = try await serviceStore.fetchServices()
 				} catch {
-
+					errorMessage = error.localizedDescription
+					showError = true
 				}
+			}
+			.alert(LocalizedStringResource.errorTitle, isPresented: $showError) {
+				Button("OK", role: .cancel) {}
+			} message: {
+				Text(errorMessage ?? String(localized: LocalizedStringResource.errorHappenedTitle))
 			}
 			.navigationTitle(LocalizedStringResource.homeTitle)
 			.background(Color(UIColor.systemGroupedBackground))

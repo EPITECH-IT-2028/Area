@@ -16,9 +16,13 @@ struct ContentView: View {
 	@StateObject private var registerViewModel = RegisterViewModel()
 	@State private var showSplash = true
 	@State private var showingRegister = false
+	@State private var showError = false
+	@State private var errorMessage = ""
+
 	private let fadeOutDuration: TimeInterval = 0.5
 
 	var body: some View {
+
 		ZStack {
 			if showSplash {
 				SplashScreenView()
@@ -30,17 +34,17 @@ struct ContentView: View {
 			} else {
 				if authState.isAuthenticated {
 					TabView {
-						Tab(Constants.homeString, systemImage: Constants.homeIconString) {
+						Tab(LocalizedStringResource.homeTitle, systemImage: Constants.homeIconString) {
 							HomeView()
 						}
 						Tab(
-							Constants.servicesString,
+							LocalizedStringResource.servicesTitle,
 							systemImage: Constants.servicesIconString
 						) {
 							ServicesView()
 						}
 						Tab(
-							Constants.settingsString,
+							LocalizedStringResource.settings,
 							systemImage: Constants.settingsIconString
 						) {
 							SettingsView()
@@ -51,10 +55,26 @@ struct ContentView: View {
 								do {
 									_ = try await serviceStore.fetchServices()
 								} catch {
-									print(error)
+									errorMessage = error.localizedDescription
+									showError = true
 								}
 							}
 						}
+					}
+					.alert(LocalizedStringResource.errorTitle, isPresented: $showError) {
+						Button(LocalizedStringResource.tryagainTitle) {
+							Task {
+								do {
+									_ = try await serviceStore.fetchServices()
+								} catch {
+									errorMessage = error.localizedDescription
+									showError = true
+								}
+							}
+						}
+						Button("OK", role: .cancel) {}
+					} message: {
+						Text(errorMessage)
 					}
 				} else {
 					if showingRegister {

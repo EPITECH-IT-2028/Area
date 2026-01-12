@@ -13,8 +13,8 @@ struct TableView: View {
 
 	var body: some View {
 		HStack(alignment: .center, spacing: 0) {
-			if item.iconURL != nil {
-				WebImage(url: item.iconURL)
+			if let iconURL = item.iconURL {
+				WebImage(url: iconURL)
 					.resizable()
 					.indicator(.activity)
 					.transition(.fade(duration: 0.5))
@@ -30,8 +30,8 @@ struct TableView: View {
 					.foregroundStyle(.black)
 					.multilineTextAlignment(.center)
 
-				if item.description != nil {
-					Text(item.description!)
+				if let description = item.description {
+					Text(description)
 							.font(.body)
 							.foregroundStyle(.gray)
 							.lineLimit(2)

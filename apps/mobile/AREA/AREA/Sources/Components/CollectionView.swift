@@ -1,5 +1,5 @@
 //
-//  ExpandingCardListView.swift
+//  CollectionView.swift
 //  AREA
 //
 //  Created by Arthur GUERINAULT on 11/12/2025.
@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct CollectionView: View {
-	@State private var selectedCardIndex: Int? = nil
 	@EnvironmentObject var serviceStore: ServiceStore
 	var searchText: String
 
