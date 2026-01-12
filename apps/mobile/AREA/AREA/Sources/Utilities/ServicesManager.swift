@@ -45,7 +45,11 @@ class ServiceStore: ObservableObject {
 		)
 
 		await MainActor.run { self.isLoading = true }
-		defer { Task { await MainActor.run { self.isLoading = false } } }
+		defer {
+			Task { @MainActor in
+				self.isLoading = false
+			}
+		}
 
 		let (data, urlResponse) = try await URLSession.shared.data(for: request)
 
