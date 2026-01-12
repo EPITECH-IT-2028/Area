@@ -35,6 +35,7 @@ export interface CommitData {
 @Injectable()
 export class GithubService {
   private readonly logger = new Logger(GithubService.name);
+  private readonly REQUEST_TIMEOUT_MS = 10000;
 
   async fetchNewCommits(
     token: string,
@@ -54,12 +55,17 @@ export class GithubService {
 
     try {
       const url = `https://api.github.com/repos/${repo}/commits?sha=${branch}&since=${sinceIso}`;
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), this.REQUEST_TIMEOUT_MS);
+
       const response = await fetch(url, {
         headers: {
           Authorization: `Bearer ${token}`,
           Accept: 'application/vnd.github.v3+json',
         },
+        signal: controller.signal,
       });
+      clearTimeout(timeoutId);
 
       if (!response.ok) {
         const errText = await response.text();
@@ -88,7 +94,11 @@ export class GithubService {
 
       return commits;
     } catch (error) {
-      this.logger.error('Network error fetching GitHub commits:', error);
+      if ((error as any)?.name === 'AbortError') {
+        this.logger.error(`GitHub API request timed out after ${this.REQUEST_TIMEOUT_MS}ms for ${repo}`);
+      } else {
+        this.logger.error('Network error fetching GitHub commits:', error);
+      }
       return [];
     }
   }
