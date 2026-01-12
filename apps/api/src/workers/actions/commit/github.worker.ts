@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { Areas } from '../../../generated/graphql';
 import { ReactionExecutor } from '../../reactions/reactions-executor.service';
-import { GithubService} from './github.service';
+import { GithubService} from '../../services/github.service';
 
 @Injectable()
 export class GithubWorker {
