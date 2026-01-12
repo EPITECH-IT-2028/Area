@@ -44,7 +44,7 @@ struct ContentView: View {
 							ServicesView()
 						}
 						Tab(
-							LocalizedStringResource.settings,
+							LocalizedStringResource.settingsTitle,
 							systemImage: Constants.settingsIconString
 						) {
 							SettingsView()
@@ -62,7 +62,7 @@ struct ContentView: View {
 						}
 					}
 					.alert(LocalizedStringResource.errorTitle, isPresented: $showError) {
-						Button(LocalizedStringResource.tryagainTitle) {
+						Button(LocalizedStringResource.tryAgainTitle) {
 							Task {
 								do {
 									_ = try await serviceStore.fetchServices()
