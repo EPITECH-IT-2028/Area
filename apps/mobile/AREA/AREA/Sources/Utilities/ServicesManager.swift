@@ -26,6 +26,19 @@ class ServiceStore: ObservableObject {
 		return cardItems
 	}
 
+	func fromActionsToCard(serviceName: String) -> [CardItem] {
+		guard let foundService = services.first(where: { $0.name == serviceName }) else {
+			return []
+		}
+		return foundService.actions.map { action in
+			CardItem(
+				title: action.name,
+				description: action.description,
+				iconURL: nil
+			)
+		}
+	}
+
 	func fetchServices() async throws -> Bool {
 		let builder = BuilderAPI()
 		let url = try builder.buildURL(path: Constants.aboutJsonPath)
