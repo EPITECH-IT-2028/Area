@@ -26,7 +26,7 @@ export class AboutService {
 
     const getActionsService = async (serviceName: string) => {
       const result = await this.graphqlService.adminQuery<{
-        actions: { name: string; description: string; config_schema: string }[];
+        actions: { name: string; description: string; config_schema: string | null }[];
       }>(GetActionsByServiceQuery, { service_name: serviceName });
       return result.actions.map((action) => ({
         name: action.name,
@@ -37,7 +37,7 @@ export class AboutService {
 
     const getReactionsService = async (serviceName: string) => {
       const result = await this.graphqlService.adminQuery<{
-        reactions: { name: string; description: string; config_schema: string }[];
+        reactions: { name: string; description: string; config_schema: string | null }[];
       }>(GetReactionsByServiceQuery, { service_name: serviceName });
       return result.reactions.map((reaction) => ({
         name: reaction.name,
