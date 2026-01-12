@@ -47,20 +47,25 @@ export class GithubWorker {
 
       if (commits.length > 0) {
         this.logger.log(`[${area.name}] 🐙 Found ${commits.length} new commits.`);
-        
-        for (const commit of commits) {
-          await this.reactionExecutor.execute(area, commit);
-        }
 
-        try {
-          const now = new Date().toISOString();
-          await this.graphqlService.adminMutation(UpdateAreaLastTriggeredMutation, {
-            id: area.id,
-            last_triggered: now,
-          });
-          this.logger.log(`[${area.name}] Updated last_triggered to ${now}`);
-        } catch (err) {
-          this.logger.error(`[${area.name}] Failed to update last_triggered:`, err);
+        for (const commit of commits) {
+          try {
+            await this.reactionExecutor.execute(area, commit);
+
+            try {
+              const last = commit.date ?? new Date().toISOString();
+              await this.graphqlService.adminMutation(UpdateAreaLastTriggeredMutation, {
+                id: area.id,
+                last_triggered: last,
+              });
+              this.logger.log(`[${area.name}] Updated last_triggered to ${last} after commit ${commit.sha}`);
+            } catch (err) {
+              this.logger.error(`[${area.name}] Failed to update last_triggered after commit ${commit.sha}:`, err);
+            }
+          } catch (err) {
+            this.logger.error(`[${area.name}] Reaction failed for commit ${commit.sha}:`, err);
+            throw err;
+          }
         }
       }
     } catch (error) {

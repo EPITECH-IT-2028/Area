@@ -30,7 +30,7 @@ export class ReactionExecutor {
           await this.discordWebhookHandler.sendWebhookMessage(area, actionData);
           break;
         case 'send_email':
-          await this.sendEmailHandler.sendEmail(area as any, actionData as any);
+          await this.sendEmailHandler.sendEmail(area, actionData);
           break;
         case 'create_github_issue':
           await this.githubCreateIssueHandler.createIssue(area, actionData);
