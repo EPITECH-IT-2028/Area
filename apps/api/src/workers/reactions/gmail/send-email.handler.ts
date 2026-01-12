@@ -2,6 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { Areas } from 'src/generated/graphql';
 import { OAuthService } from '../../services/oauth.service';
 import { GmailService } from '../../services/gmail.service';
+import { VariableReplacer } from '../../../utils/replaceVariables';
 
 export interface GmailReactionConfig extends Areas {
 	reaction_config?: {
@@ -54,7 +55,7 @@ export class SendEmailHandler {
 		const template =
 			area.reaction_config.body_template ||
 			'Hello,\n\nThis is an automated notification from AREA.\n\n{{data}}\n\nBest regards,\nAREA Team';
-		const body = this.replaceVariables(template, actionData);
+		const body = VariableReplacer.replaceVariables(template, actionData);
 
 		try {
 			await this.gmailService.sendEmail(token, {
@@ -67,17 +68,5 @@ export class SendEmailHandler {
 			this.logger.error(`Failed to send email: ${error}`);
 			throw error;
 		}
-	}
-
-	private replaceVariables(template: string, data: ActionData): string {
-		let result = template;
-		for (const key in data) {
-			if (Object.prototype.hasOwnProperty.call(data, key)) {
-				const escapedKey = key.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-				const regex = new RegExp(`\\{\\{${escapedKey}\\}\\}`, 'g');
-				result = result.replace(regex, String(data[key]));
-			}
-		}
-		return result;
 	}
 }

@@ -1,5 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { Areas } from 'src/generated/graphql';
+import { VariableReplacer } from '../../../utils/replaceVariables';
 
 export interface DiscordReactionConfig extends Areas {
   reaction_config?: {
@@ -37,7 +38,7 @@ export class DiscordWebhookHandler {
     const template =
       area.reaction_config.message_template ||
       'Hello,\n\nThis is an automated notification from AREA.\n\n{{data}}\n\nBest regards,\nAREA Team';
-    const message = this.replaceVariables(template, actionData);
+    const message = VariableReplacer.replaceVariables(template, actionData);
 
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 10000);
@@ -68,17 +69,5 @@ export class DiscordWebhookHandler {
     } finally {
       clearTimeout(timeoutId);
     }
-  }
-
-  private replaceVariables(template: string, data: ActionData): string {
-    let result = template;
-    for (const key in data) {
-      if (Object.prototype.hasOwnProperty.call(data, key)) {
-        const escapedKey = key.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-        const regex = new RegExp(`\\{\\{${escapedKey}\\}\\}`, 'g');
-        result = result.replace(regex, String(data[key]));
-      }
-    }
-    return result;
   }
 }
