@@ -14,7 +14,6 @@ export function StatsCards({
         </div>
         <div>
           <div className="text-2xl font-bold">{totalAreas}</div>
-          <p className="text-xs text-muted-foreground">{activeAreas} active</p>
         </div>
       </div>
       <div className="rounded-xl border bg-card text-card-foreground shadow p-6">
@@ -23,7 +22,6 @@ export function StatsCards({
         </div>
         <div>
           <div className="text-2xl font-bold">{executionsToday}</div>
-          <p className="text-xs text-muted-foreground">Total runs</p>
         </div>
       </div>
       <div className="rounded-xl border bg-card text-card-foreground shadow p-6">
@@ -32,7 +30,6 @@ export function StatsCards({
         </div>
         <div>
           <div className="text-2xl font-bold">{connectedServicesCount}</div>
-          <p className="text-xs text-muted-foreground">Services linked</p>
         </div>
       </div>
     </div>
