@@ -32,3 +32,10 @@ export interface AreasResponse {
   success: boolean;
   data: Area[];
 }
+
+export interface StatsCardsProps {
+  totalAreas: number;
+  activeAreas: number;
+  executionsToday: number;
+  connectedServicesCount: number;
+}

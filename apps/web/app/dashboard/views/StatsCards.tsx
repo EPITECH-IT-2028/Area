@@ -1,9 +1,4 @@
-interface StatsCardsProps {
-  totalAreas: number;
-  activeAreas: number;
-  executionsToday: number;
-  connectedServicesCount: number;
-}
+import { StatsCardsProps } from "../models/Dasboard";
 
 export function StatsCards({
   totalAreas,
