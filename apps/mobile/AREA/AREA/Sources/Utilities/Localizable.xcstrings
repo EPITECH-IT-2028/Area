@@ -126,6 +126,7 @@
       }
     },
     "Home.Title" : {
+      "comment" : "The title of the home view.",
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
@@ -671,6 +672,7 @@
       }
     },
     "Services.Title" : {
+      "comment" : "The title of the services view.",
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
