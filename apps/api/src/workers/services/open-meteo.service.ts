@@ -67,6 +67,8 @@ export class OpenMeteoService {
         this.logger.error('OpenMeteo fetch error:', error);
       }
       return null;
+    } finally {
+      clearTimeout(timeout);
     }
   }
 }

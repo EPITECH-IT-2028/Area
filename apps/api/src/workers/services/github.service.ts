@@ -155,7 +155,7 @@ export class GithubService {
           const createdAt = item.created_at;
           if (!createdAt) continue;
 
-          if (new Date(createdAt).getTime() <= new Date(sinceIso).getTime()) {
+          if (new Date(createdAt).getTime() <= sinceDate.getTime()) {
             continue;
           }
 
@@ -163,7 +163,7 @@ export class GithubService {
             number: item.number,
             title: item.title,
             body: item.body ?? null,
-            user: { login: item.user?.login },
+            user: { login: item.user?.login ?? 'unknown' },
             html_url: item.html_url,
             created_at: item.created_at,
           });

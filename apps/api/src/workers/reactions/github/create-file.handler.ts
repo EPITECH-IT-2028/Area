@@ -23,6 +23,10 @@ export class GithubCreateFileHandler {
       return;
     }
 
+    if (!area.reaction_config) {
+      throw new Error('Reaction configuration is missing.');
+    }
+    
     const repo = area.reaction_config['repository'];
     if (!repo || typeof repo !== 'string') {
       throw new Error('Reaction config must include "repository" (owner/repo).');
