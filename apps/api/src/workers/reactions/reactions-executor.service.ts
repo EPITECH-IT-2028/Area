@@ -2,6 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { Areas } from 'src/generated/graphql';
 import { DiscordWebhookHandler } from './discord/discord-webhook.handler';
 import { SendEmailHandler } from './gmail/send-email.handler';
+import { GithubCreateIssueHandler } from './github/create-issue.handler';
 
 @Injectable()
 export class ReactionExecutor {
@@ -10,6 +11,7 @@ export class ReactionExecutor {
   constructor(
     private readonly discordWebhookHandler: DiscordWebhookHandler,
     private readonly sendEmailHandler: SendEmailHandler,
+    private readonly githubCreateIssueHandler: GithubCreateIssueHandler,
   ) {}
 
   async execute(area: Areas, actionData: any) {
@@ -27,6 +29,9 @@ export class ReactionExecutor {
           break;
         case 'send_email':
           await this.sendEmailHandler.sendEmail(area as any, actionData as any);
+          break;
+        case 'create_github_issue':
+          await this.githubCreateIssueHandler.createIssue(area, actionData);
           break;
         default:
           throw new Error(

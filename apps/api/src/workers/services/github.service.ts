@@ -102,4 +102,35 @@ export class GithubService {
       return [];
     }
   }
+
+  async createIssue(token: string, repository: string, title: string, body?: string): Promise<any> {
+    const url = `https://api.github.com/repos/${repository}/issues`;
+    const controller = new AbortController();
+    const timeout = 10000;
+    const id = setTimeout(() => controller.abort(), timeout);
+
+    try {
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: 'application/vnd.github.v3+json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ title, body }),
+        signal: controller.signal,
+      });
+      clearTimeout(id);
+      if (!res.ok) {
+        const txt = await res.text();
+        throw new Error(`GitHub API createIssue error ${res.status}: ${txt}`);
+      }
+      return await res.json();
+    } catch (error) {
+      if ((error as any)?.name === 'AbortError') {
+        throw new Error(`GitHub createIssue timed out after ${timeout}ms`);
+      }
+      throw error;
+    }
+  }
 }

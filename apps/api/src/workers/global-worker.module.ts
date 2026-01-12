@@ -12,6 +12,7 @@ import { DiscordWebhookHandler } from './reactions/discord/discord-webhook.handl
 import { SendEmailHandler } from './reactions/gmail/send-email.handler';
 import { GithubWorker } from './actions/commit/github.worker';
 import { GithubService } from './services/github.service';
+import { GithubCreateIssueHandler } from './reactions/github/create-issue.handler';
 
 @Module({
   imports: [ScheduleModule.forRoot(), GraphQLModule, AreasModule],
@@ -25,6 +26,7 @@ import { GithubService } from './services/github.service';
     ReactionExecutor,
     DiscordWebhookHandler,
     SendEmailHandler,
+    GithubCreateIssueHandler,
   ],
 })
 export class WorkersModule {}
