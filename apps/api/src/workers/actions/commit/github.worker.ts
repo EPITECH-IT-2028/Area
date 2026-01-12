@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { Areas } from '../../../generated/graphql';
 import { ReactionExecutor } from '../../reactions/reactions-executor.service';
-import { GitHubService} from './github.service';
+import { GithubService} from './github.service';
 
 @Injectable()
 export class GithubWorker {
@@ -9,7 +9,7 @@ export class GithubWorker {
 
   constructor(
     private readonly reactionExecutor: ReactionExecutor,
-    private readonly gitHubService: GitHubService,
+    private readonly githubService: GithubService,
   ) {}
 
   async process(areas: Areas[]) {
@@ -36,7 +36,7 @@ export class GithubWorker {
         return;
       }
 
-      const commits = await this.gitHubService.fetchNewCommits(
+      const commits = await this.githubService.fetchNewCommits(
         githubService.access_token,
         config,
         area.last_triggered,

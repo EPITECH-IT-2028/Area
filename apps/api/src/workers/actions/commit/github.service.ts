@@ -33,8 +33,8 @@ export interface CommitData {
 }
 
 @Injectable()
-export class GitHubService {
-  private readonly logger = new Logger(GitHubService.name);
+export class GithubService {
+  private readonly logger = new Logger(GithubService.name);
 
   async fetchNewCommits(
     token: string,
