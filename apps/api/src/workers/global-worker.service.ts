@@ -18,7 +18,9 @@ export class GlobalWorkerService {
     private readonly githubWorker: GithubWorker,
   ) {
     this.actionWorkers.set('new_email', this.emailWorker);
-    this.actionWorkers.set('new_github_commit', this.githubWorker);
+    this.actionWorkers.set('new_commit_push', this.githubWorker);
+    const registered = [...this.actionWorkers.keys()].join(', ');
+    this.logger.log(`Registered action workers: ${registered}`);
   }
 
   @Cron(CronExpression.EVERY_MINUTE)
@@ -71,7 +73,8 @@ export class GlobalWorkerService {
     const worker = this.actionWorkers.get(actionName);
 
     if (!worker) {
-      this.logger.warn(`No worker registered for action: ${actionName}`);
+      const available = [...this.actionWorkers.keys()].join(', ');
+      this.logger.warn(`No worker registered for action: ${actionName}. Available workers: ${available}`);
       return;
     }
 

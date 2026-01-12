@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { User_Services } from '../../../generated/graphql';
+import { User_Services } from '../../generated/graphql';
 import { UserServicesService } from 'src/user-services/user-services.service';
 
 interface GoogleTokenResponse {

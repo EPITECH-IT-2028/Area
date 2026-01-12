@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { Areas } from 'src/generated/graphql';
-import { OAuthService } from '../../actions/email/oauth.service';
+import { OAuthService } from '../../services/oauth.service';
 import { GmailService } from '../../services/gmail.service';
 
 export interface GmailReactionConfig extends Areas {
