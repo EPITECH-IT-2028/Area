@@ -1,11 +1,3 @@
-export interface HookLog {
-  id: string;
-  status: string;
-  error_message?: string;
-  execution_time_ms?: number;
-  created_at: string;
-}
-
 export interface Area {
   id: string;
   name: string;
@@ -25,7 +17,6 @@ export interface Area {
       name: string;
     };
   };
-  hook_logs?: HookLog[];
 }
 
 export interface AreasResponse {

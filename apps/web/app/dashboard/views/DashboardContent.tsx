@@ -10,7 +10,7 @@ import { RecentActivity } from "@/app/dashboard/views/RecentActivity";
 
 export default function DashboardContent() {
   const { user } = useAuth();
-  const { areas, loading, stats, allLogs, getStatusColor } =
+  const { areas, loading, stats, getStatusColor } =
     useDashboardViewModel();
 
   return (
@@ -50,12 +50,7 @@ export default function DashboardContent() {
                   ))}
                 </div>
               )}
-              {allLogs.length > 0 && (
-                <RecentActivity
-                  allLogs={allLogs}
-                  getStatusColor={getStatusColor}
-                />
-              )}
+              <RecentActivity getStatusColor={getStatusColor} />
             </>
           )}
         </main>

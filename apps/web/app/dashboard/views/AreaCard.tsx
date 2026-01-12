@@ -35,47 +35,6 @@ export function AreaCard({ area, getStatusColor }: AreaCardProps) {
           {area.reaction.action_type}
         </span>
       </div>
-      <div className="border-t pt-3">
-        <p className="text-sm font-medium mb-2">
-          Recent executions ({area.hook_logs?.length || 0})
-        </p>
-        {area.hook_logs && area.hook_logs.length > 0 ? (
-          <div className="space-y-2">
-            {area.hook_logs.slice(0, 3).map((log) => (
-              <div
-                key={log.id}
-                className="flex items-center gap-2 p-2 bg-secondary/50 rounded text-sm"
-              >
-                <div
-                  className={`w-2 h-2 rounded-full ${getStatusColor(
-                    log.status
-                  )}`}
-                />
-                <span className="capitalize">{log.status}</span>
-                {log.execution_time_ms && (
-                  <span className="text-muted-foreground">
-                    {log.execution_time_ms}ms
-                  </span>
-                )}
-                {log.error_message && (
-                  <span className="text-red-500 text-xs truncate">
-                    {log.error_message}
-                  </span>
-                )}
-                <span className="ml-auto text-xs text-muted-foreground">
-                  {new Date(log.created_at).toLocaleString()}
-                </span>
-              </div>
-            ))}
-          </div>
-        ) : (
-          <div className="text-center py-4">
-            <p className="text-sm text-muted-foreground">
-              No executions yet
-            </p>
-          </div>
-        )}
-      </div>
     </div>
   );
 }
