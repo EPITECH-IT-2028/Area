@@ -2,8 +2,9 @@ import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { AreasService } from 'src/areas/areas.service';
 import { Areas } from 'src/generated/graphql';
-import { EmailWorker } from './actions/email/email.worker';
 import { IActionWorker } from './interfaces/worker.interface';
+import { EmailWorker } from './actions/email/email.worker';
+import { GithubWorker } from './actions/commit/github.worker';
 
 @Injectable()
 export class GlobalWorkerService {
@@ -14,8 +15,10 @@ export class GlobalWorkerService {
   constructor(
     private readonly areasService: AreasService,
     private readonly emailWorker: EmailWorker,
+    private readonly githubWorker: GithubWorker,
   ) {
     this.actionWorkers.set('new_email', this.emailWorker);
+    this.actionWorkers.set('new_github_commit', this.githubWorker);
   }
 
   @Cron(CronExpression.EVERY_MINUTE)

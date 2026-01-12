@@ -9,14 +9,18 @@ import { OAuthService } from './actions/email/oauth.service';
 import { GmailService } from './actions/email/gmail.service';
 import { ReactionExecutor } from './reactions/reactions-executor.service';
 import { DiscordWebhookHandler } from './reactions/discord/discord-webhook.handler';
+import { GithubWorker } from './actions/commit/github.worker';
+import { GithubService } from './actions/commit/github.service';
 
 @Module({
   imports: [ScheduleModule.forRoot(), GraphQLModule, AreasModule],
   providers: [
     GlobalWorkerService,
     EmailWorker,
-    OAuthService,
     GmailService,
+    OAuthService,
+    GithubWorker,
+    GithubService,
     ReactionExecutor,
     DiscordWebhookHandler,
   ],
