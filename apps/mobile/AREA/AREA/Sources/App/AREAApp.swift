@@ -13,7 +13,7 @@ import SwiftUI
 
 @main
 struct AREAApp: App {
-	@StateObject private var serviceStore = ServiceStore()
+	@StateObject private var serviceStore = ServiceStore.shared
 	@StateObject private var authState = AuthState.shared
 
 	var body: some Scene {

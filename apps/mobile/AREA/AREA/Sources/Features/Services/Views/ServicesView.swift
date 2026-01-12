@@ -13,8 +13,8 @@ struct ServicesView: View {
 	var body: some View {
 		NavigationStack {
 			CollectionView(searchText: searchText)
+				.searchable(text: $searchText)
+				.navigationTitle(LocalizedStringResource.servicesTitle)
 		}
-		.searchable(text: $searchText)
-		.navigationTitle(LocalizedStringResource.servicesTitle)
 	}
 }
