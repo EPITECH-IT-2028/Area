@@ -8,11 +8,6 @@
 import Foundation
 
 struct Constants {
-	// Name string for tabs
-	static let homeString = "Home"
-	static let servicesString = "Services"
-	static let settingsString = "Settings"
-
 	// Icon string for tabs
 	static let homeIconString = "house"
 	static let servicesIconString = "list.bullet"

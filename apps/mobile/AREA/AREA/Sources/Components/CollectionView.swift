@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct CollectionView: View {
-	@State private var selectedCardIndex: Int? = nil
 	@EnvironmentObject var serviceStore: ServiceStore
 	var searchText: String
 	var body: some View {
@@ -24,10 +23,8 @@ struct CollectionView: View {
 		NavigationStack {
 			ScrollView {
 				VStack(spacing: 20) {
-					ForEach(filteredCards.indices, id: \.self) { index in
-						TableView(
-							item: filteredCards[index]
-						)
+					ForEach(filteredCards) { card in
+						TableView(item: card)
 					}
 				}
 				.padding()
