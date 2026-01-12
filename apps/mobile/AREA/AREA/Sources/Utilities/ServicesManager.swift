@@ -86,7 +86,6 @@ class ServiceStore: ObservableObject {
 				SplashScreenResponse.self,
 				from: data
 			)
-			self.services = decodedResponse.server.services
 			await MainActor.run {
 				self.services = decodedResponse.server.services
 			}

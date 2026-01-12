@@ -52,7 +52,7 @@
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Une erreur vient de survenir, réessayer."
+            "value" : "Une erreur vient de survenir, réessayez."
           }
         }
       }
