@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { DocumentNode } from 'graphql';
 import { GraphQLClient } from 'graphql-request';
+import { print } from 'graphql';
 
 @Injectable()
 export class GraphQLService {
@@ -27,22 +28,33 @@ export class GraphQLService {
   }
 
   async query<T>(query: DocumentNode, variables?: object): Promise<T> {
-    return this.client.request<T>(query, variables);
+    const queryString = print(query);
+    const result = await this.client.rawRequest<T>(queryString, variables);
+    return result.data;
   }
 
   async mutation<T>(mutation: DocumentNode, variables?: object): Promise<T> {
-    return this.client.request<T>(mutation, variables);
+    const mutationString = print(mutation);
+    const result = await this.client.rawRequest<T>(mutationString, variables);
+    return result.data;
   }
 
   async adminQuery<T>(query: DocumentNode, variables?: object): Promise<T> {
-    return this.adminClient.request<T>(query, variables);
+    const queryString = print(query);
+    const result = await this.adminClient.rawRequest<T>(queryString, variables);
+    return result.data;
   }
 
   async adminMutation<T>(
     mutation: DocumentNode,
     variables?: object,
   ): Promise<T> {
-    return this.adminClient.request<T>(mutation, variables);
+    const mutationString = print(mutation);
+    const result = await this.adminClient.rawRequest<T>(
+      mutationString,
+      variables,
+    );
+    return result.data;
   }
 
   async queryAsUser<T>(
@@ -59,6 +71,8 @@ export class GraphQLService {
         },
       },
     );
-    return userClient.request<T>(query, variables);
+    const queryString = print(query);
+    const result = await userClient.rawRequest<T>(queryString, variables);
+    return result.data;
   }
 }
