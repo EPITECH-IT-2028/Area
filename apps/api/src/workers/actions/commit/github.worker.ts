@@ -2,6 +2,8 @@ import { Injectable, Logger } from '@nestjs/common';
 import { Areas } from '../../../generated/graphql';
 import { ReactionExecutor } from '../../reactions/reactions-executor.service';
 import { GithubService} from '../../services/github.service';
+import { GraphQLService } from '../../../graphql/graphql.service';
+import { UpdateAreaLastTriggeredMutation } from 'src/graphql/queries/areas/areas';
 
 @Injectable()
 export class GithubWorker {
@@ -10,6 +12,7 @@ export class GithubWorker {
   constructor(
     private readonly reactionExecutor: ReactionExecutor,
     private readonly githubService: GithubService,
+    private readonly graphqlService: GraphQLService,
   ) {}
 
   async process(areas: Areas[]) {
@@ -47,6 +50,17 @@ export class GithubWorker {
         
         for (const commit of commits) {
           await this.reactionExecutor.execute(area, commit);
+        }
+
+        try {
+          const now = new Date().toISOString();
+          await this.graphqlService.adminMutation(UpdateAreaLastTriggeredMutation, {
+            id: area.id,
+            last_triggered: now,
+          });
+          this.logger.log(`[${area.name}] Updated last_triggered to ${now}`);
+        } catch (err) {
+          this.logger.error(`[${area.name}] Failed to update last_triggered:`, err);
         }
       }
     } catch (error) {
