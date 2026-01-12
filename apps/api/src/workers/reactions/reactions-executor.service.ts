@@ -3,6 +3,7 @@ import { Areas } from 'src/generated/graphql';
 import { DiscordWebhookHandler } from './discord/discord-webhook.handler';
 import { SendEmailHandler } from './gmail/send-email.handler';
 import { GithubCreateIssueHandler } from './github/create-issue.handler';
+import { GithubCreateFileHandler } from './github/create-file.handler';
 
 @Injectable()
 export class ReactionExecutor {
@@ -12,6 +13,7 @@ export class ReactionExecutor {
     private readonly discordWebhookHandler: DiscordWebhookHandler,
     private readonly sendEmailHandler: SendEmailHandler,
     private readonly githubCreateIssueHandler: GithubCreateIssueHandler,
+    private readonly githubCreateFileHandler: GithubCreateFileHandler,
   ) {}
 
   async execute(area: Areas, actionData: any) {
@@ -32,6 +34,9 @@ export class ReactionExecutor {
           break;
         case 'create_github_issue':
           await this.githubCreateIssueHandler.createIssue(area, actionData);
+          break;
+        case 'create_github_file':
+          await this.githubCreateFileHandler.createFile(area, actionData);
           break;
         default:
           throw new Error(

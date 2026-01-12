@@ -133,4 +133,71 @@ export class GithubService {
       throw error;
     }
   }
+
+  async createOrUpdateFile(
+    token: string,
+    repository: string,
+    path: string,
+    content: string,
+    message: string,
+    branch?: string,
+  ): Promise<any> {
+    const encodedPath = encodeURIComponent(path);
+    const url = `https://api.github.com/repos/${repository}/contents/${encodedPath}`;
+    const controller = new AbortController();
+    const timeout = 10000;
+    const id = setTimeout(() => controller.abort(), timeout);
+
+    try {
+      const getUrl = branch ? `${url}?ref=${encodeURIComponent(branch)}` : url;
+      const getRes = await fetch(getUrl, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: 'application/vnd.github.v3+json',
+        },
+        signal: controller.signal,
+      });
+
+      let sha: string | undefined;
+      if (getRes.ok) {
+        const existing = await getRes.json();
+        sha = existing.sha;
+      } else if (getRes.status === 404) {
+      } else if (getRes.status === 401 || getRes.status === 403) {
+        const txt = await getRes.text();
+        throw new Error(`GitHub preflight failed (${getRes.status}): ${txt}`);
+      }
+
+      const body = {
+        message,
+        content: Buffer.from(content, 'utf8').toString('base64'),
+        ...(branch ? { branch } : {}),
+        ...(sha ? { sha } : {}),
+      } as any;
+
+      const putRes = await fetch(url, {
+        method: 'PUT',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: 'application/vnd.github.v3+json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(body),
+        signal: controller.signal,
+      });
+      clearTimeout(id);
+
+      if (!putRes.ok) {
+        const txt = await putRes.text();
+        throw new Error(`GitHub createOrUpdateFile error ${putRes.status}: ${txt}`);
+      }
+
+      return await putRes.json();
+    } catch (error) {
+      if ((error as any)?.name === 'AbortError') {
+        throw new Error(`GitHub createOrUpdateFile timed out after ${timeout}ms`);
+      }
+      throw error;
+    }
+  }
 }
