@@ -135,14 +135,18 @@ export class OutlookService {
     }
   }
 
+  private escapeODataString(value: string): string {
+    return value.replace(/'/g, "''");
+  }
+
   private buildFilterQuery(config: EmailFetchConfig): string {
     const filters: string[] = ['isRead eq false'];
 
     if (config.from) {
-      filters.push(`from/emailAddress/address eq '${config.from}'`);
+      filters.push(`from/emailAddress/address eq '${this.escapeODataString(config.from)}'`);
     }
     if (config.subject_contains) {
-      filters.push(`subject contains '${config.subject_contains}'`);
+      filters.push(`contains (subject,'${this.escapeODataString(config.subject_contains)}')`);
     }
 
     if (filters.length === 1) {

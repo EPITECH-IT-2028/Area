@@ -53,10 +53,11 @@ export class GithubService {
 
     this.logger.log(`[GitHub] Fetching commits for ${repo} on ${branch} since ${sinceIso}`);
 
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), this.REQUEST_TIMEOUT_MS);
+
     try {
       const url = `https://api.github.com/repos/${repo}/commits?sha=${branch}&since=${sinceIso}`;
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), this.REQUEST_TIMEOUT_MS);
 
       const response = await fetch(url, {
         headers: {
@@ -100,6 +101,8 @@ export class GithubService {
         this.logger.error('Network error fetching GitHub commits:', error);
       }
       return [];
+    } finally {
+      clearTimeout(timeoutId);
     }
   }
 
@@ -122,14 +125,15 @@ export class GithubService {
 
     this.logger.log(`[GitHub] Fetching pull requests for ${repository} since ${sinceIso}`);
 
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), this.REQUEST_TIMEOUT_MS);
+
     try {
       let page = 1;
       const found: Array<{ number: number; title: string; body?: string | null; user: { login: string }; html_url: string; created_at: string }> = [];
-
+      
       while (true) {
-        const url = `https://api.github.com/repos/${owner}/${repo}/pulls?state=all&sort=created&direction=asc&per_page=${perPage}&page=${page}`;
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), this.REQUEST_TIMEOUT_MS);
+        const url = `https://api.github.com/repos/${owner}/${repo}/pulls?state=all&sort=created&direction=desc&per_page=${perPage}&page=${page}`;
 
         const res = await fetch(url, {
           headers: {
@@ -151,12 +155,14 @@ export class GithubService {
 
         if (!Array.isArray(data) || data.length === 0) break;
 
+        let shouldstop = false;
         for (const item of data) {
           const createdAt = item.created_at;
           if (!createdAt) continue;
 
           if (new Date(createdAt).getTime() <= sinceDate.getTime()) {
-            continue;
+            shouldstop = true;
+            break;
           }
 
           found.push({
@@ -170,6 +176,7 @@ export class GithubService {
         }
 
         if (data.length < perPage) break;
+        if (shouldstop) break;
         page += 1;
         if (page > 10) break;
       }
@@ -183,6 +190,8 @@ export class GithubService {
         this.logger.error('[GitHub] Network error fetching PRs:', error);
       }
       return [];
+    } finally {
+      clearTimeout(timeoutId);
     }
   }
 

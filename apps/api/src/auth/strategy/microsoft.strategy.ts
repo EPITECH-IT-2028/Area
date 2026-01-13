@@ -61,6 +61,8 @@ export class MicrosoftStrategy extends PassportStrategy(Strategy, 'microsoft') {
           }
         },
       });
+    } else {
+      throw new Error('Microsoft service not found');
     }
 
     return {
