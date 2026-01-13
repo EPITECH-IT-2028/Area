@@ -5,7 +5,7 @@ interface AreaCardProps {
   getStatusColor: (status: string) => string;
 }
 
-export function AreaCard({ area, getStatusColor }: AreaCardProps) {
+export function AreaCard({ area }: AreaCardProps) {
   return (
     <div className="rounded-xl border bg-card text-card-foreground shadow p-6">
       <div className="flex items-center gap-3 mb-3">
