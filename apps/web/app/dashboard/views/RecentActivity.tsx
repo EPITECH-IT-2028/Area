@@ -1,8 +1,13 @@
 interface RecentActivityProps {
   getStatusColor: (status: string) => string;
+  hasAreas: boolean;
 }
 
-export function RecentActivity({ getStatusColor }: RecentActivityProps) {
+export function RecentActivity({ getStatusColor, hasAreas }: RecentActivityProps) {
+  if (hasAreas) {
+    return null;
+  }
+
   return (
     <div className="rounded-xl border bg-card text-card-foreground shadow">
       <div className="flex flex-col space-y-1.5 p-6">

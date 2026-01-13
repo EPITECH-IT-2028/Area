@@ -26,6 +26,5 @@ export interface AreasResponse {
 export interface StatsCardsProps {
   totalAreas: number;
   activeAreas: number;
-  executionsToday: number;
   connectedServicesCount: number;
 }

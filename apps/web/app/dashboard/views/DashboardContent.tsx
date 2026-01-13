@@ -35,7 +35,6 @@ export default function DashboardContent() {
               <StatsCards
                 totalAreas={stats.totalAreas}
                 activeAreas={stats.activeAreas}
-                executionsToday={stats.executionsToday}
                 connectedServicesCount={stats.connectedServicesCount}
               />
               {areas.length > 0 && (
@@ -50,7 +49,7 @@ export default function DashboardContent() {
                   ))}
                 </div>
               )}
-              <RecentActivity getStatusColor={getStatusColor} />
+              <RecentActivity getStatusColor={getStatusColor} hasAreas={areas.length > 0} />
             </>
           )}
         </main>
