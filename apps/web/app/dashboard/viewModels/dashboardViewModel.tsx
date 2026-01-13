@@ -1,6 +1,20 @@
 import { useMemo } from "react";
 import { useDashboard } from "@/app/dashboard/hooks/useDashboard";
 
+const getStatusColor = (status: string) => {
+  switch (status.toLowerCase()) {
+    case "success":
+      return "bg-green-500";
+    case "failed":
+    case "error":
+      return "bg-red-500";
+    case "pending":
+      return "bg-yellow-500";
+    default:
+      return "bg-gray-500";
+  }
+};
+
 export function useDashboardViewModel() {
   const { areas, loading } = useDashboard();
 
@@ -21,20 +35,6 @@ export function useDashboardViewModel() {
       connectedServicesCount: connectedServices.size,
     };
   }, [areas]);
-
-  const getStatusColor = (status: string) => {
-    switch (status.toLowerCase()) {
-      case "success":
-        return "bg-green-500";
-      case "failed":
-      case "error":
-        return "bg-red-500";
-      case "pending":
-        return "bg-yellow-500";
-      default:
-        return "bg-gray-500";
-    }
-  };
 
   return {
     areas,
