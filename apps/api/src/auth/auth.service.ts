@@ -107,6 +107,10 @@ export class AuthService {
     return this.oauthLogin(user, 'GitHub');
   }
 
+  microsoftLogin(user: OAuthUser): AuthResponse {
+    return this.oauthLogin(user, 'Microsoft');
+  }
+
   private oauthLogin(user: OAuthUser, provider: string): AuthResponse {
     if (!user) {
       throw new UnauthorizedException(`No user from ${provider}`);

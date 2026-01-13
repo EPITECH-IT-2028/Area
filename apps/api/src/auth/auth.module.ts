@@ -9,6 +9,7 @@ import { UserServicesModule } from '../user-services/user-services.module';
 import { JwtStrategy } from './strategy/jwt.strategy';
 import { GoogleStrategy } from './strategy/google.strategy';
 import { GithubStrategy } from './strategy/github.strategy';
+import { MicrosoftStrategy } from './strategy/microsoft.strategy';
 
 @Module({
   imports: [
@@ -25,7 +26,7 @@ import { GithubStrategy } from './strategy/github.strategy';
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtStrategy, GoogleStrategy, GithubStrategy],
+  providers: [AuthService, JwtStrategy, GoogleStrategy, GithubStrategy, MicrosoftStrategy],
   exports: [AuthService],
 })
 export class AuthModule {}
