@@ -17,6 +17,9 @@ import { GithubCreateFileHandler } from './reactions/github/create-file.handler'
 import { OpenMeteoWorker } from './actions/weather/open-meteo.worker';
 import { OpenMeteoService } from './services/open-meteo.service';
 import { GithubPullRequestWorker } from './actions/pull_request/github-pr.worker';
+import { OutlookService } from './services/microsoft.service';
+import { OutlookWorker } from './actions/email/outlook.worker';
+import { SendOutlookEmailHandler } from './reactions/outlook/send-email.handler';
 
 @Module({
   imports: [ScheduleModule.forRoot(), GraphQLModule, AreasModule],
@@ -34,7 +37,10 @@ import { GithubPullRequestWorker } from './actions/pull_request/github-pr.worker
     GithubCreateIssueHandler,
     GithubCreateFileHandler,
     OpenMeteoWorker,
-    OpenMeteoService
+    OpenMeteoService,
+    OutlookService,
+    OutlookWorker,
+    SendOutlookEmailHandler
   ],
 })
 export class WorkersModule {}
