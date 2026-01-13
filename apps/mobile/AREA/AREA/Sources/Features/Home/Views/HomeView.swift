@@ -10,13 +10,61 @@ import SwiftUI
 
 struct HomeView: View {
 	@EnvironmentObject var authState: AuthState
+	@EnvironmentObject var serviceStore: ServiceStore
+	@State private var errorMessage: String?
+	@State private var showError = false
+
 	var body: some View {
+		let stats: [HomepageCard] = [
+			HomepageCard(title: "Services", number: serviceStore.services.count),
+			HomepageCard(
+				title: "Actions",
+				number: serviceStore.services.flatMap(\.actions).count
+			),
+			HomepageCard(
+				title: "Reactions",
+				number: serviceStore.services.flatMap(\.reactions).count
+			),
+		]
+
+		let columns = [
+			GridItem(.flexible(), spacing: 16),
+			GridItem(.flexible(), spacing: 16),
+		]
+
+		let totalCards = stats.count
+		let isOdd = totalCards % 2 != 0
+		let gridCount = isOdd ? totalCards - 1 : totalCards
+
 		NavigationStack {
-
-		}.navigationTitle(LocalizedStringResource.homeTitle)
+			ScrollView {
+				VStack(spacing: 16) {
+					LazyVGrid(columns: columns, spacing: 16) {
+						ForEach(0..<gridCount, id: \.self) { index in
+							HomepageCardView(item: stats[index], isSquare: true)
+						}
+					}
+					if isOdd, let lastItem = stats.last {
+						HomepageCardView(item: lastItem, isSquare: false)
+					}
+				}
+				.padding(16)
+			}
+			.refreshable {
+				do {
+					_ = try await serviceStore.fetchServices()
+				} catch {
+					errorMessage = error.localizedDescription
+					showError = true
+				}
+			}
+			.alert(LocalizedStringResource.errorTitle, isPresented: $showError) {
+				Button("OK", role: .cancel) {}
+			} message: {
+				Text(errorMessage ?? String(localized: LocalizedStringResource.errorHappenedTitle))
+			}
+			.navigationTitle(LocalizedStringResource.homeTitle)
+			.background(Color(UIColor.systemGroupedBackground))
+		}
 	}
-}
-
-#Preview {
-	HomeView()
 }

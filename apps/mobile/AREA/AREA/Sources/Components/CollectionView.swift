@@ -1,5 +1,5 @@
 //
-//  ExpandingCardListView.swift
+//  CollectionView.swift
 //  AREA
 //
 //  Created by Arthur GUERINAULT on 11/12/2025.
@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct CollectionView: View {
-	@State private var selectedCardIndex: Int? = nil
 	@EnvironmentObject var serviceStore: ServiceStore
 	var searchText: String
 	var body: some View {
@@ -24,15 +23,14 @@ struct CollectionView: View {
 		NavigationStack {
 			ScrollView {
 				VStack(spacing: 20) {
-					ForEach(filteredCards.indices, id: \.self) { index in
-						TableView(
-							item: filteredCards[index]
-						)
+					ForEach(filteredCards) { card in
+						TableView(item: card)
 					}
 				}
 				.padding()
 				.navigationTitle(LocalizedStringResource.servicesTitle)
 			}
+			.background(Color(UIColor.systemGroupedBackground))
 		}
 	}
 }

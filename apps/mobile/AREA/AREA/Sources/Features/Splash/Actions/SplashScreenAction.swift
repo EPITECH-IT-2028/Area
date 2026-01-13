@@ -10,9 +10,6 @@ import SimpleKeychain
 
 struct SplashScreenAction {
 	func call(store: ServiceStore) async throws -> Bool {
-		if try await store.fetchServices() == false {
-			return false
-		}
-		return true
+		return try await store.fetchServices()
 	}
 }
