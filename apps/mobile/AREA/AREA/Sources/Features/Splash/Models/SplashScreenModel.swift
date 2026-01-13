@@ -39,35 +39,13 @@ struct ServiceAction: Decodable, Hashable {
 
 struct ConfigSchemaInfo: Decodable, Hashable {
 	let type: String
-	let properties: PropertiesInfo
+	let properties: [String: PropertyInfo]
 	let required: [String]?
 }
 
-struct PropertiesInfo: Decodable, Hashable {
-	let from: FromInfo?
-	let subjectContains: SubjectContainsInfo?
-	let webhookUrl: WebhookUrl?
-	let messageTemplate: MessageTemplate?
-}
-
-struct FromInfo: Decodable, Hashable {
-	let type: String
-	let description: String
-}
-
-struct SubjectContainsInfo: Decodable, Hashable {
-	let type: String
-	let description: String
-}
-
-struct WebhookUrl: Decodable, Hashable {
-	let type: String
-	let format: String
-	let description: String
-}
-
-struct MessageTemplate: Decodable, Hashable {
-	let type: String
-	let `default`: String
-	let description: String
+struct PropertyInfo: Decodable, Hashable {
+		let type: String
+		let description: String
+		let format: String?
+		let `default`: String?
 }
