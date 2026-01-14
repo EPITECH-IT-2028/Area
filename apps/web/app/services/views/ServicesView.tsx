@@ -56,7 +56,6 @@ const iconMap: Record<string, React.ReactNode> = {
 const colorMap: Record<string, string> = {
   google: "bg-red-500",
   github: "bg-gray-800",
-  discord: "bg-indigo-500",
   discord_webhook: "bg-indigo-500",
 };
 
