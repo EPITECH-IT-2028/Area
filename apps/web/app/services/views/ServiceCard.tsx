@@ -1,10 +1,10 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { Service } from "@/app/services/models/service";
+import { ServiceRequest } from "@/app/services/models/serviceRequest";
 
 interface ServiceCardProps {
-  service: Service;
+  service: ServiceRequest;
 }
 
 export default function ServiceCard({ service }: ServiceCardProps) {

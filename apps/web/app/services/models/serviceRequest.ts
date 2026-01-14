@@ -1,4 +1,4 @@
-export interface Service {
+export interface ServiceRequest {
   id: string;
   name: string;
   displayName: string;
