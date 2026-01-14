@@ -1,13 +1,13 @@
 //
-//  ActionsView.swift
+//  ReactionsView.swift
 //  AREA
 //
-//  Created by Arthur GUERINAULT on 12/01/2026.
+//  Created by Arthur GUERINAULT on 13/01/2026.
 //
 
 import SwiftUI
 
-struct ActionsView: View {
+struct ReactionsView: View {
 	let service: Service
 	@State private var searchText: String = ""
 	@EnvironmentObject var serviceStore: ServiceStore
@@ -20,13 +20,13 @@ struct ActionsView: View {
 			navigationPath: $navigationPath,
 			serviceName: service.name,
 			searchText: searchText,
-			allCards: serviceStore.fromActionsToCard(serviceName: service.name),
-			isAction: true
+			allCards: serviceStore.fromReactionsToCard(serviceName: service.name),
+			isAction: false
 		)
 		.searchable(text: $searchText)
-		.navigationTitle(LocalizedStringResource.actionsTitle)
+		.navigationTitle(LocalizedStringResource.areaCreationReactionsTitle)
 		.onAppear {
-			viewModel.selectedActionService = service
+			viewModel.selectedReactionService = service
 		}
 	}
 }

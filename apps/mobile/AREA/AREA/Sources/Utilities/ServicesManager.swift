@@ -26,11 +26,35 @@ class ServiceStore: ObservableObject {
 		return cardItems
 	}
 
-	func fromActionsToCard(serviceName: String) -> [CardItem] {
-		guard let foundService = services.first(where: { $0.name == serviceName }) else {
+	func fromActionsToCard(serviceName: String?) -> [CardItem] {
+		guard let service = serviceName else {
 			return []
 		}
+
+		guard let foundService = services.first(where: { $0.name == service })
+		else {
+			return []
+		}
+
 		return foundService.actions.map { action in
+			CardItem(
+				title: action.name,
+				description: action.description,
+				iconURL: nil
+			)
+		}
+	}
+
+	func fromReactionsToCard(serviceName: String?) -> [CardItem] {
+		guard let service = serviceName else {
+			return []
+		}
+
+		guard let foundService = services.first(where: { $0.name == service })
+		else {
+			return []
+		}
+		return foundService.reactions.map { action in
 			CardItem(
 				title: action.name,
 				description: action.description,

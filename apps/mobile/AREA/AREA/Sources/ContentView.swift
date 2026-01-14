@@ -72,7 +72,7 @@ struct ContentView: View {
 								}
 							}
 						}
-						Button("OK", role: .cancel) {}
+						Button(LocalizedStringResource.okTitle, role: .cancel) {}
 					} message: {
 						Text(errorMessage)
 					}
