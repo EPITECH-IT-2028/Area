@@ -13,7 +13,6 @@ function useServices() {
     if (!accessToken) {
       return;
     }
-
     const fetchServices = async () => {
       try {
         setIsLoading(true);
