@@ -93,7 +93,11 @@ struct AreaCollectionView: View {
 				EmptyView()
 			}
 		}
-		.navigationTitle(LocalizedStringResource.actionsTitle)
+		.navigationTitle(
+			isAction
+				? LocalizedStringResource.actionsTitle
+				: LocalizedStringResource.areaCreationReactionsTitle
+		)
 		.background(Color(UIColor.systemGroupedBackground))
 	}
 }

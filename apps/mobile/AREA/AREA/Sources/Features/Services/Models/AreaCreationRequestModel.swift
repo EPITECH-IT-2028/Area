@@ -1,5 +1,5 @@
 //
-//  AreaCreationModel.swift
+//  AreaCreationRequestModel.swift
 //  AREA
 //
 //  Created by Arthur GUERINAULT on 14/01/2026.

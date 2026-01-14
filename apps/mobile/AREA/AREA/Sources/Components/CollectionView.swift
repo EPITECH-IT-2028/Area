@@ -9,10 +9,8 @@ import SwiftUI
 
 struct CollectionView: View {
 	@EnvironmentObject var serviceStore: ServiceStore
-	@ObservedObject var viewModel: AreaCreationViewModel
 	var searchText: String
 	var allCards: [CardItem]
-	var isAction: Bool
 
 	var body: some View {
 		let filteredCards =
