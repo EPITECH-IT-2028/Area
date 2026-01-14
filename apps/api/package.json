@@ -42,6 +42,8 @@
     "graphql-request": "^7.3.4",
     "graphql-tag": "^2.12.6",
     "passport": "^0.7.0",
+    "passport-discord": "^0.1.4",
+    "passport-discord-auth": "^1.2.0",
     "passport-github2": "^0.1.12",
     "passport-google-oauth20": "^2.0.0",
     "passport-jwt": "^4.0.1",

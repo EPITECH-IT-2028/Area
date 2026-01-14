@@ -5,6 +5,7 @@ import { SendEmailHandler } from './gmail/send-email.handler';
 import { GithubCreateIssueHandler } from './github/create-issue.handler';
 import { GithubCreateFileHandler } from './github/create-file.handler';
 import { SendOutlookEmailHandler } from './outlook/send-email.handler';
+import { SendDiscordMessageHandler } from './discord/discord-message.handler';
 
 @Injectable()
 export class ReactionExecutor {
@@ -16,6 +17,7 @@ export class ReactionExecutor {
     private readonly githubCreateIssueHandler: GithubCreateIssueHandler,
     private readonly githubCreateFileHandler: GithubCreateFileHandler,
     private readonly sendOutlookEmailHandler: SendOutlookEmailHandler,
+    private readonly sendDiscordMessageHandler: SendDiscordMessageHandler,
   ) {}
 
   async execute(area: Areas, actionData: any) {
@@ -42,6 +44,9 @@ export class ReactionExecutor {
           break;
         case 'send_outlook_email':
           await this.sendOutlookEmailHandler.sendEmail(area, actionData);
+          break;
+        case 'send_discord_message':
+          await this.sendDiscordMessageHandler.handle(area, actionData);
           break;
         default:
           throw new Error(

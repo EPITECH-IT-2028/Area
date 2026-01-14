@@ -8,6 +8,7 @@ import { GithubWorker } from './actions/commit/github.worker';
 import { GithubPullRequestWorker } from './actions/pull_request/github-pr.worker';
 import { OpenMeteoWorker } from './actions/weather/open-meteo.worker';
 import { OutlookWorker } from './actions/email/outlook.worker';
+import { DiscordMessageWorker } from './actions/new_message/new-message.worker';
 
 @Injectable()
 export class GlobalWorkerService {
@@ -22,12 +23,14 @@ export class GlobalWorkerService {
     private readonly githubPullRequestWorker: GithubPullRequestWorker,
     private readonly openMeteoWorker: OpenMeteoWorker,
     private readonly outlookWorker: OutlookWorker,
+    private readonly discordMessageWorker: DiscordMessageWorker,
   ) {
     this.actionWorkers.set('new_email', this.emailWorker);
     this.actionWorkers.set('new_commit_push', this.githubWorker);
     this.actionWorkers.set('new_pull_request', this.githubPullRequestWorker);
     this.actionWorkers.set('open_meteo', this.openMeteoWorker);
     this.actionWorkers.set('new_outlook_email', this.outlookWorker);
+    this.actionWorkers.set('new_discord_message', this.discordMessageWorker);
     const registered = [...this.actionWorkers.keys()].join(', ');
     this.logger.log(`Registered action workers: ${registered}`);
   }

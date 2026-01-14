@@ -20,6 +20,9 @@ import { GithubPullRequestWorker } from './actions/pull_request/github-pr.worker
 import { OutlookService } from './services/microsoft.service';
 import { OutlookWorker } from './actions/email/outlook.worker';
 import { SendOutlookEmailHandler } from './reactions/outlook/send-email.handler';
+import { DiscordService } from './services/discord.service';
+import { DiscordMessageWorker } from './actions/new_message/new-message.worker';
+import { SendDiscordMessageHandler } from './reactions/discord/discord-message.handler';
 
 @Module({
   imports: [ScheduleModule.forRoot(), GraphQLModule, AreasModule],
@@ -40,7 +43,10 @@ import { SendOutlookEmailHandler } from './reactions/outlook/send-email.handler'
     OpenMeteoService,
     OutlookService,
     OutlookWorker,
-    SendOutlookEmailHandler
+    SendOutlookEmailHandler,
+    DiscordService,
+    DiscordMessageWorker,
+    SendDiscordMessageHandler,
   ],
 })
 export class WorkersModule {}
