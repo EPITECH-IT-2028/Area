@@ -65,7 +65,6 @@ class AreaCreationViewModel: ObservableObject {
 		guard let requiredFields = schema.required, !requiredFields.isEmpty else {
 			return true
 		}
-
 		for field in requiredFields {
 			let value = values[field] ?? ""
 			let trimmedValue = value.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -80,7 +79,8 @@ class AreaCreationViewModel: ObservableObject {
 
 	func submitActionConfig(action: ServiceAction) -> Bool {
 		guard validateActionConfig(for: action) else {
-			errorMessage = "Veuillez remplir tous les champs requis"
+			errorMessage =
+				"\(LocalizedStringResource.areaCreationErrorEmptyRequiredFieldTitle)"
 			return false
 		}
 
@@ -92,7 +92,8 @@ class AreaCreationViewModel: ObservableObject {
 
 	func submitReactionConfig(reaction: ServiceAction) -> Bool {
 		guard validateReactionConfig(for: reaction) else {
-			errorMessage = "Veuillez remplir tous les champs requis"
+			errorMessage =
+				"\(LocalizedStringResource.areaCreationErrorEmptyRequiredFieldTitle)"
 			return false
 		}
 
@@ -102,37 +103,45 @@ class AreaCreationViewModel: ObservableObject {
 		return true
 	}
 
-	// ENVOI AU SERVEUR (A implémenter plus tard avec ton BuilderAPI)
 	func createArea() async -> Bool {
 		guard let action = selectedAction, let reaction = selectedReaction else {
 			return false
 		}
 
 		isSubmitting = true
+		errorMessage = nil
 
-		// Exemple de payload à envoyer
-		let payload: [String: Any] = [
-			"action": action.name,
-			"action_params": actionConfigValues,
-			"reaction": reaction.name,
-			"reaction_params": reactionConfigValues,
-		]
+		let request = AreaCreationRequest(
+			name: "\(action.name) → \(reaction.name)",
+			description: "",
+			actionName: action.name,
+			actionConfig: actionConfigValues,
+			reactionName: reaction.name,
+			reactionConfig: reactionConfigValues,
+			isActive: true
+		)
 
-		print("Envoi au back: \(payload)")
-
-		// ⚠️ Ici: appel réseau...
-		// Pour l'instant, on simule un succès
-		// Remplace cette partie par ton vrai appel API
-
-		// Simulation d'un délai réseau
-		try? await Task.sleep(nanoseconds: 500_000_000)  // 0.5 secondes
+		let areaCreationAction = AreaCreationAction(parameters: request)
+		let result = await areaCreationAction.call()
 
 		isSubmitting = false
 
-		// 🔥 REMPLACE CETTE LIGNE par le résultat de ton appel API
-		let apiSuccess = true  // Simule un succès, change selon ton API
+		switch result {
+		case .success(let response):
+			success = true
+			return true
 
-		return apiSuccess
+		case .failure(let error, let statusCode):
+			if statusCode == 401 {
+				errorMessage =
+					"\(LocalizedStringResource.areaCreationUnauthorizedTitle)"
+			} else {
+				errorMessage = error
+			}
+
+			success = false
+			return false
+		}
 	}
 
 	func resetAll() {
