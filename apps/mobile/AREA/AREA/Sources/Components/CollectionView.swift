@@ -10,6 +10,7 @@ import SwiftUI
 struct CollectionView: View {
 	@EnvironmentObject var serviceStore: ServiceStore
 	var searchText: String
+
 	var body: some View {
 		let allCards = serviceStore.fromServiceToCardItem()
 
@@ -20,17 +21,26 @@ struct CollectionView: View {
 				card.title.localizedCaseInsensitiveContains(searchText)
 			}
 
-		NavigationStack {
-			ScrollView {
-				VStack(spacing: 20) {
-					ForEach(filteredCards) { card in
+		ScrollView {
+			VStack(spacing: 20) {
+				ForEach(filteredCards, id: \.id) { card in
+					if let service = serviceStore.services.first(where: {
+						$0.displayName == card.title
+					}) {
+						NavigationLink(value: service) {
+							TableView(item: card)
+						}
+					} else {
 						TableView(item: card)
 					}
 				}
-				.padding()
-				.navigationTitle(LocalizedStringResource.servicesTitle)
 			}
-			.background(Color(UIColor.systemGroupedBackground))
+			.padding()
+			.navigationTitle(LocalizedStringResource.servicesTitle)
+		}
+		.background(Color(UIColor.systemGroupedBackground))
+		.navigationDestination(for: Service.self) { service in
+			ActionsView(selectedService: service)
 		}
 	}
 }

@@ -21,7 +21,7 @@ struct ServerInfo: Decodable {
 	var services: [Service]
 }
 
-struct Service: Decodable, Identifiable {
+struct Service: Decodable, Identifiable, Hashable {
 	var id: String { name }
 	let name: String
 	let displayName: String
@@ -30,7 +30,7 @@ struct Service: Decodable, Identifiable {
 	let reactions: [ServiceAction]
 }
 
-struct ServiceAction: Decodable {
+struct ServiceAction: Decodable, Hashable {
 	var id: String { name }
 	let name: String
 	let description: String

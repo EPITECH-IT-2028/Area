@@ -1,5 +1,5 @@
 //
-//  ExpandingCardView.swift
+//  TableView.swift
 //  AREA
 //
 //  Created by Arthur GUERINAULT on 11/12/2025.
