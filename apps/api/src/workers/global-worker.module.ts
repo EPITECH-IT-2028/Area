@@ -25,6 +25,7 @@ import { DiscordMessageWorker } from './actions/new_message/new-message.worker';
 import { SendDiscordMessageHandler } from './reactions/discord/discord-message.handler';
 import { SlackWebhookHandler } from './reactions/slack/slack-webhook.handler';
 import { TeamsWebhookHandler } from './reactions/teams/teams-webhook.handler';
+import { PipedreamWebhookHandler } from './reactions/pipedream/pipedream-webhook.handler';
 
 @Module({
   imports: [ScheduleModule.forRoot(), GraphQLModule, AreasModule],
@@ -51,6 +52,7 @@ import { TeamsWebhookHandler } from './reactions/teams/teams-webhook.handler';
     SendDiscordMessageHandler,
     SlackWebhookHandler,
     TeamsWebhookHandler,
+    PipedreamWebhookHandler,
   ],
 })
 export class WorkersModule {}
