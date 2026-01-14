@@ -6,6 +6,7 @@ import { GithubCreateIssueHandler } from './github/create-issue.handler';
 import { GithubCreateFileHandler } from './github/create-file.handler';
 import { SendOutlookEmailHandler } from './outlook/send-email.handler';
 import { SendDiscordMessageHandler } from './discord/discord-message.handler';
+import { SlackWebhookHandler } from './slack/slack-webhook.handler';
 
 @Injectable()
 export class ReactionExecutor {
@@ -18,6 +19,7 @@ export class ReactionExecutor {
     private readonly githubCreateFileHandler: GithubCreateFileHandler,
     private readonly sendOutlookEmailHandler: SendOutlookEmailHandler,
     private readonly sendDiscordMessageHandler: SendDiscordMessageHandler,
+    private readonly slackWebhookHandler: SlackWebhookHandler,
   ) {}
 
   async execute(area: Areas, actionData: any) {
@@ -47,6 +49,9 @@ export class ReactionExecutor {
           break;
         case 'send_discord_message':
           await this.sendDiscordMessageHandler.handle(area, actionData);
+          break;
+        case 'send_slack_message':
+          await this.slackWebhookHandler.sendWebhookMessage(area, actionData);
           break;
         default:
           throw new Error(

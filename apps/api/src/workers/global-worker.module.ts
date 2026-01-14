@@ -23,6 +23,7 @@ import { SendOutlookEmailHandler } from './reactions/outlook/send-email.handler'
 import { DiscordService } from './services/discord.service';
 import { DiscordMessageWorker } from './actions/new_message/new-message.worker';
 import { SendDiscordMessageHandler } from './reactions/discord/discord-message.handler';
+import { SlackWebhookHandler } from './reactions/slack/slack-webhook.handler';
 
 @Module({
   imports: [ScheduleModule.forRoot(), GraphQLModule, AreasModule],
@@ -47,6 +48,7 @@ import { SendDiscordMessageHandler } from './reactions/discord/discord-message.h
     DiscordService,
     DiscordMessageWorker,
     SendDiscordMessageHandler,
+    SlackWebhookHandler,
   ],
 })
 export class WorkersModule {}
