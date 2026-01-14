@@ -64,8 +64,6 @@ export class SendDiscordMessageHandler {
           credentials = JSON.parse(credentials);
         }
 
-        this.logger.log(`[Debug Credentials] Content: ${JSON.stringify(credentials)}`);
-
         const discordUserId = (credentials as any)?.profile?.id;
 
         if (!discordUserId) {
@@ -83,7 +81,7 @@ export class SendDiscordMessageHandler {
   }
 
   private async sendMessageToChannel(token: string, channelId: string, content: string) {
-    
+
     const botToken = this.configService.get<string>('DISCORD_BOT_TOKEN');
     if (!botToken) {
       throw new Error('Discord bot token is not configured.');
