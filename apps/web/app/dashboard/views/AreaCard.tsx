@@ -1,4 +1,4 @@
-import { Area } from "@/app/dashboard/models/Dasboard";
+import { Area } from "@/app/dashboard/models/areasResponse";
 
 interface AreaCardProps {
   area: Area;

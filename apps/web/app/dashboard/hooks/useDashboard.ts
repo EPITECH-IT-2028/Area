@@ -4,7 +4,7 @@ import api from "@/lib/api";
 import Cookies from "js-cookie";
 import { toast } from "sonner";
 import { useAuth } from "@/context/AuthContext";
-import { Area, AreasResponse } from "@/app/dashboard/models/Dasboard";
+import { Area, AreasResponse } from "@/app/dashboard/models/areasResponse";
 
 export function useDashboard() {
   const [areas, setAreas] = useState<Area[]>([]);

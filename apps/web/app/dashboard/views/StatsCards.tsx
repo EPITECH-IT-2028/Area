@@ -1,4 +1,4 @@
-import { StatsCardsProps } from "../models/Dasboard";
+import { StatsCardsProps } from "../models/statsCardsProps";
 
 export function StatsCards({
   totalAreas,
