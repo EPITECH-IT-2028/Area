@@ -59,6 +59,13 @@ export class OAuthService {
   ): Promise<string | null> {
     const logPrefix = `[${contextName}]`;
 
+    if (!userService.service.name || userService.service.name !== 'google') {
+      this.logger.error(
+        `${logPrefix} Attempted to refresh token for non-Google service.`,
+      );
+      return null;
+    }
+
     if (!userService.refresh_token) {
       this.logger.error(`${logPrefix} No refresh token available.`);
       return null;

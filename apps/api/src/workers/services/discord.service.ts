@@ -33,7 +33,7 @@ export class DiscordService {
     try {
       const url = `${this.API_URL}/channels/${channelId}/messages?limit=${limit}`;
       const response = await fetch(url, {
-        headers: { Authorization: `Bearer ${token}` },
+        headers: { Authorization: `Bot ${token}` },
         signal: controller.signal,
       });
 
@@ -60,7 +60,7 @@ export class DiscordService {
       const channelRes = await fetch(`${this.API_URL}/users/@me/channels`, {
         method: 'POST',
         headers: { 
-          Authorization: `Bearer ${token}`, 
+          Authorization: `Bot ${token}`, 
           'Content-Type': 'application/json' 
         },
         body: JSON.stringify({ recipient_id: userId }),
@@ -76,7 +76,7 @@ export class DiscordService {
       const messageRes = await fetch(`${this.API_URL}/channels/${dmChannel.id}/messages`, {
         method: 'POST',
         headers: { 
-          Authorization: `Bearer ${token}`, 
+          Authorization: `Bot ${token}`, 
           'Content-Type': 'application/json' 
         },
         body: JSON.stringify({ content }),
@@ -95,7 +95,7 @@ export class DiscordService {
       clearTimeout(timeoutId);
     }
   }
-  
+
   private handleError(error: any, context: string) {
     if (error?.name === 'AbortError') {
       this.logger.error(`Discord API request timed out (${this.REQUEST_TIMEOUT_MS}ms) in ${context}`);
