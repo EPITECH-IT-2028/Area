@@ -1,4 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 
 export interface DiscordMessage {
   id: string;
@@ -22,6 +23,11 @@ export interface DiscordGuild {
 
 @Injectable()
 export class DiscordService {
+
+  constructor(
+    private readonly configService: ConfigService
+  ) {}
+
   private readonly logger = new Logger(DiscordService.name);
   private readonly API_URL = 'https://discord.com/api/v10';
   private readonly REQUEST_TIMEOUT_MS = 10000;
@@ -30,7 +36,11 @@ export class DiscordService {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), this.REQUEST_TIMEOUT_MS);
 
-    const botToken = 'DISCORD_BOT_TOKEN';
+    const botToken = this.configService.get<string>('DISCORD_BOT_TOKEN');
+
+    if (!botToken) {
+      throw new Error('Discord bot token is not configured.');
+    }
 
     try {
       const url = `${this.API_URL}/channels/${channelId}/messages?limit=${limit}`;
@@ -58,7 +68,11 @@ export class DiscordService {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), this.REQUEST_TIMEOUT_MS);
 
-    const botToken = 'DISCORD_BOT_TOKEN';
+    const botToken = this.configService.get<string>('DISCORD_BOT_TOKEN');
+
+    if (!botToken) {
+      throw new Error('Discord bot token is not configured.');
+    }
 
     try {
       const channelRes = await fetch(`${this.API_URL}/users/@me/channels`, {

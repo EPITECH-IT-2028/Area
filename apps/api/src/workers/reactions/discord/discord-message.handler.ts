@@ -3,6 +3,7 @@ import { Areas } from 'src/generated/graphql';
 import { OAuthService } from '../../services/oauth.service';
 import { DiscordService } from '../../services/discord.service';
 import { VariableReplacer } from '../../../utils/replaceVariables';
+import { ConfigService } from '@nestjs/config';
 
 export interface DiscordMessageReactionConfig extends Areas {
   reaction_config?: {
@@ -22,6 +23,7 @@ export class SendDiscordMessageHandler {
   constructor(
     private readonly oauthService: OAuthService,
     private readonly discordService: DiscordService,
+    private readonly configService: ConfigService,
   ) {}
 
   async handle(area: DiscordMessageReactionConfig, actionData: ActionData) {
@@ -81,7 +83,11 @@ export class SendDiscordMessageHandler {
   }
 
   private async sendMessageToChannel(token: string, channelId: string, content: string) {
-    const botToken = 'DISCORD_BOT_TOKEN';
+    
+    const botToken = this.configService.get<string>('DISCORD_BOT_TOKEN');
+    if (!botToken) {
+      throw new Error('Discord bot token is not configured.');
+    }
 
     const response = await fetch(`https://discord.com/api/v10/channels/${channelId}/messages`, {
       method: 'POST',
