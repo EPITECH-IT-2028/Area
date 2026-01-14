@@ -20,6 +20,7 @@ export class ReactionExecutor {
     private readonly sendOutlookEmailHandler: SendOutlookEmailHandler,
     private readonly sendDiscordMessageHandler: SendDiscordMessageHandler,
     private readonly slackWebhookHandler: SlackWebhookHandler,
+    private readonly teamsWebhookHandler: SlackWebhookHandler,
   ) {}
 
   async execute(area: Areas, actionData: any) {
@@ -53,6 +54,9 @@ export class ReactionExecutor {
         case 'send_slack_message':
           await this.slackWebhookHandler.sendWebhookMessage(area, actionData);
           break;
+        case 'send_teams_message':
+          await this.teamsWebhookHandler.sendWebhookMessage(area, actionData);
+         break;
         default:
           throw new Error(
             `Reaction '${area.reaction.name}' is not implemented.`,
