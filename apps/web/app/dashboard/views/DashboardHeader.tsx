@@ -1,6 +1,7 @@
-import { Button } from "@/components/ui/button";
 import { useAuth } from "@/context/AuthContext";
 import { toast } from "sonner";
+
+import { Button } from "@/components/ui/button";
 
 export function DashboardHeader() {
   const { logout, user } = useAuth();

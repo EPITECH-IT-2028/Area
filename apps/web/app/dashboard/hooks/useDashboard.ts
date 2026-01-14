@@ -1,18 +1,20 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
+
 import { useRouter } from "next/navigation";
+
+import { Area, AreasResponse } from "@/app/dashboard/models/areasResponse";
+import { useAuth } from "@/context/AuthContext";
 import api from "@/lib/api";
 import Cookies from "js-cookie";
 import { toast } from "sonner";
-import { useAuth } from "@/context/AuthContext";
-import { Area, AreasResponse } from "@/app/dashboard/models/areasResponse";
 
-export function useDashboard() {
+function useDashboard() {
   const [areas, setAreas] = useState<Area[]>([]);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
   const { logout } = useAuth();
 
-  const fetchAreas = async () => {
+  async function fetchAreas() {
     try {
       const token = Cookies.get("access_token");
       if (!token) {
@@ -41,9 +43,12 @@ export function useDashboard() {
     } finally {
       setLoading(false);
     }
-  };
+  }
+
   useEffect(() => {
     fetchAreas();
   }, []);
   return { areas, loading };
 }
+
+export default useDashboard;

@@ -1,5 +1,6 @@
 import { useMemo } from "react";
-import { useDashboard } from "@/app/dashboard/hooks/useDashboard";
+
+import useDashboard from "@/app/dashboard/hooks/useDashboard";
 
 const getStatusColor = (status: string) => {
   switch (status.toLowerCase()) {

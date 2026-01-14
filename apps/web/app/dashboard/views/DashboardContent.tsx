@@ -1,17 +1,17 @@
 "use client";
 
-import { useAuth } from "@/context/AuthContext";
-import ProtectedRoute from "@/components/ProtectedRoute";
 import { useDashboardViewModel } from "@/app/dashboard/viewModels/dashboardViewModel";
-import { DashboardHeader } from "@/app/dashboard/views/DashboardHeader";
-import { StatsCards } from "@/app/dashboard/views/StatsCards";
 import { AreaCard } from "@/app/dashboard/views/AreaCard";
+import { DashboardHeader } from "@/app/dashboard/views/DashboardHeader";
 import { RecentActivity } from "@/app/dashboard/views/RecentActivity";
+import { StatsCards } from "@/app/dashboard/views/StatsCards";
+import { useAuth } from "@/context/AuthContext";
+
+import ProtectedRoute from "@/components/ProtectedRoute";
 
 export default function DashboardContent() {
   const { user } = useAuth();
-  const { areas, loading, stats, getStatusColor } =
-    useDashboardViewModel();
+  const { areas, loading, stats, getStatusColor } = useDashboardViewModel();
 
   return (
     <ProtectedRoute>
@@ -19,15 +19,15 @@ export default function DashboardContent() {
         <DashboardHeader />
         <main className="container mx-auto px-4 py-8">
           <div className="mb-8">
-            <h1 className="text-4xl font-bold mb-2">
+            <h1 className="mb-2 text-4xl font-bold">
               Welcome back, {user?.name || "User"} !
             </h1>
-            <p className="text-muted-foreground text-lg">
+            <p className="text-lg text-muted-foreground">
               Here&apos;s an overview of your automations
             </p>
           </div>
           {loading ? (
-            <div className="text-center py-12">
+            <div className="py-12 text-center">
               <p className="text-muted-foreground">Loading...</p>
             </div>
           ) : (
@@ -49,7 +49,10 @@ export default function DashboardContent() {
                   ))}
                 </div>
               )}
-              <RecentActivity getStatusColor={getStatusColor} hasAreas={areas.length > 0} />
+              <RecentActivity
+                getStatusColor={getStatusColor}
+                hasAreas={areas.length > 0}
+              />
             </>
           )}
         </main>
