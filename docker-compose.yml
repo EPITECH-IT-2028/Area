@@ -1,7 +1,10 @@
+name: area
+
 services:
   postgres:
     image: postgres:15
     restart: always
+    container_name: postgres
     volumes:
       - db_data:/var/lib/postgresql/data
     environment:
@@ -9,7 +12,7 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: ${POSTGRES_DB}
     networks:
-      - area-network
+      - network
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
       interval: 5s
@@ -19,20 +22,29 @@ services:
   graphql-engine:
     image: hasura/graphql-engine:v2.46.0.cli-migrations-v3
     ports:
-      - "${HASURA_PORT}:8080"
+      - "${HASURA_PORT}:8008"
+      - "9695:9695"
+      - "9693:9693"
     restart: always
+    container_name: graphql-engine
     volumes:
       - ./hasura/migrations:/hasura-migrations
       - ./hasura/metadata:/hasura-metadata
     environment:
       HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:${POSTGRES_PORT}/${POSTGRES_DB}
       PG_DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:${POSTGRES_PORT}/${POSTGRES_DB}
-      HASURA_GRAPHQL_ENABLE_CONSOLE: "false"
-      HASURA_GRAPHQL_DEV_MODE: "false"
+      HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
+      HASURA_GRAPHQL_DEV_MODE: "true"
       HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
       HASURA_GRAPHQL_ADMIN_SECRET: ${HASURA_GRAPHQL_ADMIN_SECRET}
+      HASURA_GRAPHQL_SERVER_PORT: 8008
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8008/healthz"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     networks:
-      - area-network
+      - network
     depends_on:
       postgres:
         condition: service_healthy
@@ -42,53 +54,82 @@ services:
   data-connector-agent:
     image: hasura/graphql-data-connector:v2.46.0
     restart: always
+    container_name: data-connector-agent
     ports:
       - "${DATA_CONNECTOR_PORT}:8081"
     environment:
       QUARKUS_LOG_LEVEL: ERROR
       QUARKUS_OPENTELEMETRY_ENABLED: "false"
     networks:
-      - area-network
+      - network
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8081/api/v1/athena/health"]
       interval: 5s
       timeout: 10s
       retries: 5
 
-  server:
+  backend:
     build:
       context: .
       dockerfile: apps/api/Dockerfile
     ports:
       - "8080:8080"
+    container_name: backend
     environment:
-      HASURA_GRAPHQL_ENDPOINT: http://graphql-engine:8080/v1/graphql
+      HASURA_GRAPHQL_ENDPOINT: http://graphql-engine:8008/v1/graphql
       DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:${POSTGRES_PORT}/${POSTGRES_DB}
     env_file:
       - .env
     depends_on:
       - graphql-engine
     networks:
-      - area-network
+      - network
     restart: unless-stopped
 
-  client_web:
+  hasura-console:
+    image: hasura/graphql-engine:v2.46.0.cli-migrations-v3
+    volumes:
+      - ./hasura:/hasura
+    container_name: hasura
+    working_dir: /hasura
+    entrypoint: 
+      - hasura-cli
+      - console
+      - --address
+      - 0.0.0.0
+      - --console-port
+      - "9695"
+      - --api-port
+      - "9693"
+      - --endpoint
+      - http://localhost:8008
+      - --admin-secret
+      - "${HASURA_GRAPHQL_ADMIN_SECRET}"
+      - --no-browser
+    depends_on:
+      graphql-engine:
+        condition: service_healthy
+    network_mode: service:graphql-engine
+    restart: always
+
+  frontend:
     build:
       context: .
       dockerfile: apps/web/Dockerfile
     ports:
       - "8081:8081"
+    container_name: frontend
     env_file:
       - .env
     depends_on:
-      - server
+      - backend
     networks:
-      - area-network
+      - network
     restart: unless-stopped
 
 volumes:
   db_data:
 
 networks:
-  area-network:
+  network:
     driver: bridge
