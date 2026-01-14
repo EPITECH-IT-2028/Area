@@ -30,10 +30,12 @@ export class DiscordService {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), this.REQUEST_TIMEOUT_MS);
 
+    const botToken = 'DISCORD_BOT_TOKEN';
+
     try {
       const url = `${this.API_URL}/channels/${channelId}/messages?limit=${limit}`;
       const response = await fetch(url, {
-        headers: { Authorization: `Bot ${token}` },
+        headers: { Authorization: `Bot ${botToken}` },
         signal: controller.signal,
       });
 
@@ -56,11 +58,13 @@ export class DiscordService {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), this.REQUEST_TIMEOUT_MS);
 
+    const botToken = 'DISCORD_BOT_TOKEN';
+
     try {
       const channelRes = await fetch(`${this.API_URL}/users/@me/channels`, {
         method: 'POST',
         headers: { 
-          Authorization: `Bot ${token}`, 
+          Authorization: `Bot ${botToken}`, 
           'Content-Type': 'application/json' 
         },
         body: JSON.stringify({ recipient_id: userId }),
@@ -76,7 +80,7 @@ export class DiscordService {
       const messageRes = await fetch(`${this.API_URL}/channels/${dmChannel.id}/messages`, {
         method: 'POST',
         headers: { 
-          Authorization: `Bot ${token}`, 
+          Authorization: `Bot ${botToken}`, 
           'Content-Type': 'application/json' 
         },
         body: JSON.stringify({ content }),

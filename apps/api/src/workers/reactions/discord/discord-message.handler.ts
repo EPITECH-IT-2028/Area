@@ -81,10 +81,12 @@ export class SendDiscordMessageHandler {
   }
 
   private async sendMessageToChannel(token: string, channelId: string, content: string) {
+    const botToken = 'DISCORD_BOT_TOKEN';
+
     const response = await fetch(`https://discord.com/api/v10/channels/${channelId}/messages`, {
       method: 'POST',
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bot ${botToken}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ content }),

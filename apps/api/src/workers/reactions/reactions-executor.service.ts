@@ -7,6 +7,7 @@ import { GithubCreateFileHandler } from './github/create-file.handler';
 import { SendOutlookEmailHandler } from './outlook/send-email.handler';
 import { SendDiscordMessageHandler } from './discord/discord-message.handler';
 import { SlackWebhookHandler } from './slack/slack-webhook.handler';
+import { TeamsWebhookHandler } from './teams/teams-webhook.handler';
 
 @Injectable()
 export class ReactionExecutor {
@@ -20,7 +21,7 @@ export class ReactionExecutor {
     private readonly sendOutlookEmailHandler: SendOutlookEmailHandler,
     private readonly sendDiscordMessageHandler: SendDiscordMessageHandler,
     private readonly slackWebhookHandler: SlackWebhookHandler,
-    private readonly teamsWebhookHandler: SlackWebhookHandler,
+    private readonly teamsWebhookHandler: TeamsWebhookHandler,
   ) {}
 
   async execute(area: Areas, actionData: any) {
