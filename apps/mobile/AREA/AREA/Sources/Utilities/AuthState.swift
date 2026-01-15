@@ -14,8 +14,6 @@ class AuthState: ObservableObject {
 
 	@Published var isAuthenticated: Bool = AuthState.isUserAuthenticated()
 
-	private init() {}
-
 	static func isUserAuthenticated() -> Bool {
 		(try? KeychainManager.shared.keychain.hasItem(
 			forKey: Constants.keychainJWTKey

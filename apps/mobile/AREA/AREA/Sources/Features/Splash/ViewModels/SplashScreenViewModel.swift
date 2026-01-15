@@ -12,16 +12,17 @@ class SplashScreenViewModel: ObservableObject {
 	@Published var isLoading: Bool = true
 	var action = SplashScreenAction()
 
-	init() {
-
-	}
-	func isTokenValid() async {
+	func retrieveServices(store: ServiceStore) async {
 		do {
-			let isTokenValid = try await action.verifyToken()
-			if !isTokenValid {
-				try AuthState.shared.logout()
+			self.isLoading = true
+			let services = try await action.call(store: store)
+
+			DispatchQueue.main.async {
+				if !services {
+					try? AuthState.shared.logout()
+				}
+				self.isLoading = false
 			}
-			return
 		} catch {
 			print(error)
 			try? AuthState.shared.logout()
