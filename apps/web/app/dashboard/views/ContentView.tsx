@@ -25,6 +25,7 @@ export default function ContentView() {
         <StatsCards
           totalAreas={stats.totalAreas}
           connectedServicesCount={stats.connectedServicesCount}
+          isLoading={isLoading}
         />
         <div className="mb-8">
           <h2 className="mb-6 text-2xl font-semibold">Your AREAs</h2>

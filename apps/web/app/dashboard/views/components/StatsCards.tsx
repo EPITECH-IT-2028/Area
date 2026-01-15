@@ -1,18 +1,17 @@
-import useDashboard from "@/app/dashboard/hooks/useDashboard";
 import { cn } from "@/lib/utils";
 import { Globe, Plus, Zap } from "lucide-react";
 
 export interface StatsCardsProps {
   totalAreas: number;
   connectedServicesCount: number;
+  isLoading: boolean;
 }
 
 export function StatsCards({
   totalAreas,
   connectedServicesCount,
+  isLoading,
 }: StatsCardsProps) {
-  const { isLoading } = useDashboard();
-
   const stats = [
     {
       label: "Total AREAs",
