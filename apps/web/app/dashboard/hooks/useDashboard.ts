@@ -12,7 +12,10 @@ function useDashboard() {
 
   useEffect(() => {
     async function fetchAreas() {
-      if (!accessToken) return;
+      if (!accessToken) {
+        setIsLoading(false);
+        return;
+      }
 
       try {
         const response = await api
