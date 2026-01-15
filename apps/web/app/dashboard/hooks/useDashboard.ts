@@ -18,13 +18,7 @@ function useDashboard() {
       }
 
       try {
-        const response = await api
-          .get("areas", {
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-            },
-          })
-          .json<AreasResponse>();
+        const response = await api.get("areas").json<AreasResponse>();
         if (response.success && response.data && response.data.length > 0) {
           setAreas(response.data.map((area) => ({ ...area, is_active: true })));
         }

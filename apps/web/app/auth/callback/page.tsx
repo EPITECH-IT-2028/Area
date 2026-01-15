@@ -57,13 +57,7 @@ export default function AuthCallbackPage() {
           return;
         }
 
-        const user = await api
-          .get(`users/${userId}`, {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          })
-          .json<OAuthResponse>();
+        const user = await api.get(`users/${userId}`).json<OAuthResponse>();
 
         login({
           access_token: token,
