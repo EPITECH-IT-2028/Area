@@ -41,7 +41,13 @@ struct ContentView: View {
 							LocalizedStringResource.servicesTitle,
 							systemImage: Constants.servicesIconString
 						) {
-							ServicesView()
+							AreaCreationView()
+						}
+						Tab(
+							LocalizedStringResource.areaTabTitle,
+							systemImage: Constants.areasIconString
+						) {
+							AreaCreationView()
 						}
 						Tab(
 							LocalizedStringResource.settingsTitle,

@@ -82,6 +82,23 @@
         }
       }
     },
+    "AREA.Tab.Title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AREAs"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "AREAs"
+          }
+        }
+      }
+    },
     "AreaCreation.ActionLocked.Title" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -238,9 +255,15 @@
     "areaCreation.Unauthorized.Title" : {
       "extractionState" : "manual",
       "localizations" : {
-        "fr" : {
+        "en" : {
           "stringUnit" : {
             "state" : "translated",
+            "value" : "Unauthorized. Please log in again."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "needs_review",
             "value" : "Non autorisé. Veuillez vous reconnecter."
           }
         }

@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ServicesView: View {
+struct AreaCreationView: View {
 	@State private var searchText: String = ""
 	@EnvironmentObject var serviceStore: ServiceStore
 	@StateObject private var viewModel = AreaCreationViewModel()
@@ -29,10 +29,8 @@ struct ServicesView: View {
 				}
 
 				CollectionView(
-					viewModel: viewModel,
 					searchText: searchText,
-					allCards: serviceStore.fromServiceToCardItem(),
-					isAction: viewModel.selectedAction == nil
+					allCards: serviceStore.fromServiceToCardItem()
 				)
 				.searchable(text: $searchText)
 			}

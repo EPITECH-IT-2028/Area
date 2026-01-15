@@ -11,6 +11,7 @@ struct Constants {
 	// Icon string for tabs
 	static let homeIconString = "house"
 	static let servicesIconString = "list.bullet"
+	static let areasIconString = "folder"
 	static let settingsIconString = "gear"
 
 	// Port MAX/MIN

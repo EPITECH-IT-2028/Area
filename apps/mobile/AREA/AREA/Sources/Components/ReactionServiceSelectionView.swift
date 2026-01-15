@@ -16,10 +16,8 @@ struct ReactionServiceSelectionView: View {
 
 	var body: some View {
 		CollectionView(
-			viewModel: viewModel,
 			searchText: searchText,
-			allCards: serviceStore.fromServiceToCardItem(),
-			isAction: false
+			allCards: serviceStore.fromServiceToCardItem()
 		)
 		.searchable(text: $searchText)
 		.navigationTitle(LocalizedStringResource.servicesTitle)
