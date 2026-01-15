@@ -21,7 +21,6 @@ export function useDashboardViewModel() {
     const totalAreas = areas.length;
 
     const connectedServices = new Set<string>();
-    console.log(connectedServices);
     areas.forEach((area) => {
       connectedServices.add(area.action.service.name);
       connectedServices.add(area.reaction.service.name);
