@@ -1,5 +1,6 @@
 import Cookies from "js-cookie";
 import ky from "ky";
+import { toast } from "sonner";
 
 const api = ky.create({
   prefixUrl: process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080/",
@@ -18,7 +19,7 @@ const api = ky.create({
     afterResponse: [
       async (_request, _options, response) => {
         if (response.status === 401) {
-          console.log("Token expired!");
+          toast.warning("Session expired, please log in again.");
         }
       },
     ],
