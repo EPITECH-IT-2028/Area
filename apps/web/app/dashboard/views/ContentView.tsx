@@ -5,6 +5,10 @@ import { AreaCard } from "@/app/dashboard/views/components/AreaCard";
 import { DashboardHeader } from "@/app/dashboard/views/components/DashboardHeader";
 import { StatsCards } from "@/app/dashboard/views/components/StatsCards";
 import { useAuth } from "@/context/AuthContext";
+import { Plus, Workflow } from "lucide-react";
+import { toast } from "sonner";
+
+import { Button } from "@/components/ui/button";
 
 export default function ContentView() {
   const { user } = useAuth();
@@ -35,6 +39,26 @@ export default function ContentView() {
                 <div className="h-8 w-8 rounded-full border-3 border-primary border-t-transparent" />
               </div>
               <p>Loading your automations...</p>
+            </div>
+          ) : areas.length === 0 ? (
+            <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed bg-card/50 py-16 text-center text-muted-foreground">
+              <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-primary/10">
+                <Workflow className="h-8 w-8 text-primary" />
+              </div>
+              <h3 className="mb-2 text-xl font-semibold text-foreground">
+                No automations yet
+              </h3>
+              <p className="mb-6 max-w-sm text-balance">
+                Create your first automation to start connecting your favorite
+                services.
+              </p>
+              <Button
+                onClick={() => toast.info("Area creation coming soon!")}
+                className="gap-2"
+              >
+                <Plus className="h-4 w-4" />
+                Create Automation
+              </Button>
             </div>
           ) : (
             <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
