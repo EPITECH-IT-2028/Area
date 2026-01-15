@@ -9,7 +9,7 @@ interface AreaCardProps {
 
 export function AreaCard({ area }: AreaCardProps) {
   return (
-    <div className="group relative overflow-hidden rounded-xl border bg-card p-5 text-card-foreground shadow-sm transition-all hover:border-primary/20 hover:shadow-md">
+    <div className="group relative overflow-hidden rounded-xl border bg-card p-4 text-card-foreground shadow-sm transition-all hover:border-primary/20 hover:shadow-md md:p-5">
       <div className="absolute -top-4 -right-4 h-24 w-24 rounded-full bg-primary/5 blur-2xl transition-all group-hover:bg-primary/10" />
 
       <div className="relative mb-4 flex items-center justify-between">
@@ -58,7 +58,7 @@ export function AreaCard({ area }: AreaCardProps) {
         </div>
       </div>
 
-      <div className="flex items-center justify-between rounded-lg border border-border/50 bg-muted/40 p-4">
+      <div className="flex items-center justify-between rounded-lg border border-border/50 bg-muted/40 p-3 md:p-4">
         <div className="space-y-1.5">
           <span className="flex items-center gap-1 text-[10px] font-bold tracking-widest text-blue-500 uppercase dark:text-blue-400">
             <Play className="h-3 w-3 fill-current" />

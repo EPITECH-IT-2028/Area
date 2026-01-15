@@ -17,12 +17,12 @@ export default function ContentView() {
   return (
     <div className="min-h-screen">
       <DashboardHeader />
-      <main className="container mx-auto my-8">
-        <div className="mb-8">
-          <h1 className="mb-2 text-4xl font-bold">
+      <main className="container mx-auto my-4 px-4 md:my-8 md:px-0">
+        <div className="mb-6 md:mb-8">
+          <h1 className="mb-2 text-2xl font-bold md:text-4xl">
             Welcome back, {user?.name || "User"} !
           </h1>
-          <p className="text-lg text-muted-foreground">
+          <p className="text-base text-muted-foreground md:text-lg">
             Here&apos;s an overview of your automations
           </p>
         </div>
@@ -32,16 +32,18 @@ export default function ContentView() {
           isLoading={isLoading}
         />
         <div className="mb-8">
-          <h2 className="mb-6 text-2xl font-semibold">Your AREAs</h2>
+          <h2 className="mb-4 text-xl font-semibold md:mb-6 md:text-2xl">
+            Your AREAs
+          </h2>
           {isLoading ? (
-            <div className="rounded-2xl border border-dashed bg-card/50 py-12 text-center text-muted-foreground">
+            <div className="rounded-2xl border border-dashed bg-card/50 py-8 text-center text-muted-foreground md:py-12">
               <div className="mb-4 inline-flex animate-spin items-center justify-center rounded-full">
                 <div className="h-8 w-8 rounded-full border-3 border-primary border-t-transparent" />
               </div>
               <p>Loading your automations...</p>
             </div>
           ) : areas.length === 0 ? (
-            <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed bg-card/50 py-16 text-center text-muted-foreground">
+            <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed bg-card/50 py-12 text-center text-muted-foreground md:py-16">
               <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-primary/10">
                 <Workflow className="h-8 w-8 text-primary" />
               </div>

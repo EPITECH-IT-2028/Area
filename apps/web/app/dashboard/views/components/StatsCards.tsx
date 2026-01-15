@@ -36,7 +36,7 @@ export function StatsCards({
       {stats.map((stat) => (
         <div
           key={stat.label}
-          className="group overflow-hidden rounded-2xl border bg-card p-6 shadow-sm transition-all hover:shadow-md"
+          className="group overflow-hidden rounded-2xl border bg-card p-4 shadow-sm transition-all hover:shadow-md md:p-6"
         >
           <div className="flex items-center gap-4">
             <div
@@ -65,7 +65,7 @@ export function StatsCards({
         </div>
       ))}
 
-      <div className="group hidden cursor-not-allowed items-center justify-between rounded-2xl border border-dashed border-border bg-muted/30 p-6 transition-all lg:flex">
+      <div className="group hidden cursor-not-allowed items-center justify-between rounded-2xl border border-dashed border-border bg-muted/30 p-4 transition-all md:p-6 lg:flex">
         <div className="flex items-center gap-4 opacity-50">
           <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-muted text-muted-foreground ring-1 ring-border">
             <Plus className="h-6 w-6" />
