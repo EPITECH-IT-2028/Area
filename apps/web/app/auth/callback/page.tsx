@@ -7,6 +7,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { OAuthResponse } from "@/app/auth/models/oauthResponse";
 import { useAuth } from "@/context/AuthContext";
 import api from "@/lib/api";
+import Cookies from "js-cookie";
 import { toast } from "sonner";
 
 interface JwtPayload {
@@ -57,6 +58,7 @@ export default function AuthCallbackPage() {
           return;
         }
 
+        Cookies.set("access_token", token);
         const user = await api.get(`users/${userId}`).json<OAuthResponse>();
 
         login({
