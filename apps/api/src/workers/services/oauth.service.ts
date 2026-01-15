@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { User_Services } from '../../../generated/graphql';
+import { User_Services } from '../../generated/graphql';
 import { UserServicesService } from 'src/user-services/user-services.service';
 
 interface GoogleTokenResponse {
@@ -58,6 +58,13 @@ export class OAuthService {
     contextName: string,
   ): Promise<string | null> {
     const logPrefix = `[${contextName}]`;
+
+    if (!userService.service.name || userService.service.name !== 'google') {
+      this.logger.error(
+        `${logPrefix} Attempted to refresh token for non-Google service.`,
+      );
+      return null;
+    }
 
     if (!userService.refresh_token) {
       this.logger.error(`${logPrefix} No refresh token available.`);

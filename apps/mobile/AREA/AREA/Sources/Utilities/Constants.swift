@@ -8,14 +8,10 @@
 import Foundation
 
 struct Constants {
-	// Name string for tabs
-	static let homeString = "Home"
-	static let servicesString = "Services"
-	static let settingsString = "Settings"
-
 	// Icon string for tabs
 	static let homeIconString = "house"
 	static let servicesIconString = "list.bullet"
+	static let areasIconString = "folder"
 	static let settingsIconString = "gear"
 
 	// Port MAX/MIN
@@ -35,7 +31,8 @@ struct Constants {
 	// Server paths
 	static let loginServerPath = "/auth/login"
 	static let registerServerPath = "/auth/register"
-	static let getUserPath = "/users"
+	static let aboutJsonPath = "/about.json"
+	static let createAREAsPath = "/areas"
 	static let githubOAuth2ServerPath = "http://localhost:8080/auth/github"
 	static let googleOAuth2ServerPath = "http://localhost:8080/auth/google"
 

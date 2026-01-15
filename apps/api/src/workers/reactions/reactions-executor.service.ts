@@ -1,12 +1,30 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { Areas } from 'src/generated/graphql';
 import { DiscordWebhookHandler } from './discord/discord-webhook.handler';
+import { SendEmailHandler } from './gmail/send-email.handler';
+import { GithubCreateIssueHandler } from './github/create-issue.handler';
+import { GithubCreateFileHandler } from './github/create-file.handler';
+import { SendOutlookEmailHandler } from './outlook/send-email.handler';
+import { SendDiscordMessageHandler } from './discord/discord-message.handler';
+import { SlackWebhookHandler } from './slack/slack-webhook.handler';
+import { TeamsWebhookHandler } from './teams/teams-webhook.handler';
+import { PipedreamWebhookHandler } from './pipedream/pipedream-webhook.handler';
 
 @Injectable()
 export class ReactionExecutor {
   private readonly logger = new Logger(ReactionExecutor.name);
 
-  constructor(private readonly discordWebhookHandler: DiscordWebhookHandler) {}
+  constructor(
+    private readonly discordWebhookHandler: DiscordWebhookHandler,
+    private readonly sendEmailHandler: SendEmailHandler,
+    private readonly githubCreateIssueHandler: GithubCreateIssueHandler,
+    private readonly githubCreateFileHandler: GithubCreateFileHandler,
+    private readonly sendOutlookEmailHandler: SendOutlookEmailHandler,
+    private readonly sendDiscordMessageHandler: SendDiscordMessageHandler,
+    private readonly slackWebhookHandler: SlackWebhookHandler,
+    private readonly teamsWebhookHandler: TeamsWebhookHandler,
+    private readonly pipedreamWebhookHandler: PipedreamWebhookHandler,
+  ) {}
 
   async execute(area: Areas, actionData: any) {
     if (!actionData || typeof actionData !== 'object') {
@@ -20,6 +38,30 @@ export class ReactionExecutor {
       switch (area.reaction.name) {
         case 'send_webhook_message':
           await this.discordWebhookHandler.sendWebhookMessage(area, actionData);
+          break;
+        case 'send_email':
+          await this.sendEmailHandler.sendEmail(area, actionData);
+          break;
+        case 'create_github_issue':
+          await this.githubCreateIssueHandler.createIssue(area, actionData);
+          break;
+        case 'create_github_file':
+          await this.githubCreateFileHandler.createFile(area, actionData);
+          break;
+        case 'send_outlook_email':
+          await this.sendOutlookEmailHandler.sendEmail(area, actionData);
+          break;
+        case 'send_discord_message':
+          await this.sendDiscordMessageHandler.handle(area, actionData);
+          break;
+        case 'send_slack_message':
+          await this.slackWebhookHandler.sendWebhookMessage(area, actionData);
+          break;
+        case 'send_teams_message':
+          await this.teamsWebhookHandler.sendWebhookMessage(area, actionData);
+         break;
+        case 'send_pipedream_message':
+          await this.pipedreamWebhookHandler.sendWebhookMessage(area, actionData);
           break;
         default:
           throw new Error(

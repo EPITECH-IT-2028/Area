@@ -28,7 +28,8 @@ struct BuilderAPI {
 	func buildRequest<T: Encodable>(
 		url: URL,
 		method: String,
-		parameters: T
+		parameters: T,
+		token: String? = nil
 	)
 		throws -> URLRequest
 	{
@@ -36,6 +37,9 @@ struct BuilderAPI {
 		request.httpMethod = method
 		request.addValue("application/json", forHTTPHeaderField: "Content-Type")
 		request.addValue("application/json", forHTTPHeaderField: "Accept")
+		if let token = token {
+			request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+		}
 		do {
 			request.httpBody = try JSONEncoder().encode(parameters)
 		} catch {
