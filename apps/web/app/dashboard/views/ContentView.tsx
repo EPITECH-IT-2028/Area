@@ -26,20 +26,25 @@ export default function ContentView() {
           totalAreas={stats.totalAreas}
           connectedServicesCount={stats.connectedServicesCount}
         />
-        <div className="mb-8 space-y-4">
-          <h2 className="text-2xl font-semibold">Your AREAs</h2>
+        <div className="mb-8">
+          <h2 className="mb-6 text-2xl font-semibold">Your AREAs</h2>
           {isLoading ? (
-            <div className="rounded-xl border bg-card py-8 text-center text-foreground/50">
-              Loading AREAs...
+            <div className="rounded-2xl border border-dashed bg-card/50 py-12 text-center text-muted-foreground">
+              <div className="mb-4 inline-flex animate-spin items-center justify-center rounded-full">
+                <div className="h-8 w-8 rounded-full border-3 border-primary border-t-transparent" />
+              </div>
+              <p>Loading your automations...</p>
             </div>
           ) : (
-            areas.map((area) => (
-              <AreaCard
-                key={area.id}
-                area={area}
-                getStatusColor={getStatusColor}
-              />
-            ))
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
+              {areas.map((area) => (
+                <AreaCard
+                  key={area.id}
+                  area={area}
+                  getStatusColor={getStatusColor}
+                />
+              ))}
+            </div>
           )}
         </div>
       </main>

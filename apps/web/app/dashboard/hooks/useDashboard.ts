@@ -22,7 +22,6 @@ function useDashboard() {
             },
           })
           .json<AreasResponse>();
-        await new Promise((r) => setTimeout(r, 2000));
         if (response.success && response.data && response.data.length > 0) {
           setAreas(response.data);
         }
