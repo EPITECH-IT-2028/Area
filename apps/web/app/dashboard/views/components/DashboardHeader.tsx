@@ -21,10 +21,10 @@ export function DashboardHeader() {
           <div className="flex items-center gap-6">
             <div className="hidden items-center gap-3 md:flex">
               <div className="flex flex-col text-right">
-                <p className="text-sm font-semibold leading-none">
+                <p className="text-sm leading-none font-semibold">
                   {user?.name || "User"}
                 </p>
-                <p className="text-xs text-muted-foreground mt-1">
+                <p className="mt-1 text-xs text-muted-foreground">
                   {user?.email}
                 </p>
               </div>
@@ -40,7 +40,7 @@ export function DashboardHeader() {
               }}
               variant="ghost"
               size="sm"
-              className="text-muted-foreground hover:text-destructive hover:bg-destructive/10"
+              className="text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
             >
               <LogOut className="mr-2 h-4 w-4" />
               Logout
