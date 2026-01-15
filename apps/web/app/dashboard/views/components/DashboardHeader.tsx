@@ -1,5 +1,7 @@
+import Image from "next/image";
+
 import { useAuth } from "@/context/AuthContext";
-import { LayoutDashboard, LogOut, User } from "lucide-react";
+import { LogOut, User } from "lucide-react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -12,10 +14,14 @@ export function DashboardHeader() {
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-sm shadow-primary/20">
-              <LayoutDashboard className="h-5 w-5" />
-            </div>
-            <h2 className="text-xl font-bold tracking-tight">AREA</h2>
+            <Image
+              src="/logo_horizontal.svg"
+              width={96}
+              height={96}
+              alt="logo"
+              className="pointer-events-none flex items-center space-x-4 select-none lg:absolute"
+              draggable="false"
+            />
           </div>
 
           <div className="flex items-center gap-6">
