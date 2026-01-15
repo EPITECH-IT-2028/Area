@@ -23,7 +23,7 @@ function useDashboard() {
           })
           .json<AreasResponse>();
         if (response.success && response.data && response.data.length > 0) {
-          setAreas(response.data);
+          setAreas(response.data.map((area) => ({ ...area, is_active: true })));
         }
       } catch (error) {
         console.error("Failed to fetch areas:", error);
