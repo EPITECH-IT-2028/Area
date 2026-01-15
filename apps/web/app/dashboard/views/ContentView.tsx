@@ -5,18 +5,19 @@ import { AreaCard } from "@/app/dashboard/views/components/AreaCard";
 import { DashboardHeader } from "@/app/dashboard/views/components/DashboardHeader";
 import { RecentActivity } from "@/app/dashboard/views/components/RecentActivity";
 import { StatsCards } from "@/app/dashboard/views/components/StatsCards";
+import Loading from "@/app/loading";
 import { useAuth } from "@/context/AuthContext";
 
 import ProtectedRoute from "@/components/ProtectedRoute";
 
 export default function ContentView() {
   const { user } = useAuth();
-  const { areas, loading, stats, getStatusColor } = useDashboardViewModel();
+  const { areas, stats, getStatusColor } = useDashboardViewModel();
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen">
       <DashboardHeader />
-      <main className="container mx-auto px-4 py-8">
+      <main className="container mx-auto my-8">
         <div className="mb-8">
           <h1 className="mb-2 text-4xl font-bold">
             Welcome back, {user?.name || "User"} !
@@ -25,35 +26,28 @@ export default function ContentView() {
             Here&apos;s an overview of your automations
           </p>
         </div>
-        {loading ? (
-          <div className="py-12 text-center">
-            <p className="text-muted-foreground">Loading...</p>
-          </div>
-        ) : (
-          <>
-            <StatsCards
-              totalAreas={stats.totalAreas}
-              activeAreas={stats.activeAreas}
-              connectedServicesCount={stats.connectedServicesCount}
-            />
-            {areas.length > 0 && (
-              <div className="mb-8 space-y-4">
-                <h2 className="text-2xl font-semibold">Your AREAs</h2>
-                {areas.map((area) => (
-                  <AreaCard
-                    key={area.id}
-                    area={area}
-                    getStatusColor={getStatusColor}
-                  />
-                ))}
-              </div>
-            )}
-            <RecentActivity
-              getStatusColor={getStatusColor}
-              hasAreas={areas.length > 0}
-            />
-          </>
-        )}
+        <>
+          <StatsCards
+            totalAreas={stats.totalAreas}
+            connectedServicesCount={stats.connectedServicesCount}
+          />
+          {areas.length > 0 && (
+            <div className="mb-8 space-y-4">
+              <h2 className="text-2xl font-semibold">Your AREAs</h2>
+              {areas.map((area) => (
+                <AreaCard
+                  key={area.id}
+                  area={area}
+                  getStatusColor={getStatusColor}
+                />
+              ))}
+            </div>
+          )}
+          <RecentActivity
+            statusColor={getStatusColor}
+            hasAreas={areas.length > 0}
+          />
+        </>
       </main>
     </div>
   );

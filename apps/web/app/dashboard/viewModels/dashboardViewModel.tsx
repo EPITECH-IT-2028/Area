@@ -1,5 +1,3 @@
-import { useMemo } from "react";
-
 import useDashboard from "@/app/dashboard/hooks/useDashboard";
 
 const getStatusColor = (status: string) => {
@@ -17,13 +15,13 @@ const getStatusColor = (status: string) => {
 };
 
 export function useDashboardViewModel() {
-  const { areas, loading } = useDashboard();
+  const { areas, isLoading } = useDashboard();
 
-  const stats = useMemo(() => {
+  const stats = (() => {
     const totalAreas = areas.length;
-    const activeAreas = areas.filter((a) => a.is_active).length;
 
     const connectedServices = new Set<string>();
+    console.log(connectedServices);
     areas.forEach((area) => {
       connectedServices.add(area.action.service.name);
       connectedServices.add(area.reaction.service.name);
@@ -31,15 +29,13 @@ export function useDashboardViewModel() {
 
     return {
       totalAreas,
-      activeAreas,
-      executionsToday: 0,
       connectedServicesCount: connectedServices.size,
     };
-  }, [areas]);
+  })();
 
   return {
     areas,
-    loading,
+    isLoading,
     stats,
     getStatusColor,
   };

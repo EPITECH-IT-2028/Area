@@ -1,54 +1,42 @@
 import { useEffect, useState } from "react";
 
-import { useRouter } from "next/navigation";
-
 import { Area, AreasResponse } from "@/app/dashboard/models/areasResponse";
 import { useAuth } from "@/context/AuthContext";
 import api from "@/lib/api";
-import Cookies from "js-cookie";
 import { toast } from "sonner";
 
 function useDashboard() {
   const [areas, setAreas] = useState<Area[]>([]);
-  const [loading, setLoading] = useState(true);
-  const router = useRouter();
-  const { logout } = useAuth();
-
-  async function fetchAreas() {
-    try {
-      const token = Cookies.get("access_token");
-      if (!token) {
-        const storedUser = Cookies.get("user");
-        if (storedUser) {
-          toast.error("Session expired. Please log in again.");
-          logout();
-          router.push("/login");
-        }
-        setLoading(false);
-        return;
-      }
-      const response = await api
-        .get("areas", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        })
-        .json<AreasResponse>();
-      if (response.success && response.data) {
-        setAreas(response.data);
-      }
-    } catch (err) {
-      console.error("Failed to fetch areas:", err);
-      toast.error("Failed to load your automations. Please try again.");
-    } finally {
-      setLoading(false);
-    }
-  }
+  const [isLoading, setIsLoading] = useState(true);
+  const { accessToken } = useAuth();
 
   useEffect(() => {
-    fetchAreas();
-  }, []);
-  return { areas, loading };
+    async function fetchAreas() {
+      if (!accessToken) return;
+
+      try {
+        const response = await api
+          .get("areas", {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          })
+          .json<AreasResponse>();
+        await new Promise((r) => setTimeout(r, 2000));
+        if (response.success && response.data && response.data.length > 0) {
+          setAreas(response.data);
+        }
+      } catch (error) {
+        console.error("Failed to fetch areas:", error);
+        toast.error("Failed to load your automations. Please try again.");
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    void fetchAreas();
+  }, [accessToken]);
+  return { areas, isLoading };
 }
 
 export default useDashboard;

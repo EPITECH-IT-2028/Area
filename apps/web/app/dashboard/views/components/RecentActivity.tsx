@@ -1,5 +1,5 @@
 interface RecentActivityProps {
-  getStatusColor: (status: string) => string;
+  statusColor: (status: string) => string;
   hasAreas: boolean;
 }
 
