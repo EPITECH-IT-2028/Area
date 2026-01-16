@@ -2,7 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { Areas } from 'src/generated/graphql';
 import { VariableReplacer } from '../../../utils/replaceVariables';
 
-export interface DiscordReactionConfig extends Areas {
+export interface SlackReactionConfig extends Areas {
   reaction_config?: {
     webhook_url: string;
     message_template?: string;
@@ -15,11 +15,11 @@ export interface ActionData {
 }
 
 @Injectable()
-export class DiscordWebhookHandler {
-  private readonly logger = new Logger(DiscordWebhookHandler.name);
+export class SlackWebhookHandler {
+  private readonly logger = new Logger(SlackWebhookHandler.name);
 
   async sendWebhookMessage(
-    area: DiscordReactionConfig,
+    area: SlackReactionConfig,
     actionData: ActionData,
   ) {
     if (!area.reaction_config) {
@@ -30,7 +30,7 @@ export class DiscordWebhookHandler {
       typeof area.reaction_config !== 'object' ||
       !area.reaction_config.webhook_url
     ) {
-      throw new Error('Discord webhook URL is not configured.');
+      throw new Error('Slack webhook URL is not configured.');
     }
 
     const webhookUrl = area.reaction_config.webhook_url;
@@ -38,6 +38,7 @@ export class DiscordWebhookHandler {
     const template =
       area.reaction_config.message_template ||
       'Hello,\n\nThis is an automated notification from AREA.\n\n{{data}}\n\nBest regards,\nAREA Team';
+    
     const message = VariableReplacer.replaceVariables(template, actionData);
 
     const controller = new AbortController();
@@ -48,22 +49,23 @@ export class DiscordWebhookHandler {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          content: message,
+          text: message,
           username: area.reaction_config.username || 'Area Bot',
         }),
         signal: controller.signal,
       });
 
       if (!response.ok) {
+        const errorBody = await response.text();
         throw new Error(
-          `Discord webhook failed with status ${response.status}: ${response.statusText}`,
+          `Slack webhook failed with status ${response.status}: ${errorBody || response.statusText}`,
         );
       }
 
-      this.logger.log('Discord notification sent successfully.');
+      this.logger.log('Slack notification sent successfully.');
     } catch (error) {
       this.logger.error(
-        `Failed to send Discord webhook notification: ${error}`,
+        `Failed to send Slack webhook notification: ${error}`,
       );
       throw error;
     } finally {

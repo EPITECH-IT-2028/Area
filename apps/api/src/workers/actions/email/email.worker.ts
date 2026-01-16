@@ -1,8 +1,8 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ReactionExecutor } from '../../reactions/reactions-executor.service';
 import { Areas } from 'src/generated/graphql';
-import { OAuthService } from './oauth.service';
-import { GmailService } from './gmail.service';
+import { OAuthService } from '../../services/oauth.service';
+import { GmailService } from '../../services/gmail.service';
 import { IActionWorker } from 'src/workers/interfaces/worker.interface';
 
 @Injectable()
