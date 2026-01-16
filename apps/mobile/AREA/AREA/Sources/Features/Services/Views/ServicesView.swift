@@ -8,11 +8,13 @@
 import SwiftUI
 
 struct ServicesView: View {
-    var body: some View {
-        Text("Services")
-    }
-}
+	@State private var searchText: String = ""
 
-#Preview {
-	ServicesView()
+	var body: some View {
+		NavigationStack {
+			CollectionView(searchText: searchText)
+				.searchable(text: $searchText)
+				.navigationTitle(LocalizedStringResource.servicesTitle)
+		}
+	}
 }

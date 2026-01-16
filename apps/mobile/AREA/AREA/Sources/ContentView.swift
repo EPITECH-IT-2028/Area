@@ -11,13 +11,18 @@ import SwiftUI
 
 struct ContentView: View {
 	@EnvironmentObject var authState: AuthState
+	@EnvironmentObject var serviceStore: ServiceStore
 	@StateObject private var loginViewModel = LoginViewModel()
 	@StateObject private var registerViewModel = RegisterViewModel()
 	@State private var showSplash = true
 	@State private var showingRegister = false
+	@State private var showError = false
+	@State private var errorMessage = ""
+
 	private let fadeOutDuration: TimeInterval = 0.5
 
 	var body: some View {
+
 		ZStack {
 			if showSplash {
 				SplashScreenView()
@@ -29,21 +34,47 @@ struct ContentView: View {
 			} else {
 				if authState.isAuthenticated {
 					TabView {
-						Tab(Constants.homeString, systemImage: Constants.homeIconString) {
+						Tab(LocalizedStringResource.homeTitle, systemImage: Constants.homeIconString) {
 							HomeView()
 						}
 						Tab(
-							Constants.servicesString,
+							LocalizedStringResource.servicesTitle,
 							systemImage: Constants.servicesIconString
 						) {
 							ServicesView()
 						}
 						Tab(
-							Constants.settingsString,
+							LocalizedStringResource.settingsTitle,
 							systemImage: Constants.settingsIconString
 						) {
 							SettingsView()
 						}
+					}.onAppear {
+						Task {
+							if serviceStore.services.isEmpty {
+								do {
+									_ = try await serviceStore.fetchServices()
+								} catch {
+									errorMessage = error.localizedDescription
+									showError = true
+								}
+							}
+						}
+					}
+					.alert(LocalizedStringResource.errorTitle, isPresented: $showError) {
+						Button(LocalizedStringResource.tryAgainTitle) {
+							Task {
+								do {
+									_ = try await serviceStore.fetchServices()
+								} catch {
+									errorMessage = error.localizedDescription
+									showError = true
+								}
+							}
+						}
+						Button("OK", role: .cancel) {}
+					} message: {
+						Text(errorMessage)
 					}
 				} else {
 					if showingRegister {

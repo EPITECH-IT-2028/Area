@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5D3F365E2EEB292800829511 /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 5D3F365D2EEB292800829511 /* SDWebImageSwiftUI */; };
+		5D3F36612EEB293800829511 /* SDWebImageSVGCoder in Frameworks */ = {isa = PBXBuildFile; productRef = 5D3F36602EEB293700829511 /* SDWebImageSVGCoder */; };
 		5DBE58E62EE03EA100EFA570 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 5DBE58E52EE03EA100EFA570 /* GoogleSignIn */; };
 		5DBE58E82EE03EA100EFA570 /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 5DBE58E72EE03EA100EFA570 /* GoogleSignInSwift */; };
 		5DD884CE2ED5E7DA00AF5084 /* SimpleKeychain in Frameworks */ = {isa = PBXBuildFile; productRef = 5DD884CD2ED5E7DA00AF5084 /* SimpleKeychain */; };
@@ -42,8 +44,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5D3F365E2EEB292800829511 /* SDWebImageSwiftUI in Frameworks */,
 				5DBE58E82EE03EA100EFA570 /* GoogleSignInSwift in Frameworks */,
 				5DD884CE2ED5E7DA00AF5084 /* SimpleKeychain in Frameworks */,
+				5D3F36612EEB293800829511 /* SDWebImageSVGCoder in Frameworks */,
 				5DBE58E62EE03EA100EFA570 /* GoogleSignIn in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -90,6 +94,8 @@
 				5DD884CD2ED5E7DA00AF5084 /* SimpleKeychain */,
 				5DBE58E52EE03EA100EFA570 /* GoogleSignIn */,
 				5DBE58E72EE03EA100EFA570 /* GoogleSignInSwift */,
+				5D3F365D2EEB292800829511 /* SDWebImageSwiftUI */,
+				5D3F36602EEB293700829511 /* SDWebImageSVGCoder */,
 			);
 			productName = AREA;
 			productReference = 5D5444A42ECB6D720081D5C9 /* AREA.app */;
@@ -123,6 +129,8 @@
 			packageReferences = (
 				5DD884CC2ED5E7DA00AF5084 /* XCRemoteSwiftPackageReference "SimpleKeychain" */,
 				5DBE58E42EE03EA100EFA570 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
+				5D3F365C2EEB292800829511 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */,
+				5D3F365F2EEB293700829511 /* XCRemoteSwiftPackageReference "SDWebImageSVGCoder" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 5D5444A52ECB6D720081D5C9 /* Products */;
@@ -367,6 +375,22 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		5D3F365C2EEB292800829511 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SDWebImage/SDWebImageSwiftUI";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.1.4;
+			};
+		};
+		5D3F365F2EEB293700829511 /* XCRemoteSwiftPackageReference "SDWebImageSVGCoder" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SDWebImage/SDWebImageSVGCoder";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.8.0;
+			};
+		};
 		5DBE58E42EE03EA100EFA570 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/google/GoogleSignIn-iOS";
@@ -386,6 +410,16 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		5D3F365D2EEB292800829511 /* SDWebImageSwiftUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5D3F365C2EEB292800829511 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */;
+			productName = SDWebImageSwiftUI;
+		};
+		5D3F36602EEB293700829511 /* SDWebImageSVGCoder */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5D3F365F2EEB293700829511 /* XCRemoteSwiftPackageReference "SDWebImageSVGCoder" */;
+			productName = SDWebImageSVGCoder;
+		};
 		5DBE58E52EE03EA100EFA570 /* GoogleSignIn */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 5DBE58E42EE03EA100EFA570 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
