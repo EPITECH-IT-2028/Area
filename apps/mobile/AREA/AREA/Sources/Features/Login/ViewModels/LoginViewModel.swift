@@ -32,7 +32,7 @@ class LoginViewModel: ObservableObject {
 	@MainActor
 	func googleLogin() async {
 		do {
-			try await googleAuthAction.signIn()
+			let _ = try await googleAuthAction.signIn()
 			isLoggedIn = true
 			status = .success
 			errorMessage = nil
@@ -48,7 +48,7 @@ class LoginViewModel: ObservableObject {
 	@MainActor
 	func githubLogin() async {
 		do {
-			try await githubAuthAction.signIn()
+			let _ = try await githubAuthAction.signIn()
 			isLoggedIn = true
 			status = .success
 			errorMessage = nil
