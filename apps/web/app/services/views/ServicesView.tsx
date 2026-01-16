@@ -6,29 +6,26 @@ import ServiceCard from "@/app/services/views/ServiceCard";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import useServices from "@/app/services/hooks/useServices";
 import { ServiceRequest } from "@/app/services/models/serviceRequest";
-
 const colorMap: Record<string, string> = {
   google: "bg-red-500",
   github: "bg-gray-800",
   discord_webhook: "bg-indigo-500",
 };
 
-export default function ServicesView() {
+
+function ServicesView() {
   const { services, isLoading, error } = useServices();
 
   const servicesData = useMemo(() => {
-    return services.map((service) => {
-      
-      return {
-        id: service.name,
-        name: service.name,
-        displayName: service.display_name,
-        color: colorMap[service.name] || "bg-gray-500",
-        icon: service.icon_url ? (
-          <img src={service.icon_url} alt={`${service.display_name} icon`} width={32} height={32} className="object-contain"/>
-        ) : (<span className="text-2xl font-bold">{service.display_name.charAt(0).toUpperCase()}</span>),
-      };
-    }) as ServiceRequest[];
+    return services.map((service) => ({
+      id: service.name,
+      name: service.name,
+      displayName: service.display_name,
+      color: colorMap[service.name] || "bg-gray-500",
+      icon: service.icon_url ? (
+        <img src={service.icon_url} alt={`${service.display_name} icon`} width={32} height={32} className="object-contain"/>
+      ) : (<span className="text-2xl font-bold">{service.display_name.charAt(0).toUpperCase()}</span>),
+    }));
   }, [services]);
 
   return (
@@ -66,3 +63,5 @@ export default function ServicesView() {
     </ProtectedRoute>
   );
 }
+
+export default ServicesView;
