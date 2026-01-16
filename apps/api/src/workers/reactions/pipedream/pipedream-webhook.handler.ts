@@ -2,11 +2,10 @@ import { Injectable, Logger } from '@nestjs/common';
 import { Areas } from 'src/generated/graphql';
 import { VariableReplacer } from '../../../utils/replaceVariables';
 
-export interface DiscordReactionConfig extends Areas {
+export interface PipedreamReactionConfig extends Areas {
   reaction_config?: {
     webhook_url: string;
     message_template?: string;
-    username?: string;
   };
 }
 
@@ -15,22 +14,15 @@ export interface ActionData {
 }
 
 @Injectable()
-export class DiscordWebhookHandler {
-  private readonly logger = new Logger(DiscordWebhookHandler.name);
+export class PipedreamWebhookHandler {
+  private readonly logger = new Logger(PipedreamWebhookHandler.name);
 
   async sendWebhookMessage(
-    area: DiscordReactionConfig,
+    area: PipedreamReactionConfig,
     actionData: ActionData,
   ) {
-    if (!area.reaction_config) {
-      throw new Error('Reaction configuration is missing.');
-    }
-
-    if (
-      typeof area.reaction_config !== 'object' ||
-      !area.reaction_config.webhook_url
-    ) {
-      throw new Error('Discord webhook URL is not configured.');
+    if (!area.reaction_config?.webhook_url) {
+      throw new Error('Pipedream webhook URL is not configured.');
     }
 
     const webhookUrl = area.reaction_config.webhook_url;
@@ -38,6 +30,7 @@ export class DiscordWebhookHandler {
     const template =
       area.reaction_config.message_template ||
       'Hello,\n\nThis is an automated notification from AREA.\n\n{{data}}\n\nBest regards,\nAREA Team';
+      
     const message = VariableReplacer.replaceVariables(template, actionData);
 
     const controller = new AbortController();
@@ -48,22 +41,26 @@ export class DiscordWebhookHandler {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          content: message,
-          username: area.reaction_config.username || 'Area Bot',
+          success: true,
+          source: 'AREA_ENGINE',
+          message: message,
+          details: actionData,
+          fired_at: new Date().toISOString(),
         }),
         signal: controller.signal,
       });
 
       if (!response.ok) {
+        const errorText = await response.text();
         throw new Error(
-          `Discord webhook failed with status ${response.status}: ${response.statusText}`,
+          `Pipedream webhook failed with status ${response.status}: ${errorText}`,
         );
       }
 
-      this.logger.log('Discord notification sent successfully.');
+      this.logger.log('Data successfully sent to Pipedream.');
     } catch (error) {
       this.logger.error(
-        `Failed to send Discord webhook notification: ${error}`,
+        `Failed to send Pipedream webhook notification: ${error.message}`,
       );
       throw error;
     } finally {
