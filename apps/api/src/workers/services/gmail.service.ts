@@ -186,12 +186,13 @@ export class GmailService {
     }
   }
 
-  async sendEmail(
-    token: string,
-    payload: SendEmailPayload
-  ): Promise<void> {
+  async sendEmail(token: string, payload: SendEmailPayload): Promise<void> {
     try {
-      const raw = this.createRawEmail(payload.to, payload.subject, payload.body);
+      const raw = this.createRawEmail(
+        payload.to,
+        payload.subject,
+        payload.body,
+      );
       const url = `${this.GMAIL_API_BASE}/users/me/messages/send`;
       const response = await fetch(url, {
         method: 'POST',
@@ -204,21 +205,21 @@ export class GmailService {
 
       if (!response.ok) {
         const errorText = await response.text();
-        this.logger.error(`Failed to send email. Status: ${response.status}. Reason: ${errorText}`);
+        this.logger.error(
+          `Failed to send email. Status: ${response.status}. Reason: ${errorText}`,
+        );
         throw new Error(`Gmail API error: ${errorText}`);
       }
-      this.logger.log(`Email sent to ${payload.to} with subject "${payload.subject}".`);
+      this.logger.log(
+        `Email sent to ${payload.to} with subject "${payload.subject}".`,
+      );
     } catch (error) {
       this.logger.error('Network error while sending email:', error);
       throw error;
     }
   }
 
-  private createRawEmail(
-    to: string,
-    subject: string,
-    body: string
-  ): string {
+  private createRawEmail(to: string, subject: string, body: string): string {
     const message = [
       `To: ${to}`,
       'Content-Type: text/plain; charset=UTF-8',

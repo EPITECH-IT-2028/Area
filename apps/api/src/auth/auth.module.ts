@@ -11,6 +11,10 @@ import { GoogleStrategy } from './strategy/google.strategy';
 import { GithubStrategy } from './strategy/github.strategy';
 import { MicrosoftStrategy } from './strategy/microsoft.strategy';
 import { DiscordStrategy } from './strategy/discord.strategy';
+import { GoogleLinkGuard } from './guards/google-link.guard';
+import { GithubLinkGuard } from './guards/github-link.guard';
+import { MicrosoftLinkGuard } from './guards/microsoft-link.guard';
+import { DiscordLinkGuard } from './guards/discord-link.guard';
 
 @Module({
   imports: [
@@ -27,7 +31,18 @@ import { DiscordStrategy } from './strategy/discord.strategy';
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtStrategy, GoogleStrategy, GithubStrategy, MicrosoftStrategy, DiscordStrategy],
+  providers: [
+    AuthService,
+    JwtStrategy,
+    GoogleStrategy,
+    GithubStrategy,
+    MicrosoftStrategy,
+    DiscordStrategy,
+    GoogleLinkGuard,
+    GithubLinkGuard,
+    MicrosoftLinkGuard,
+    DiscordLinkGuard,
+  ],
   exports: [AuthService],
 })
 export class AuthModule {}
