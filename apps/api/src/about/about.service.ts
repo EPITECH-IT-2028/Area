@@ -13,12 +13,13 @@ export class AboutService {
   async getAboutInfo(clientIp: string) {
     const getServices = async () => {
       const result = await this.graphqlService.adminQuery<{
-        services: { name: string; display_name: string; icon_url: string }[];
+        services: { name: string; display_name: string; icon_url: string; oauth_url: string }[];
       }>(GetAllServicesQuery, {});
       return result.services.map((service) => ({
         name: service.name,
         display_name: service.display_name,
         icon_url: service.icon_url,
+        oauth_url: service.oauth_url,
       }));
     };
 
