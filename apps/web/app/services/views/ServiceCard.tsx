@@ -1,40 +1,35 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { ServiceRequest } from "@/app/services/models/serviceRequest";
 
 interface ServiceCardProps {
   service: ServiceRequest;
+  isConnected: boolean;
 }
 
-
-export default function ServiceCard({ service }: ServiceCardProps) {
-  const [isConnected, setIsConnected] = useState(false);
+export default function ServiceCard({ service, isConnected: initialIsConnected }: ServiceCardProps) {
+  const [isConnected, setIsConnected] = useState(initialIsConnected);
 
   useEffect(() => {
-    const connected = localStorage.getItem("connected_services");
-    if (connected) {
-      const arr = JSON.parse(connected) as string[];
-      setIsConnected(arr.includes(service.name));
-    }
-  }, [service.name]);
+    setIsConnected(initialIsConnected);
+  }, [initialIsConnected]);
 
-  const handleToggle = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleConnect = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
-    const connected = localStorage.getItem("connected_services");
-    let arr: string[] = connected ? JSON.parse(connected) : [];
-    if (!isConnected) {
-      if (!arr.includes(service.name)) {
-        arr.push(service.name);
-        localStorage.setItem("connected_services", JSON.stringify(arr));
-      }
-      setIsConnected(true);
-    } else {
-      arr = arr.filter((name) => name !== service.name);
-      localStorage.setItem("connected_services", JSON.stringify(arr));
-      setIsConnected(false);
+    const oauthRoutes: Record<string, string> = {
+      google: '/auth/google',
+      github: '/auth/github',
+    };
+    const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8080';
+    const route = oauthRoutes[service.name];
+    if (route) {
+      window.location.href = `${apiBaseUrl}${route}`;
     }
+  };
+  const handleDisconnect = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    console.log('Disconnect service:', service.name);
   };
 
   return (
@@ -53,7 +48,7 @@ export default function ServiceCard({ service }: ServiceCardProps) {
         </div>
         {!isConnected ? (
           <button
-            onClick={handleToggle}
+            onClick={handleConnect}
             className="mt-4 rounded px-4 py-2 font-semibold text-white transition bg-blue-600 hover:bg-blue-700"
           >
             Connect
@@ -61,7 +56,7 @@ export default function ServiceCard({ service }: ServiceCardProps) {
         ) : (
           <>
             <button
-              onClick={handleToggle}
+              onClick={handleDisconnect}
               className="mt-4 rounded px-4 py-2 font-semibold text-white transition bg-red-500 hover:bg-red-600"
             >
               Disconnect
