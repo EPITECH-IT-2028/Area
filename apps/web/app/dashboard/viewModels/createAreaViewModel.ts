@@ -52,7 +52,12 @@ export function useCreateAreaViewModel(
   }, [fetchServices]);
 
   const selectActionService = (service: Service) => {
-    setDraft((prev) => ({ ...prev, actionService: service }));
+    setDraft((prev) => ({
+      ...prev,
+      actionService: service,
+      action: null,
+      actionConfig: {},
+    }));
     setStep("select-action");
   };
 
@@ -66,7 +71,7 @@ export function useCreateAreaViewModel(
         action.name,
       );
     }
-    setDraft((prev) => ({ ...prev, action: enrichedAction }));
+    setDraft((prev) => ({ ...prev, action: enrichedAction, actionConfig: {} }));
     if (
       action.config_schema &&
       action.config_schema.properties &&
@@ -97,12 +102,17 @@ export function useCreateAreaViewModel(
   };
 
   const selectReactionService = (service: Service) => {
-    setDraft((prev) => ({ ...prev, reactionService: service }));
+    setDraft((prev) => ({
+      ...prev,
+      reactionService: service,
+      reaction: null,
+      reactionConfig: {},
+    }));
     setStep("select-reaction");
   };
 
   const selectReaction = (reaction: Reaction) => {
-    setDraft((prev) => ({ ...prev, reaction }));
+    setDraft((prev) => ({ ...prev, reaction, reactionConfig: {} }));
     if (
       reaction.config_schema &&
       reaction.config_schema.properties &&
@@ -127,11 +137,16 @@ export function useCreateAreaViewModel(
     switch (step) {
       case "select-action":
         setStep("select-action-service");
-        setDraft((prev) => ({ ...prev, actionService: null }));
+        setDraft((prev) => ({
+          ...prev,
+          actionService: null,
+          action: null,
+          actionConfig: {},
+        }));
         break;
       case "configure-action":
         setStep("select-action");
-        setDraft((prev) => ({ ...prev, action: null }));
+        setDraft((prev) => ({ ...prev, action: null, actionConfig: {} }));
         break;
       case "select-reaction-service":
         if (
@@ -142,16 +157,21 @@ export function useCreateAreaViewModel(
           setStep("configure-action");
         } else {
           setStep("select-action");
-          setDraft((prev) => ({ ...prev, action: null }));
+          setDraft((prev) => ({ ...prev, action: null, actionConfig: {} }));
         }
         break;
       case "select-reaction":
         setStep("select-reaction-service");
-        setDraft((prev) => ({ ...prev, reactionService: null }));
+        setDraft((prev) => ({
+          ...prev,
+          reactionService: null,
+          reaction: null,
+          reactionConfig: {},
+        }));
         break;
       case "configure-reaction":
         setStep("select-reaction");
-        setDraft((prev) => ({ ...prev, reaction: null }));
+        setDraft((prev) => ({ ...prev, reaction: null, reactionConfig: {} }));
         break;
       case "review":
         if (
@@ -162,7 +182,7 @@ export function useCreateAreaViewModel(
           setStep("configure-reaction");
         } else {
           setStep("select-reaction");
-          setDraft((prev) => ({ ...prev, reaction: null }));
+          setDraft((prev) => ({ ...prev, reaction: null, reactionConfig: {} }));
         }
         break;
       default:
