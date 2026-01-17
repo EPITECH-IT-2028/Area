@@ -19,6 +19,7 @@ export default function ContentView() {
     getStatusColor,
     isCreateModalOpen,
     setIsCreateModalOpen,
+    refetch,
   } = useDashboardViewModel();
 
   return (
@@ -98,6 +99,7 @@ export default function ContentView() {
         <CreateAreaView
           open={isCreateModalOpen}
           onOpenChange={setIsCreateModalOpen}
+          onAreaCreated={refetch}
         />
       )}
     </div>

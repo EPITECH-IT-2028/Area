@@ -17,7 +17,7 @@ const getStatusColor = (status: string) => {
 };
 
 export function useDashboardViewModel() {
-  const { areas, isLoading } = useDashboard();
+  const { areas, isLoading, refetch } = useDashboard();
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
   const stats = (() => {
@@ -42,5 +42,6 @@ export function useDashboardViewModel() {
     getStatusColor,
     isCreateModalOpen,
     setIsCreateModalOpen,
+    refetch,
   };
 }

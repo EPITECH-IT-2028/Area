@@ -21,11 +21,13 @@ import { Separator } from "@/components/ui/separator";
 interface CreateAreaViewProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  onAreaCreated?: () => void;
 }
 
 export default function CreateAreaView({
   open,
   onOpenChange,
+  onAreaCreated,
 }: CreateAreaViewProps) {
   const handleClose = () => {
     onOpenChange(false);
@@ -46,7 +48,10 @@ export default function CreateAreaView({
     updateDraftDetails,
     goBack,
     submit,
-  } = useCreateAreaViewModel(handleClose, handleClose);
+  } = useCreateAreaViewModel(() => {
+    handleClose();
+    onAreaCreated?.();
+  }, handleClose);
 
   const getStepTitle = () => {
     switch (step) {
