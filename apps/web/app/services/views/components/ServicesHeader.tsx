@@ -1,28 +1,60 @@
-"use client";
+import Image from "next/image";
+import Link from "next/link";
 
-import { ArrowLeft } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { useAuth } from "@/context/AuthContext";
+import { ArrowLeft, LogOut, User } from "lucide-react";
+import { toast } from "sonner";
+
 import { Button } from "@/components/ui/button";
 
 export function ServicesHeader() {
-  const router = useRouter();
+  const { logout, user } = useAuth();
 
   return (
-    <div className="mb-6 md:mb-8">
-      <Button
-        onClick={() => router.push('/dashboard')}
-        variant="ghost"
-        className="mb-4 gap-2 text-muted-foreground hover:text-foreground"
-      >
-        <ArrowLeft className="h-4 w-4" />
-        Back to Dashboard
-      </Button>
-      <h1 className="mb-2 text-2xl font-bold md:text-4xl">
-        Connect Services
-      </h1>
-      <p className="text-base text-muted-foreground md:text-lg">
-        Connect your favorite services to create powerful automations
-      </p>
-    </div>
+    <header className="sticky top-0 z-50 border-b bg-card/80 backdrop-blur-md">
+      <div className="container mx-auto px-4 py-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Image
+              src="/logo_horizontal.svg"
+              width={96}
+              height={96}
+              alt="logo"
+              className="pointer-events-none flex items-center space-x-4 select-none lg:absolute"
+              draggable="false"
+            />
+          </div>
+
+          <div className="flex items-center gap-6">
+            <div className="hidden items-center gap-3 md:flex">
+              <div className="flex flex-col text-right">
+                <p className="text-sm font-semibold leading-none">
+                  {user?.name || "User"}
+                </p>
+                <p className="mt-1 text-xs text-muted-foreground">
+                  {user?.email}
+                </p>
+              </div>
+              <div className="flex h-9 w-9 items-center justify-center rounded-full bg-muted ring-1 ring-border">
+                <User className="h-5 w-5 text-muted-foreground" />
+              </div>
+            </div>
+
+            <Button
+              onClick={() => {
+                logout();
+                toast.success("Logged out");
+              }}
+              variant="ghost"
+              size="sm"
+              className="text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
+            >
+              <LogOut className="mr-2 h-4 w-4" />
+              <span className="hidden sm:inline">Logout</span>
+            </Button>
+          </div>
+        </div>
+      </div>
+    </header>
   );
 }
