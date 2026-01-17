@@ -102,18 +102,18 @@ export class AreasService {
   ): Promise<Areas> {
     try {
       const data = await this.graphqlService.adminMutation<{
-        update_areas_by_pk: Areas;
+        update_areas: Areas;
       }>(ModifyAreaNameMutation, {
         id: areaId,
-        user_id: userId,
         name: newName,
+        user_id: userId,
       });
 
-      if (!data.update_areas_by_pk) {
+      if (!data.update_areas) {
         throw new NotFoundException('Area not found or not owned by user');
       }
 
-      return data.update_areas_by_pk;
+      return data.update_areas;
     } catch (error) {
       if (error instanceof NotFoundException) {
         throw error;
@@ -129,18 +129,18 @@ export class AreasService {
   ): Promise<Areas> {
     try {
       const data = await this.graphqlService.adminMutation<{
-        update_areas_by_pk: Areas;
+        update_areas: Areas;
       }>(ModifyAreaStatusMutation, {
         id: areaId,
-        user_id: userId,
         is_active: isActive,
+        user_id: userId,
       });
 
-      if (!data.update_areas_by_pk) {
+      if (!data.update_areas) {
         throw new NotFoundException('Area not found or not owned by user');
       }
 
-      return data.update_areas_by_pk;
+      return data.update_areas;
     } catch (error) {
       if (error instanceof NotFoundException) {
         throw error;
