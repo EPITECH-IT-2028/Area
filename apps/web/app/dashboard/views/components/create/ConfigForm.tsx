@@ -26,25 +26,27 @@ export function ConfigForm({
   const [formData, setFormData] =
     useState<Record<string, unknown>>(initialData);
 
-  const getDeepValue = (obj: any, path: string[]) => {
-    let current = obj;
+  const getDeepValue = (obj: Record<string, unknown>, path: string[]) => {
+    let current: unknown = obj;
     for (const key of path) {
       if (current === undefined || current === null) return undefined;
-      current = current[key];
+      current = (current as Record<string, unknown>)[key];
     }
     return current;
   };
 
-  const setDeepValue = (path: string[], value: any) => {
+  const setDeepValue = (path: string[], value: unknown) => {
     setFormData((prev) => {
       const newObj = JSON.parse(JSON.stringify(prev));
-      let current = newObj;
+      let current: unknown = newObj;
       for (let i = 0; i < path.length - 1; i++) {
         const key = path[i];
-        if (!current[key]) current[key] = {};
-        current = current[key];
+        if (!(current as Record<string, unknown>)[key]) {
+          (current as Record<string, unknown>)[key] = {};
+        }
+        current = (current as Record<string, unknown>)[key];
       }
-      current[path[path.length - 1]] = value;
+      (current as Record<string, unknown>)[path[path.length - 1]] = value;
       return newObj;
     });
   };
@@ -65,17 +67,20 @@ export function ConfigForm({
   };
 
   const processSubmissionData = (
-    data: any,
+    data: Record<string, unknown>,
     props: Record<string, ConfigProperty>,
-  ): any => {
-    const result: any = {};
+  ): Record<string, unknown> => {
+    const result: Record<string, unknown> = {};
 
     Object.entries(props).forEach(([key, prop]) => {
       const value = data?.[key];
 
       if (prop.type === "object" && prop.properties) {
         if (value && typeof value === "object") {
-          result[key] = processSubmissionData(value, prop.properties);
+          result[key] = processSubmissionData(
+            value as Record<string, unknown>,
+            prop.properties,
+          );
         }
       } else if (value !== undefined) {
         if (typeof value === "string") {
