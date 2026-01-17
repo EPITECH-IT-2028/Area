@@ -64,7 +64,15 @@ export class AreasController {
   }
 
   @Get(':id')
-  async getAreaByUserId(@Param('id') id: string) {
+  async getAreaByUserId(@Param('id') id: string, @Req() req: any) {
+    const userId = req.user.id as string;
+    if (userId !== id) {
+      return {
+        success: false,
+        message: 'Unauthorized access to area',
+      };
+    }
+    
     const area = await this.areasService.getAreaByUserId(id);
     return {
       success: true,
