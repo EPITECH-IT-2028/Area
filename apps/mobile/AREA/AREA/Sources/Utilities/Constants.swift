@@ -11,6 +11,7 @@ struct Constants {
 	// Icon string for tabs
 	static let homeIconString = "house"
 	static let servicesIconString = "list.bullet"
+	static let areasIconString = "folder"
 	static let settingsIconString = "gear"
 
 	// Port MAX/MIN
@@ -31,6 +32,7 @@ struct Constants {
 	static let loginServerPath = "/auth/login"
 	static let registerServerPath = "/auth/register"
 	static let aboutJsonPath = "/about.json"
+	static let createAREAsPath = "/areas"
 	static let githubOAuth2ServerPath = "http://localhost:8080/auth/github"
 	static let googleOAuth2ServerPath = "http://localhost:8080/auth/google"
 

@@ -32,10 +32,10 @@ struct TableView: View {
 
 				if let description = item.description {
 					Text(description)
-							.font(.body)
-							.foregroundStyle(.gray)
-							.lineLimit(2)
-							.multilineTextAlignment(.center)
+						.font(.body)
+						.foregroundStyle(.gray)
+						.lineLimit(2)
+						.multilineTextAlignment(.center)
 				}
 			}
 			.padding(.top, 10)

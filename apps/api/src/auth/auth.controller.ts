@@ -21,6 +21,8 @@ import { AuthService, AuthResponse } from './auth.service';
 import { GoogleOauthGuard } from './guards/google-auth.guard';
 import { GithubOauthGuard } from './guards/github-auth.guard';
 import { Request } from 'express';
+import { MicrosoftOauthGuard } from './guards/microsoft-auth.guard';
+import { DiscordOauthGuard } from './guards/discord-auth.guard';
 
 class RegisterDto {
   @IsEmail()
@@ -119,6 +121,46 @@ export class AuthController {
       res,
       platform,
       this.authService.githubLogin.bind(this.authService),
+    );
+  }
+
+  @Get('microsoft')
+  @UseGuards(MicrosoftOauthGuard)
+  async microsoftAuth() {}
+
+  @Get('microsoft/callback')
+  @UseGuards(MicrosoftOauthGuard)
+  microsoftAuthCallback(
+    @Req() req: RequestWithUser,
+    @Res({ passthrough: false }) res: Response
+  ): void {
+    const platform = req.user?.platform || 'web';
+
+    this.handleOAuthCallback(
+      req,
+      res,
+      platform,
+      this.authService.microsoftLogin.bind(this.authService),
+    );
+  }
+
+  @Get('discord')
+  @UseGuards(DiscordOauthGuard)
+  async discordAuth() {}
+
+  @Get('discord/callback')
+  @UseGuards(DiscordOauthGuard)
+  discordAuthCallback(
+    @Req() req: RequestWithUser,
+    @Res({ passthrough: false }) res: Response
+  ): void {
+    const platform = req.user?.platform || 'web';
+
+    this.handleOAuthCallback(
+      req,
+      res,
+      platform,
+      this.authService.discordLogin.bind(this.authService),
     );
   }
 

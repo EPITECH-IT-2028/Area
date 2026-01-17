@@ -2,8 +2,13 @@ import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { AreasService } from 'src/areas/areas.service';
 import { Areas } from 'src/generated/graphql';
-import { EmailWorker } from './actions/email/email.worker';
 import { IActionWorker } from './interfaces/worker.interface';
+import { EmailWorker } from './actions/email/email.worker';
+import { GithubWorker } from './actions/commit/github.worker';
+import { GithubPullRequestWorker } from './actions/pull_request/github-pr.worker';
+import { OpenMeteoWorker } from './actions/weather/open-meteo.worker';
+import { OutlookWorker } from './actions/email/outlook.worker';
+import { DiscordMessageWorker } from './actions/new_message/new-message.worker';
 
 @Injectable()
 export class GlobalWorkerService {
@@ -14,8 +19,20 @@ export class GlobalWorkerService {
   constructor(
     private readonly areasService: AreasService,
     private readonly emailWorker: EmailWorker,
+    private readonly githubWorker: GithubWorker,
+    private readonly githubPullRequestWorker: GithubPullRequestWorker,
+    private readonly openMeteoWorker: OpenMeteoWorker,
+    private readonly outlookWorker: OutlookWorker,
+    private readonly discordMessageWorker: DiscordMessageWorker,
   ) {
     this.actionWorkers.set('new_email', this.emailWorker);
+    this.actionWorkers.set('new_commit_push', this.githubWorker);
+    this.actionWorkers.set('new_pull_request', this.githubPullRequestWorker);
+    this.actionWorkers.set('open_meteo', this.openMeteoWorker);
+    this.actionWorkers.set('new_outlook_email', this.outlookWorker);
+    this.actionWorkers.set('new_discord_message', this.discordMessageWorker);
+    const registered = [...this.actionWorkers.keys()].join(', ');
+    this.logger.log(`Registered action workers: ${registered}`);
   }
 
   @Cron(CronExpression.EVERY_MINUTE)
@@ -68,7 +85,8 @@ export class GlobalWorkerService {
     const worker = this.actionWorkers.get(actionName);
 
     if (!worker) {
-      this.logger.warn(`No worker registered for action: ${actionName}`);
+      const available = [...this.actionWorkers.keys()].join(', ');
+      this.logger.warn(`No worker registered for action: ${actionName}. Available workers: ${available}`);
       return;
     }
 
