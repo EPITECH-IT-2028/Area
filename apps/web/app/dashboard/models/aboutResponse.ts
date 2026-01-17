@@ -3,6 +3,9 @@ export interface ConfigProperty {
   type?: string;
   default?: string | number | boolean;
   format?: string;
+  properties?: Record<string, ConfigProperty>;
+  enum?: (string | number)[];
+  required?: string[];
 }
 
 export interface ConfigSchema {
@@ -15,6 +18,7 @@ export interface Action {
   name: string;
   description: string;
   config_schema: ConfigSchema | null;
+  available_variables?: string[];
 }
 
 export interface Reaction {

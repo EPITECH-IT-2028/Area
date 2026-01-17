@@ -169,6 +169,7 @@ export default function CreateAreaView({
                     schema={draft.reaction.config_schema}
                     onSubmit={configureReaction}
                     initialData={draft.reactionConfig}
+                    availableVariables={draft.action?.available_variables}
                   />
                 )}
 
