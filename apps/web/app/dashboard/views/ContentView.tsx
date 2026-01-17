@@ -1,10 +1,10 @@
 "use client";
 
 import { useDashboardViewModel } from "@/app/dashboard/viewModels/dashboardViewModel";
+import CreateAreaView from "@/app/dashboard/views/CreateAreaView";
 import { AreaCard } from "@/app/dashboard/views/components/AreaCard";
 import { DashboardHeader } from "@/app/dashboard/views/components/DashboardHeader";
 import { StatsCards } from "@/app/dashboard/views/components/StatsCards";
-import CreateAreaView from "@/app/dashboard/views/CreateAreaView";
 import { useAuth } from "@/context/AuthContext";
 import { Plus, Workflow } from "lucide-react";
 

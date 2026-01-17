@@ -57,7 +57,7 @@ export function ConfigForm({
         return (
           <div key={key} className="grid w-full items-center gap-1.5">
             <Label htmlFor={key} className="capitalize">
-              {key.replace(/_/g, " ")}{" "}
+              {key.replace(/_/g, " ")}
               {isRequired && <span className="text-red-500">*</span>}
             </Label>
             {prop.description && (

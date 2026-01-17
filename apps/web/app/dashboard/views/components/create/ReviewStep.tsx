@@ -24,7 +24,10 @@ export function ReviewStep({
     <div className="space-y-6">
       <div className="space-y-4">
         <div className="grid w-full items-center gap-1.5">
-          <Label htmlFor="name">Area Name</Label>
+          <div className="flex space-x-2">
+            <Label htmlFor="name">Area Name</Label>
+            <span className="text-red-500">*</span>
+          </div>
           <Input
             id="name"
             placeholder="My Awesome Automation"
@@ -49,7 +52,7 @@ export function ReviewStep({
 
         <div className="flex flex-1 flex-col items-center text-center">
           <div className="relative mb-3 flex h-16 w-16 items-center justify-center rounded-2xl border bg-background p-3 shadow-sm transition-transform hover:scale-105">
-            <div className="absolute -top-1 -right-1 flex h-6 w-6 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-primary-foreground shadow-sm">
+            <div className="absolute -top-3 -right-3 flex h-6 w-6 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-primary-foreground shadow-sm">
               IF
             </div>
             <Image
@@ -74,7 +77,7 @@ export function ReviewStep({
 
         <div className="flex flex-1 flex-col items-center text-center">
           <div className="relative mb-3 flex h-16 w-16 items-center justify-center rounded-2xl border bg-background p-3 shadow-sm transition-transform hover:scale-105">
-            <div className="absolute -top-1 -right-1 flex h-6 w-6 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-primary-foreground shadow-sm">
+            <div className="absolute -top-3 -right-6 flex h-6 w-6 items-center justify-center rounded-full bg-primary px-5 text-[10px] font-bold text-primary-foreground shadow-sm">
               THEN
             </div>
             <Image
