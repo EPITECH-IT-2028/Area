@@ -12,9 +12,9 @@ export default function ProfileView() {
   const router = useRouter();
 
   if (!user) {
+    router.push("/login");
     return null;
   }
-
   return (
     <div className="min-h-screen">
       <DashboardHeader />
