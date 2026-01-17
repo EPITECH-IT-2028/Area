@@ -33,19 +33,16 @@ export default function ProfileView() {
             Manage your account information
           </p>
         </div>
-
         <div className="grid gap-6 md:grid-cols-3">
           <div className="md:col-span-1">
             <ProfileCard name={user.name} email={user.email} />
           </div>
-
           <div className="md:col-span-2 space-y-6">
             <PersonalInformation 
               name={user.name} 
               email={user.email} 
               userId={user.id} 
             />
-            <AccountStatus />
           </div>
         </div>
       </main>
