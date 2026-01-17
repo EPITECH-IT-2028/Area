@@ -26,10 +26,8 @@ struct Service: Decodable, Identifiable, Hashable {
 	let name: String
 	let displayName: String
 	let iconUrl: URL?
-	let oauthUrl: URL?
 	let actions: [ServiceAction]
 	let reactions: [ServiceAction]
-	var isAuthenticated: Bool?
 }
 
 struct ServiceAction: Decodable, Hashable, Identifiable {
@@ -40,14 +38,20 @@ struct ServiceAction: Decodable, Hashable, Identifiable {
 }
 
 struct ConfigSchemaInfo: Decodable, Hashable {
-		let type: String
-		let properties: [String: PropertyInfo]
-		let required: [String]?
+	let type: String
+	let properties: [String: PropertyInfo]
+	let required: [String]?
 }
 
 struct PropertyInfo: Decodable, Hashable {
-		let type: String
-		let description: String
-		let format: String?
-		let `default`: String?
+	let type: String
+	let description: String
+	let format: String?
+	let `default`: String?
+	let items: ItemInfo?
+	let `enum`: [String]?
+}
+
+struct ItemInfo: Decodable, Hashable {
+	let type: String
 }

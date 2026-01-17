@@ -16,17 +16,13 @@ class ServicesViewModel: ObservableObject {
 
 	@MainActor
 	func connect(to service: Service, store: ServiceStore) async {
-		guard let oauthUrl = service.oauthUrl else {
-			self.errorMessage = "URL OAuth introuvable pour \(service.displayName)"
-			self.showAuthAlert = true
-			return
-		}
+		
 
 		self.isAuthenticating = true
 
 		let action = ServiceAuthAction(
 			serviceName: service.name,
-			authURL: oauthUrl.absoluteString
+			authURL: "http://localhost:8080/auth/link/\(service.name)"
 		)
 		self.currentAuthAction = action
 
