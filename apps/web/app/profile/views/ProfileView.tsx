@@ -1,11 +1,14 @@
 "use client";
 
-import { useAuth } from "@/context/AuthContext";
-import { DashboardHeader } from "@/app/dashboard/views/components/DashboardHeader";
 import { useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
-import { ProfileCard } from "@/app/profile/views/components/ProfileCard";
+
+import { DashboardHeader } from "@/app/dashboard/views/components/DashboardHeader";
 import { PersonalInformation } from "@/app/profile/views/components/PersonalInformation";
+import { ProfileCard } from "@/app/profile/views/components/ProfileCard";
+import { useAuth } from "@/context/AuthContext";
+import { ArrowLeft } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
 
 export default function ProfileView() {
   const { user } = useAuth();
@@ -16,31 +19,37 @@ export default function ProfileView() {
     return null;
   }
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-muted/30">
       <DashboardHeader />
-      <main className="container mx-auto my-4 px-4 md:my-8 md:px-0">
-        <div className="mb-6 md:mb-8">
+      <main className="container mx-auto max-w-5xl animate-in px-4 py-8 duration-500 fade-in slide-in-from-bottom-4">
+        <div className="mb-8">
           <Button
             variant="ghost"
             onClick={() => router.push("/dashboard")}
-            className="mb-4 text-muted-foreground hover:text-foreground"
+            className="mb-4 pl-0 text-muted-foreground hover:text-foreground"
           >
-            ← Back to Dashboard
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            Back to Dashboard
           </Button>
-          <h1 className="mb-2 text-2xl font-bold md:text-4xl">Profile</h1>
-          <p className="text-base text-muted-foreground md:text-lg">
-            Manage your account information
-          </p>
+          <div className="space-y-1">
+            <h1 className="text-3xl font-bold tracking-tight md:text-4xl">
+              Profile
+            </h1>
+            <p className="text-muted-foreground">
+              Manage your account information and preferences
+            </p>
+          </div>
         </div>
-        <div className="grid gap-6 md:grid-cols-3">
+
+        <div className="grid gap-6 md:grid-cols-3 lg:gap-8">
           <div className="md:col-span-1">
             <ProfileCard name={user.name} email={user.email} />
           </div>
-          <div className="md:col-span-2 space-y-6">
-            <PersonalInformation 
-              name={user.name} 
-              email={user.email} 
-              userId={user.id} 
+          <div className="md:col-span-2">
+            <PersonalInformation
+              name={user.name}
+              email={user.email}
+              userId={user.id}
             />
           </div>
         </div>
