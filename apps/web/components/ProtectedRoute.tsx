@@ -7,7 +7,11 @@ import { useRouter } from "next/navigation";
 import Loading from "@/app/loading";
 import { useAuth } from "@/context/AuthContext";
 
-export default function ProtectedRoute({ children }: { children: React.ReactNode }) {
+export default function ProtectedRoute({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const { isAuthenticated, isLoading } = useAuth();
   const router = useRouter();
 

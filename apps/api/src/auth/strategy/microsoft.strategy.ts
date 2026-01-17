@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
-import { Strategy, Profile } from 'passport-github2';
+import { Strategy } from 'passport-microsoft';
 import { ConfigService } from '@nestjs/config';
 import { UsersService } from '../../users/users.service';
 import { UserServicesService } from '../../user-services/user-services.service';
@@ -8,17 +8,17 @@ import { Request } from 'express';
 import { parsePlatformFromState } from 'src/utils/parsePlatform';
 
 @Injectable()
-export class GithubStrategy extends PassportStrategy(Strategy, 'github') {
+export class MicrosoftStrategy extends PassportStrategy(Strategy, 'microsoft') {
   constructor(
     private readonly configService: ConfigService,
     private readonly usersService: UsersService,
     private readonly userServicesService: UserServicesService,
   ) {
     super({
-      clientID: configService.getOrThrow<string>('GITHUB_CLIENT_ID'),
-      clientSecret: configService.getOrThrow<string>('GITHUB_CLIENT_SECRET'),
-      callbackURL: configService.getOrThrow<string>('GITHUB_CALLBACK_URL'),
-      scope: ['user:email', 'public_repo'],
+      clientID: configService.getOrThrow<string>('MICROSOFT_CLIENT_ID'),
+      clientSecret: configService.getOrThrow<string>('MICROSOFT_CLIENT_SECRET'),
+      callbackURL: configService.getOrThrow<string>('MICROSOFT_CALLBACK_URL'),
+      scope: ['user.read', 'offline_access', 'mail.read', 'mail.send', 'email', 'openid'],
       passReqToCallback: true,
     });
   }
@@ -27,52 +27,47 @@ export class GithubStrategy extends PassportStrategy(Strategy, 'github') {
     req: Request,
     accessToken: string,
     refreshToken: string,
-    profile: Profile,
+    profile: any,
   ) {
-    const platform = parsePlatformFromState(req);
-    const { displayName, emails, username } = profile;
 
-    const email = emails && emails.length > 0 ? emails[0].value : null;
-    if (!email) {
-      throw new Error('No email found in GitHub profile');
-    }
+    const platform = parsePlatformFromState(req);
+    const email = profile.emails && profile.emails.length > 0 ? profile.emails[0].value : profile.userPrincipalName;
+
+    if (!email) throw new Error('No email found in Microsoft profile');
 
     let user = await this.usersService.findByEmail(email);
 
     if (!user) {
       user = await this.usersService.create({
         email,
-        name: displayName || username || email.split('@')[0],
+        name: profile.displayName || email.split('@')[0],
         password: null,
       });
     }
 
-    const githubService =
-      await this.userServicesService.getServiceByName('github');
+    const msService = await this.userServicesService.getServiceByName('microsoft');
 
-    if (githubService) {
+    if (msService) {
       await this.userServicesService.createOrUpdate({
         userId: user.id,
-        serviceId: githubService.id,
+        serviceId: msService.id,
         accessToken,
-        refreshToken: refreshToken || null,
-        tokenExpiry: null, // GitHub tokens do not expire
+        refreshToken,
+        tokenExpiry: new Date(Date.now() + 3600 * 1000).toISOString(),
         credentials: {
           profile: {
             id: profile.id,
-            username: profile.username,
-            displayName: profile.displayName,
-            emails: profile.emails,
-          },
+            displayName: profile.displayName
+          }
         },
       });
     } else {
-      throw new Error('GitHub service not found');
+      throw new Error('Microsoft service not found');
     }
 
     return {
       ...user,
-      platform,
+      platform
     };
   }
 }

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
-import { Strategy, Profile } from 'passport-github2';
+import { Strategy } from 'passport-discord-auth';
 import { ConfigService } from '@nestjs/config';
 import { UsersService } from '../../users/users.service';
 import { UserServicesService } from '../../user-services/user-services.service';
@@ -8,17 +8,17 @@ import { Request } from 'express';
 import { parsePlatformFromState } from 'src/utils/parsePlatform';
 
 @Injectable()
-export class GithubStrategy extends PassportStrategy(Strategy, 'github') {
+export class DiscordStrategy extends PassportStrategy(Strategy, 'discord') {
   constructor(
     private readonly configService: ConfigService,
     private readonly usersService: UsersService,
     private readonly userServicesService: UserServicesService,
   ) {
     super({
-      clientID: configService.getOrThrow<string>('GITHUB_CLIENT_ID'),
-      clientSecret: configService.getOrThrow<string>('GITHUB_CLIENT_SECRET'),
-      callbackURL: configService.getOrThrow<string>('GITHUB_CALLBACK_URL'),
-      scope: ['user:email', 'public_repo'],
+      clientId: configService.getOrThrow<string>('DISCORD_CLIENT_ID'),
+      clientSecret: configService.getOrThrow<string>('DISCORD_CLIENT_SECRET'),
+      callbackUrl: configService.getOrThrow<string>('DISCORD_CALLBACK_URL'),
+      scope: ['identify', 'email', 'guilds', 'messages.read'],
       passReqToCallback: true,
     });
   }
@@ -27,52 +27,44 @@ export class GithubStrategy extends PassportStrategy(Strategy, 'github') {
     req: Request,
     accessToken: string,
     refreshToken: string,
-    profile: Profile,
+    profile: any,
   ) {
     const platform = parsePlatformFromState(req);
-    const { displayName, emails, username } = profile;
+    const email = profile.email;
 
-    const email = emails && emails.length > 0 ? emails[0].value : null;
-    if (!email) {
-      throw new Error('No email found in GitHub profile');
-    }
+    if (!email) throw new Error('No email found in Discord profile');
 
     let user = await this.usersService.findByEmail(email);
 
     if (!user) {
       user = await this.usersService.create({
         email,
-        name: displayName || username || email.split('@')[0],
+        name: profile.global_name || profile.username || email.split('@')[0],
         password: null,
       });
     }
 
-    const githubService =
-      await this.userServicesService.getServiceByName('github');
+    const discordService = await this.userServicesService.getServiceByName('discord');
 
-    if (githubService) {
+    if (discordService) {
       await this.userServicesService.createOrUpdate({
         userId: user.id,
-        serviceId: githubService.id,
+        serviceId: discordService.id,
         accessToken,
-        refreshToken: refreshToken || null,
-        tokenExpiry: null, // GitHub tokens do not expire
+        refreshToken,
+        tokenExpiry: new Date(Date.now() + 3600 * 1000).toISOString(),
         credentials: {
           profile: {
             id: profile.id,
-            username: profile.username,
-            displayName: profile.displayName,
-            emails: profile.emails,
-          },
+            username: profile.username
+          }
         },
       });
-    } else {
-      throw new Error('GitHub service not found');
     }
 
     return {
       ...user,
-      platform,
+      platform
     };
   }
 }

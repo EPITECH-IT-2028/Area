@@ -6,10 +6,12 @@ export const GetAllActiveAreasQuery = gql`
       id
       user_id
       name
+      last_triggered
       action_id
       action_config
       reaction_id
       reaction_config
+      description
       action {
         id
         name
@@ -32,11 +34,21 @@ export const GetAllActiveAreasQuery = gql`
           access_token
           refresh_token
           token_expiry
+          credentials
           service {
             name
           }
         }
       }
+    }
+  }
+`;
+
+export const UpdateAreaLastTriggeredMutation = gql`
+  mutation UpdateAreaLastTriggered($id: uuid!, $last_triggered: timestamptz!) {
+    update_areas_by_pk(pk_columns: { id: $id }, _set: { last_triggered: $last_triggered }) {
+      id
+      last_triggered
     }
   }
 `;

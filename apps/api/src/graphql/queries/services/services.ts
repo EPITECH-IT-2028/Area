@@ -7,6 +7,7 @@ export const GetServiceByNameQuery = gql`
       name
       display_name
       auth_type
+      oauth_url
     }
   }
 `;
@@ -19,6 +20,7 @@ export const GetAllServicesQuery = gql`
       display_name
       auth_type
       icon_url
+      oauth_url
     }
   }
 `;
