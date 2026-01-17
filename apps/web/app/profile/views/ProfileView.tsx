@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { ProfileCard } from "@/app/profile/views/components/ProfileCard";
 import { PersonalInformation } from "@/app/profile/views/components/PersonalInformation";
-import { AccountStatus } from "@/app/profile/views/components/AccountStatus";
 
 export default function ProfileView() {
   const { user } = useAuth();
