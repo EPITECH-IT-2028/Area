@@ -75,6 +75,18 @@ export const GetAreasByUserIdQuery = gql`
           name
         }
       }
+      user {
+        user_services {
+          id
+          access_token
+          refresh_token
+          token_expiry
+          credentials
+          service {
+            name
+          }
+        }
+      }
     }
   }
 `;

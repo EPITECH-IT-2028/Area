@@ -31,14 +31,14 @@ export class AreasService {
     return result.areas;
   }
 
-  async getAreaById(id: string): Promise<Areas[]> {
+  async getAreaByUserId(id: string): Promise<Areas[]> {
     const result = await this.graphqlService.adminQuery<{ areas: Areas[] }>(
       GetAreasByUserIdQuery,
       { user_id: id },
     );
 
     if (!result.areas || result.areas.length === 0) {
-      throw new NotFoundException(`Area with ID '${id}' not found`);
+      throw new NotFoundException(`Area with user ID '${id}' not found`);
     }
 
     return result.areas;
