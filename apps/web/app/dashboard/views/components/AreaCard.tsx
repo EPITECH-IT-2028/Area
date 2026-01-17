@@ -62,6 +62,7 @@ export function AreaCard({ area, onDelete, getStatusColor }: AreaCardProps) {
             size="icon"
             className="h-8 w-8 rounded-full text-muted-foreground transition-colors hover:bg-destructive/10 hover:text-destructive"
             onClick={() => onDelete?.(area.id)}
+            aria-label={`Delete area ${area.name}`}
           >
             <Trash2 className="h-4 w-4" />
           </Button>
