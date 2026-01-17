@@ -7,6 +7,7 @@ import {
   Post,
   Body,
   Req,
+  Param,
 } from '@nestjs/common';
 import { AreasService } from './areas.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
@@ -59,6 +60,15 @@ export class AreasController {
     return {
       success: true,
       data: areas,
+    };
+  }
+
+  @Get(':id')
+  async getAreaByUserId(@Param('id') id: string) {
+    const area = await this.areasService.getAreaByUserId(id);
+    return {
+      success: true,
+      data: area,
     };
   }
 
