@@ -26,8 +26,10 @@ struct Service: Decodable, Identifiable, Hashable {
 	let name: String
 	let displayName: String
 	let iconUrl: URL?
+	let oauthUrl: URL?
 	let actions: [ServiceAction]
 	let reactions: [ServiceAction]
+	var isAuthenticated: Bool?
 }
 
 struct ServiceAction: Decodable, Hashable, Identifiable {

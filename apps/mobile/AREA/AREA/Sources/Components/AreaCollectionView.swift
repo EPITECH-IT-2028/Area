@@ -93,11 +93,12 @@ struct AreaCollectionView: View {
 				EmptyView()
 			}
 		}
+		.navigationBarTitleDisplayMode(.inline)
 		.navigationTitle(
 			isAction
 				? LocalizedStringResource.actionsTitle
 				: LocalizedStringResource.areaCreationReactionsTitle
 		)
-		.background(Color(UIColor.systemGroupedBackground))
+		.background(Color.backgroundColor)
 	}
 }

@@ -64,7 +64,7 @@ struct ReactionConfigView: View {
 				viewModel.isSubmitting
 					? Color.gray
 					: (viewModel.validateReactionConfig(for: reaction)
-						? Color.green : Color.gray)
+						 ? Color.mainColor : Color.gray)
 			)
 			.foregroundColor(.white)
 			.cornerRadius(10)
@@ -81,6 +81,7 @@ struct ReactionConfigView: View {
 					.padding(.horizontal)
 			}
 		}
+		.navigationBarTitleDisplayMode(.inline)
 		.navigationTitle(
 			"\(LocalizedStringResource.areaCreationConfigTitle) \(reaction.name)"
 		)

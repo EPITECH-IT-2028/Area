@@ -64,7 +64,7 @@ struct HomeView: View {
 				Text(errorMessage ?? String(localized: LocalizedStringResource.errorHappenedTitle))
 			}
 			.navigationTitle(LocalizedStringResource.homeTitle)
-			.background(Color(UIColor.systemGroupedBackground))
+			.background(Color.backgroundColor)
 		}
 	}
 }

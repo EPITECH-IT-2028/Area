@@ -34,14 +34,17 @@ struct ContentView: View {
 			} else {
 				if authState.isAuthenticated {
 					TabView {
-						Tab(LocalizedStringResource.homeTitle, systemImage: Constants.homeIconString) {
+						Tab(
+							LocalizedStringResource.homeTitle,
+							systemImage: Constants.homeIconString
+						) {
 							HomeView()
 						}
 						Tab(
 							LocalizedStringResource.servicesTitle,
 							systemImage: Constants.servicesIconString
 						) {
-							AreaCreationView()
+							ServicesView()
 						}
 						Tab(
 							LocalizedStringResource.areaTabTitle,
@@ -55,7 +58,9 @@ struct ContentView: View {
 						) {
 							SettingsView()
 						}
-					}.onAppear {
+					}
+					.tint(Color.mainColor)
+					.onAppear {
 						Task {
 							if serviceStore.services.isEmpty {
 								do {
