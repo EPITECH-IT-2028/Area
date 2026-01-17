@@ -9,6 +9,7 @@ import {
   Req,
   Delete,
   Param,
+  Patch,
 } from '@nestjs/common';
 import { AreasService } from './areas.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
@@ -78,12 +79,39 @@ export class AreasController {
   }
 
   @Delete(':id')
-  @HttpCode(HttpStatus.OK)
-  async delete(@Param('id') id: string) {
-    await this.areasService.delete(id);
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async delete(@Param('id') id: string, @Req() req: any) {
+    const userId = req.user.id as string;
+    await this.areasService.delete(id, userId);
+  }
+
+  @Patch(':id/name')
+  async modifyName(
+    @Param('id') id: string,
+    @Body('name') name: string,
+    @Req() req: any,
+  ) {
+    const userId = req.user.id as string;
+    const area = await this.areasService.modifyName(id, userId, name);
     return {
       success: true,
-      message: 'Area deleted successfully',
+      data: area,
+      message: 'Area name modified successfully',
+    };
+  }
+
+  @Patch(':id/status')
+  async modifyStatus(
+    @Param('id') id: string,
+    @Body('is_active') isActive: boolean,
+    @Req() req: any,
+  ) {
+    const userId = req.user.id as string;
+    const area = await this.areasService.modifyStatus(id, userId, isActive);
+    return {
+      success: true,
+      data: area,
+      message: 'Area status modified successfully',
     };
   }
 }

@@ -163,9 +163,29 @@ export const CreateAreaQuery = gql`
 `;
 
 export const DeleteAreaMutation = gql`
-  mutation DeleteArea($id: uuid!) {
-    delete_areas_by_pk(id: $id) {
+  mutation DeleteArea($id: uuid!, $user_id: uuid!) {
+    delete_areas(
+      where: { id: { _eq: $id }, user_id: { _eq: $user_id } }
+    ) {
+      affected_rows
+    }
+  }
+`;
+
+export const ModifyAreaNameMutation = gql`
+  mutation ModifyAreaName($id: uuid!, $name: String!) {
+    update_areas_by_pk(pk_columns: { id: $id }, _set: { name: $name }) {
       id
+      name
+    }
+  }
+`;
+
+export const ModifyAreaStatusMutation = gql`
+  mutation ModifyAreaStatus($id: uuid!, $is_active: Boolean!) {
+    update_areas_by_pk(pk_columns: { id: $id }, _set: { is_active: $is_active }) {
+      id
+      is_active
     }
   }
 `;

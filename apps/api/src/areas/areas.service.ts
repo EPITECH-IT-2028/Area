@@ -11,6 +11,8 @@ import {
   GetAllActiveAreasQuery,
   GetReactionByNameQuery,
   DeleteAreaMutation,
+  ModifyAreaNameMutation,
+  ModifyAreaStatusMutation,
 } from 'src/graphql/queries/areas/areas';
 import { CreateAreaDto } from './areas.controller';
 
@@ -81,11 +83,69 @@ export class AreasService {
     }
   }
 
-  async delete(id: string): Promise<void> {
+  async delete(areaId: string, userId: string): Promise<boolean> {
     try {
-      await this.graphqlService.adminMutation(DeleteAreaMutation, { id });
+      await this.graphqlService.adminMutation(DeleteAreaMutation, {
+        id: areaId,
+        user_id: userId,
+      });
+      return true;
     } catch (error) {
       throw new Error(`Failed to delete area: ${error}`);
+    }
+  }
+
+  async modifyName(
+    areaId: string,
+    userId: string,
+    newName: string,
+  ): Promise<Areas> {
+    try {
+      const data = await this.graphqlService.adminMutation<{
+        update_areas_by_pk: Areas;
+      }>(ModifyAreaNameMutation, {
+        id: areaId,
+        user_id: userId,
+        name: newName,
+      });
+
+      if (!data.update_areas_by_pk) {
+        throw new NotFoundException('Area not found or not owned by user');
+      }
+
+      return data.update_areas_by_pk;
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw error;
+      }
+      throw new Error(`Failed to modify area name: ${error}`);
+    }
+  }
+
+  async modifyStatus(
+    areaId: string,
+    userId: string,
+    isActive: boolean,
+  ): Promise<Areas> {
+    try {
+      const data = await this.graphqlService.adminMutation<{
+        update_areas_by_pk: Areas;
+      }>(ModifyAreaStatusMutation, {
+        id: areaId,
+        user_id: userId,
+        is_active: isActive,
+      });
+
+      if (!data.update_areas_by_pk) {
+        throw new NotFoundException('Area not found or not owned by user');
+      }
+
+      return data.update_areas_by_pk;
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw error;
+      }
+      throw new Error(`Failed to modify area status: ${error}`);
     }
   }
 }
