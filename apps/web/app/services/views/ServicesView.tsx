@@ -1,6 +1,6 @@
 "use client";
 
-import { useServicesViewModel } from "@/app/services/viewModels/servicesViewModel";
+import { useServices } from "@/app/services/hooks/useServices";
 import { ServiceCard } from "@/app/services/views/components/ServiceCard";
 import { ServicesHeader } from "@/app/services/views/components/ServicesHeader";
 import { ServiceStatsCards } from "@/app/services/views/components/ServiceStatsCards";
@@ -18,7 +18,7 @@ export default function ServicesView() {
     connectService,
     disconnectService,
     stats,
-  } = useServicesViewModel();
+  } = useServices();
 
   return (
     <div className="min-h-screen">
