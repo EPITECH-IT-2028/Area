@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 import useDashboard from "@/app/dashboard/hooks/useDashboard";
 
 const getStatusColor = (status: string) => {
@@ -16,6 +18,7 @@ const getStatusColor = (status: string) => {
 
 export function useDashboardViewModel() {
   const { areas, isLoading } = useDashboard();
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
   const stats = (() => {
     const totalAreas = areas.length;
@@ -37,5 +40,7 @@ export function useDashboardViewModel() {
     isLoading,
     stats,
     getStatusColor,
+    isCreateModalOpen,
+    setIsCreateModalOpen,
   };
 }
