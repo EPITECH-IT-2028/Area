@@ -10,7 +10,7 @@ import { toast } from "sonner";
 
 export function useCreateArea() {
   const [services, setServices] = useState<Service[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const fetchServices = useCallback(async () => {
