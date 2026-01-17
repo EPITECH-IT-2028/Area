@@ -161,3 +161,11 @@ export const CreateAreaQuery = gql`
     }
   }
 `;
+
+export const DeleteAreaMutation = gql`
+  mutation DeleteArea($id: uuid!) {
+    delete_areas_by_pk(id: $id) {
+      id
+    }
+  }
+`;

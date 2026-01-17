@@ -7,6 +7,8 @@ import {
   Post,
   Body,
   Req,
+  Delete,
+  Param,
 } from '@nestjs/common';
 import { AreasService } from './areas.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
@@ -72,6 +74,16 @@ export class AreasController {
       success: true,
       data: area,
       message: 'Area created successfully',
+    };
+  }
+
+  @Delete(':id')
+  @HttpCode(HttpStatus.OK)
+  async delete(@Param('id') id: string) {
+    await this.areasService.delete(id);
+    return {
+      success: true,
+      message: 'Area deleted successfully',
     };
   }
 }

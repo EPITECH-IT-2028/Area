@@ -10,6 +10,7 @@ import {
   GetActionByNameQuery,
   GetAllActiveAreasQuery,
   GetReactionByNameQuery,
+  DeleteAreaMutation,
 } from 'src/graphql/queries/areas/areas';
 import { CreateAreaDto } from './areas.controller';
 
@@ -77,6 +78,14 @@ export class AreasService {
         throw error;
       }
       throw new Error(`Failed to create area: ${error}`);
+    }
+  }
+
+  async delete(id: string): Promise<void> {
+    try {
+      await this.graphqlService.adminMutation(DeleteAreaMutation, { id });
+    } catch (error) {
+      throw new Error(`Failed to delete area: ${error}`);
     }
   }
 }
