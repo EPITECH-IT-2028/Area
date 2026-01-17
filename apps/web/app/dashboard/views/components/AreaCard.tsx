@@ -10,7 +10,14 @@ interface AreaCardProps {
   onDelete?: (id: string) => void;
 }
 
-export function AreaCard({ area, onDelete }: AreaCardProps) {
+export function AreaCard({ area, onDelete, getStatusColor }: AreaCardProps) {
+  const status = area.is_active ? "success" : "disabled";
+  const statusColorClass = getStatusColor
+    ? getStatusColor(status)
+    : area.is_active
+      ? "bg-emerald-500"
+      : "bg-muted-foreground/50";
+
   return (
     <div className="group relative overflow-hidden rounded-xl border bg-card p-4 text-card-foreground shadow-sm transition-all hover:border-primary/20 hover:shadow-md md:p-5">
       <div className="absolute -top-4 -right-4 h-24 w-24 rounded-full bg-primary/5 blur-2xl transition-all group-hover:bg-primary/10" />
@@ -44,9 +51,8 @@ export function AreaCard({ area, onDelete }: AreaCardProps) {
             <div
               className={cn(
                 "h-1.5 w-1.5 rounded-full",
-                area.is_active
-                  ? "animate-pulse bg-emerald-500"
-                  : "bg-muted-foreground/50",
+                area.is_active && "animate-pulse",
+                statusColorClass,
               )}
             />
             {area.is_active ? "Active" : "Disabled"}
