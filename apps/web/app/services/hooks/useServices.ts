@@ -3,9 +3,7 @@
 import api from "@/lib/api";
 import { useState, useEffect, useCallback } from "react";
 import { ServiceRequest, UserServiceRequest } from "@/app/services/models/serviceRequest";
-import {AboutResponse,
-  UserServicesResponse,
-} from "@/app/services/models/serviceResponse";
+import {AboutResponse, UserServicesResponse } from "@/app/services/models/serviceResponse";
 import { toast } from "sonner";
 
 export const useServices = () => {
@@ -70,7 +68,6 @@ export const useServices = () => {
         toast.info("Service is already connected");
         return;
       }
-
       setIsConnecting(service.name);
 
       try {
@@ -78,7 +75,6 @@ export const useServices = () => {
         const height = 700;
         const left = window.screenX + (window.outerWidth - width) / 2;
         const top = window.screenY + (window.outerHeight - height) / 2;
-
         const popup = window.open(
           service.oauth_url,
           "OAuth",
