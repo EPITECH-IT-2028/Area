@@ -57,7 +57,16 @@ export function useCreateAreaViewModel(
   };
 
   const selectAction = (action: Action) => {
-    setDraft((prev) => ({ ...prev, action }));
+    const enrichedAction = { ...action };
+    if (
+      !enrichedAction.available_variables ||
+      enrichedAction.available_variables.length === 0
+    ) {
+      enrichedAction.available_variables = getAvailableVariablesForAction(
+        action.name,
+      );
+    }
+    setDraft((prev) => ({ ...prev, action: enrichedAction }));
     if (
       action.config_schema &&
       action.config_schema.properties &&
@@ -67,6 +76,19 @@ export function useCreateAreaViewModel(
     } else {
       setStep("select-reaction-service");
     }
+  };
+
+  const getAvailableVariablesForAction = (actionName: string): string[] => {
+    const variableMapping: Record<string, string[]> = {
+      open_meteo: ["matchedValue"],
+      new_email: ["from", "subject", "snippet"],
+      new_outlook_email: ["from", "subject"],
+      new_commit_push: ["author", "message", "sha", "url", "date"],
+      new_pull_request: ["repository"],
+      new_discord_message: ["content", "author", "channel_id", "timestamp"],
+    };
+
+    return variableMapping[actionName] || ["data"];
   };
 
   const configureAction = (config: Record<string, unknown>) => {

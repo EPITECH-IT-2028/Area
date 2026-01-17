@@ -103,6 +103,12 @@ export function ConfigForm({
     }
   };
 
+  const cleanDescription = (description?: string) => {
+    if (!description) return undefined;
+    // Remove "Variables: {{...}}" or "Variables: var1, var2" part
+    return description.replace(/Variables:.*$/i, "").trim();
+  };
+
   const renderField = (
     key: string,
     prop: ConfigProperty,
@@ -111,6 +117,7 @@ export function ConfigForm({
   ) => {
     const fieldId = path.join(".");
     const currentValue = getDeepValue(formData, path);
+    const description = cleanDescription(prop.description);
 
     if (prop.type === "object" && prop.properties) {
       return (
@@ -122,10 +129,8 @@ export function ConfigForm({
             <Label className="text-base font-bold capitalize">
               {key.replace(/_/g, " ")}
             </Label>
-            {prop.description && (
-              <p className="text-xs text-muted-foreground">
-                {prop.description}
-              </p>
+            {description && (
+              <p className="text-xs text-muted-foreground">{description}</p>
             )}
           </div>
           <div className="space-y-4 border-l-2 border-border/50 pl-4">
@@ -150,8 +155,8 @@ export function ConfigForm({
             {key.replace(/_/g, " ")}{" "}
             {isRequired && <span className="text-red-500">*</span>}
           </Label>
-          {prop.description && (
-            <p className="text-xs text-muted-foreground">{prop.description}</p>
+          {description && (
+            <p className="text-xs text-muted-foreground">{description}</p>
           )}
           <div className="relative">
             <select
@@ -200,11 +205,12 @@ export function ConfigForm({
         {isTemplateField && availableVariables.length > 0 && (
           <div className="mb-1 flex flex-wrap gap-1">
             <span className="mr-1 text-xs text-muted-foreground">
-              Variables:
+              Insert Variable:
             </span>
             {availableVariables.map((v) => (
               <button
                 key={v}
+                title={`Insert {{${v}}}`}
                 type="button"
                 onClick={() => {
                   const val = currentValue ? String(currentValue) : "";
@@ -218,8 +224,8 @@ export function ConfigForm({
           </div>
         )}
 
-        {prop.description && (
-          <p className="text-xs text-muted-foreground">{prop.description}</p>
+        {description && (
+          <p className="text-xs text-muted-foreground">{description}</p>
         )}
         <Input
           id={fieldId}
