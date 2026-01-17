@@ -10,10 +10,9 @@ import SwiftUI
 struct CollectionView: View {
 	@EnvironmentObject var serviceStore: ServiceStore
 	var searchText: String
+	var allCards: [CardItem]
 
 	var body: some View {
-		let allCards = serviceStore.fromServiceToCardItem()
-
 		let filteredCards =
 			searchText.isEmpty
 			? allCards
@@ -39,8 +38,5 @@ struct CollectionView: View {
 			.navigationTitle(LocalizedStringResource.servicesTitle)
 		}
 		.background(Color(UIColor.systemGroupedBackground))
-		.navigationDestination(for: Service.self) { service in
-			ActionsView(selectedService: service)
-		}
 	}
 }

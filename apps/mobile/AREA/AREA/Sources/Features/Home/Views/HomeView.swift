@@ -59,7 +59,7 @@ struct HomeView: View {
 				}
 			}
 			.alert(LocalizedStringResource.errorTitle, isPresented: $showError) {
-				Button("OK", role: .cancel) {}
+				Button(LocalizedStringResource.okTitle, role: .cancel) {}
 			} message: {
 				Text(errorMessage ?? String(localized: LocalizedStringResource.errorHappenedTitle))
 			}

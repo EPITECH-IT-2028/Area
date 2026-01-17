@@ -8,7 +8,7 @@
 import Foundation
 
 struct LoginResponseData: Decodable {
-	var success: Bool
+	var success: Bool?
 	var data: DataLoginResponse?
 	var message: String?
 }
