@@ -2514,6 +2514,7 @@ export type Services = {
   id: Scalars['uuid']['output'];
   is_active?: Maybe<Scalars['Boolean']['output']>;
   name: Scalars['String']['output'];
+  oauth_url?: Maybe<Scalars['String']['output']>;
   /** An array relationship */
   reactions: Array<Reactions>;
   /** An aggregate relationship */
@@ -2627,6 +2628,7 @@ export type Services_Bool_Exp = {
   id?: InputMaybe<Uuid_Comparison_Exp>;
   is_active?: InputMaybe<Boolean_Comparison_Exp>;
   name?: InputMaybe<String_Comparison_Exp>;
+  oauth_url?: InputMaybe<String_Comparison_Exp>;
   reactions?: InputMaybe<Reactions_Bool_Exp>;
   reactions_aggregate?: InputMaybe<Reactions_Aggregate_Bool_Exp>;
   updated_at?: InputMaybe<Timestamptz_Comparison_Exp>;
@@ -2670,6 +2672,7 @@ export type Services_Insert_Input = {
   id?: InputMaybe<Scalars['uuid']['input']>;
   is_active?: InputMaybe<Scalars['Boolean']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
+  oauth_url?: InputMaybe<Scalars['String']['input']>;
   reactions?: InputMaybe<Reactions_Arr_Rel_Insert_Input>;
   updated_at?: InputMaybe<Scalars['timestamptz']['input']>;
   user_services?: InputMaybe<User_Services_Arr_Rel_Insert_Input>;
@@ -2686,6 +2689,7 @@ export type Services_Max_Fields = {
   icon_url?: Maybe<Scalars['String']['output']>;
   id?: Maybe<Scalars['uuid']['output']>;
   name?: Maybe<Scalars['String']['output']>;
+  oauth_url?: Maybe<Scalars['String']['output']>;
   updated_at?: Maybe<Scalars['timestamptz']['output']>;
 };
 
@@ -2700,6 +2704,7 @@ export type Services_Min_Fields = {
   icon_url?: Maybe<Scalars['String']['output']>;
   id?: Maybe<Scalars['uuid']['output']>;
   name?: Maybe<Scalars['String']['output']>;
+  oauth_url?: Maybe<Scalars['String']['output']>;
   updated_at?: Maybe<Scalars['timestamptz']['output']>;
 };
 
@@ -2739,6 +2744,7 @@ export type Services_Order_By = {
   id?: InputMaybe<Order_By>;
   is_active?: InputMaybe<Order_By>;
   name?: InputMaybe<Order_By>;
+  oauth_url?: InputMaybe<Order_By>;
   reactions_aggregate?: InputMaybe<Reactions_Aggregate_Order_By>;
   updated_at?: InputMaybe<Order_By>;
   user_services_aggregate?: InputMaybe<User_Services_Aggregate_Order_By>;
@@ -2777,6 +2783,8 @@ export enum Services_Select_Column {
   /** column name */
   Name = 'name',
   /** column name */
+  OauthUrl = 'oauth_url',
+  /** column name */
   UpdatedAt = 'updated_at',
 }
 
@@ -2792,6 +2800,7 @@ export type Services_Set_Input = {
   id?: InputMaybe<Scalars['uuid']['input']>;
   is_active?: InputMaybe<Scalars['Boolean']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
+  oauth_url?: InputMaybe<Scalars['String']['input']>;
   updated_at?: InputMaybe<Scalars['timestamptz']['input']>;
 };
 
@@ -2815,6 +2824,7 @@ export type Services_Stream_Cursor_Value_Input = {
   id?: InputMaybe<Scalars['uuid']['input']>;
   is_active?: InputMaybe<Scalars['Boolean']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
+  oauth_url?: InputMaybe<Scalars['String']['input']>;
   updated_at?: InputMaybe<Scalars['timestamptz']['input']>;
 };
 
@@ -2840,6 +2850,8 @@ export enum Services_Update_Column {
   IsActive = 'is_active',
   /** column name */
   Name = 'name',
+  /** column name */
+  OauthUrl = 'oauth_url',
   /** column name */
   UpdatedAt = 'updated_at',
 }
@@ -3750,10 +3762,12 @@ export type GetAllActiveAreasQuery = {
     id: string;
     user_id: string;
     name: string;
+    last_triggered?: string | null;
     action_id: string;
     action_config?: any | null;
     reaction_id: string;
     reaction_config?: any | null;
+    description?: string | null;
     action: {
       __typename?: 'actions';
       id: string;
@@ -3776,8 +3790,115 @@ export type GetAllActiveAreasQuery = {
         access_token?: string | null;
         refresh_token?: string | null;
         token_expiry?: string | null;
+        credentials?: any | null;
         service: { __typename?: 'services'; name: string };
       }>;
+    };
+  }>;
+};
+
+export type UpdateAreaLastTriggeredMutationVariables = Exact<{
+  id: Scalars['uuid']['input'];
+  last_triggered: Scalars['timestamptz']['input'];
+}>;
+
+export type UpdateAreaLastTriggeredMutation = {
+  __typename?: 'mutation_root';
+  update_areas_by_pk?: {
+    __typename?: 'areas';
+    id: string;
+    last_triggered?: string | null;
+  } | null;
+};
+
+export type GetActionByNameQueryVariables = Exact<{
+  name: Scalars['String']['input'];
+}>;
+
+export type GetActionByNameQuery = {
+  __typename?: 'query_root';
+  actions: Array<{
+    __typename?: 'actions';
+    id: string;
+    name: string;
+    display_name: string;
+    event_type: string;
+    description?: string | null;
+    config_schema?: any | null;
+    service: {
+      __typename?: 'services';
+      id: string;
+      name: string;
+      display_name: string;
+    };
+  }>;
+};
+
+export type GetActionsByServiceQueryVariables = Exact<{
+  service_name: Scalars['String']['input'];
+}>;
+
+export type GetActionsByServiceQuery = {
+  __typename?: 'query_root';
+  actions: Array<{
+    __typename?: 'actions';
+    id: string;
+    name: string;
+    display_name: string;
+    event_type: string;
+    description?: string | null;
+    config_schema?: any | null;
+    service: {
+      __typename?: 'services';
+      id: string;
+      name: string;
+      display_name: string;
+    };
+  }>;
+};
+
+export type GetReactionsByServiceQueryVariables = Exact<{
+  service_name: Scalars['String']['input'];
+}>;
+
+export type GetReactionsByServiceQuery = {
+  __typename?: 'query_root';
+  reactions: Array<{
+    __typename?: 'reactions';
+    id: string;
+    name: string;
+    display_name: string;
+    action_type: string;
+    description?: string | null;
+    config_schema?: any | null;
+    service: {
+      __typename?: 'services';
+      id: string;
+      name: string;
+      display_name: string;
+    };
+  }>;
+};
+
+export type GetReactionByNameQueryVariables = Exact<{
+  name: Scalars['String']['input'];
+}>;
+
+export type GetReactionByNameQuery = {
+  __typename?: 'query_root';
+  reactions: Array<{
+    __typename?: 'reactions';
+    id: string;
+    name: string;
+    display_name: string;
+    action_type: string;
+    description?: string | null;
+    config_schema?: any | null;
+    service: {
+      __typename?: 'services';
+      id: string;
+      name: string;
+      display_name: string;
     };
   }>;
 };
@@ -3816,6 +3937,22 @@ export type GetServiceByNameQuery = {
     name: string;
     display_name: string;
     auth_type: string;
+    oauth_url?: string | null;
+  }>;
+};
+
+export type GetAllServicesQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetAllServicesQuery = {
+  __typename?: 'query_root';
+  services: Array<{
+    __typename?: 'services';
+    id: string;
+    name: string;
+    display_name: string;
+    auth_type: string;
+    icon_url?: string | null;
+    oauth_url?: string | null;
   }>;
 };
 
@@ -4020,10 +4157,12 @@ export const GetAllActiveAreasDocument = gql`
       id
       user_id
       name
+      last_triggered
       action_id
       action_config
       reaction_id
       reaction_config
+      description
       action {
         id
         name
@@ -4046,10 +4185,96 @@ export const GetAllActiveAreasDocument = gql`
           access_token
           refresh_token
           token_expiry
+          credentials
           service {
             name
           }
         }
+      }
+    }
+  }
+`;
+export const UpdateAreaLastTriggeredDocument = gql`
+  mutation UpdateAreaLastTriggered($id: uuid!, $last_triggered: timestamptz!) {
+    update_areas_by_pk(
+      pk_columns: { id: $id }
+      _set: { last_triggered: $last_triggered }
+    ) {
+      id
+      last_triggered
+    }
+  }
+`;
+export const GetActionByNameDocument = gql`
+  query GetActionByName($name: String!) {
+    actions(
+      where: { name: { _eq: $name }, is_active: { _eq: true } }
+      limit: 1
+    ) {
+      id
+      name
+      display_name
+      event_type
+      description
+      config_schema
+      service {
+        id
+        name
+        display_name
+      }
+    }
+  }
+`;
+export const GetActionsByServiceDocument = gql`
+  query GetActionsByService($service_name: String!) {
+    actions(where: { service: { name: { _eq: $service_name } } }) {
+      id
+      name
+      display_name
+      event_type
+      description
+      config_schema
+      service {
+        id
+        name
+        display_name
+      }
+    }
+  }
+`;
+export const GetReactionsByServiceDocument = gql`
+  query GetReactionsByService($service_name: String!) {
+    reactions(where: { service: { name: { _eq: $service_name } } }) {
+      id
+      name
+      display_name
+      action_type
+      description
+      config_schema
+      service {
+        id
+        name
+        display_name
+      }
+    }
+  }
+`;
+export const GetReactionByNameDocument = gql`
+  query GetReactionByName($name: String!) {
+    reactions(
+      where: { name: { _eq: $name }, is_active: { _eq: true } }
+      limit: 1
+    ) {
+      id
+      name
+      display_name
+      action_type
+      description
+      config_schema
+      service {
+        id
+        name
+        display_name
       }
     }
   }
@@ -4091,6 +4316,19 @@ export const GetServiceByNameDocument = gql`
       name
       display_name
       auth_type
+      oauth_url
+    }
+  }
+`;
+export const GetAllServicesDocument = gql`
+  query GetAllServices {
+    services {
+      id
+      name
+      display_name
+      auth_type
+      icon_url
+      oauth_url
     }
   }
 `;
@@ -4313,6 +4551,96 @@ export function getSdk(
         variables,
       );
     },
+    UpdateAreaLastTriggered(
+      variables: UpdateAreaLastTriggeredMutationVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+      signal?: RequestInit['signal'],
+    ): Promise<UpdateAreaLastTriggeredMutation> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.request<UpdateAreaLastTriggeredMutation>({
+            document: UpdateAreaLastTriggeredDocument,
+            variables,
+            requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders },
+            signal,
+          }),
+        'UpdateAreaLastTriggered',
+        'mutation',
+        variables,
+      );
+    },
+    GetActionByName(
+      variables: GetActionByNameQueryVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+      signal?: RequestInit['signal'],
+    ): Promise<GetActionByNameQuery> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.request<GetActionByNameQuery>({
+            document: GetActionByNameDocument,
+            variables,
+            requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders },
+            signal,
+          }),
+        'GetActionByName',
+        'query',
+        variables,
+      );
+    },
+    GetActionsByService(
+      variables: GetActionsByServiceQueryVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+      signal?: RequestInit['signal'],
+    ): Promise<GetActionsByServiceQuery> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.request<GetActionsByServiceQuery>({
+            document: GetActionsByServiceDocument,
+            variables,
+            requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders },
+            signal,
+          }),
+        'GetActionsByService',
+        'query',
+        variables,
+      );
+    },
+    GetReactionsByService(
+      variables: GetReactionsByServiceQueryVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+      signal?: RequestInit['signal'],
+    ): Promise<GetReactionsByServiceQuery> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.request<GetReactionsByServiceQuery>({
+            document: GetReactionsByServiceDocument,
+            variables,
+            requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders },
+            signal,
+          }),
+        'GetReactionsByService',
+        'query',
+        variables,
+      );
+    },
+    GetReactionByName(
+      variables: GetReactionByNameQueryVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+      signal?: RequestInit['signal'],
+    ): Promise<GetReactionByNameQuery> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.request<GetReactionByNameQuery>({
+            document: GetReactionByNameDocument,
+            variables,
+            requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders },
+            signal,
+          }),
+        'GetReactionByName',
+        'query',
+        variables,
+      );
+    },
     CreateArea(
       variables: CreateAreaMutationVariables,
       requestHeaders?: GraphQLClientRequestHeaders,
@@ -4345,6 +4673,24 @@ export function getSdk(
             signal,
           }),
         'GetServiceByName',
+        'query',
+        variables,
+      );
+    },
+    GetAllServices(
+      variables?: GetAllServicesQueryVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+      signal?: RequestInit['signal'],
+    ): Promise<GetAllServicesQuery> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.request<GetAllServicesQuery>({
+            document: GetAllServicesDocument,
+            variables,
+            requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders },
+            signal,
+          }),
+        'GetAllServices',
         'query',
         variables,
       );
