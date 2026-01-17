@@ -2,17 +2,15 @@
 
 import api from "@/lib/api";
 import { useState, useEffect, useCallback } from "react";
-import {
-  Service,
-  UserService,
-  AboutResponse,
+import { ServiceRequest, UserServiceRequest } from "@/app/services/models/serviceRequest";
+import {AboutResponse,
   UserServicesResponse,
-} from "@/app/services/models/Service";
+} from "@/app/services/models/serviceResponse";
 import { toast } from "sonner";
 
 export const useServices = () => {
-  const [services, setServices] = useState<Service[]>([]);
-  const [userServices, setUserServices] = useState<UserService[]>([]);
+  const [services, setServices] = useState<ServiceRequest[]>([]);
+  const [userServices, setUserServices] = useState<UserServiceRequest[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isConnecting, setIsConnecting] = useState<string | null>(null);
 
@@ -60,14 +58,14 @@ export const useServices = () => {
   );
 
   const getServiceDetails = useCallback(
-    (serviceName: string): UserService | undefined => {
+    (serviceName: string): UserServiceRequest | undefined => {
       return userServices.find((us) => us.service.name === serviceName);
     },
     [userServices]
   );
 
   const connectService = useCallback(
-    async (service: Service) => {
+    async (service: ServiceRequest) => {
       if (isServiceConnected(service.name)) {
         toast.info("Service is already connected");
         return;

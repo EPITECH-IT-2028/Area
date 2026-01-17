@@ -1,12 +1,12 @@
-import { Service, UserService } from "@/app/services/models/Service";
+import { ServiceRequest, UserServiceRequest } from "@/app/services/models/serviceRequest";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Check, ExternalLink, Loader2, Plug, X } from "lucide-react";
 
 interface ServiceCardProps {
-  service: Service;
+  service: ServiceRequest;
   isConnected: boolean;
-  userService?: UserService;
+  userService?: UserServiceRequest;
   isConnecting: boolean;
   onConnect: () => void;
   onDisconnect: () => void;
