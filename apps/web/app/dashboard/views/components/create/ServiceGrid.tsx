@@ -22,11 +22,20 @@ export function ServiceGrid({
         <Card
           key={service.name}
           className={cn(
-            "cursor-pointer transition-all hover:border-primary/50 hover:bg-accent",
+            "cursor-pointer transition-all hover:border-primary/50 hover:bg-accent focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none",
             selectedService?.name === service.name &&
               "border-primary bg-accent ring-1 ring-primary",
           )}
           onClick={() => onSelect(service)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              onSelect(service);
+            }
+          }}
+          role="button"
+          tabIndex={0}
+          aria-pressed={selectedService?.name === service.name}
         >
           <CardContent className="flex flex-col items-center justify-center p-6 text-center">
             <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-lg bg-background p-2 shadow-sm">
