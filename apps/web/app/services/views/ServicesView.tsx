@@ -1,66 +1,105 @@
 "use client";
 
-import { useMemo } from "react";
-import ProtectedRoute from "@/components/ProtectedRoute";
-import useServices from "@/app/services/hooks/useServices";
-import useUserServices from "@/app/services/hooks/useUserServices";
-import { DashboardHeader } from "@/app/dashboard/views/components/DashboardHeader";
+import { useServicesViewModel } from "@/app/services/viewModels/servicesViewModel";
+import { ServiceCard } from "@/app/services/views/components/ServiceCard";
 import { ServicesHeader } from "@/app/services/views/components/ServicesHeader";
-import { ServicesList } from "@/app/services/views/components/ServicesList";
-import { LoadingState } from "@/app/services/views/components/LoadingState";
-import { ErrorState } from "@/app/services/views/components/ErrorState";
-import { EmptyState } from "@/app/services/views/components/EmptyState";
+import { ServiceStatsCards } from "@/app/services/views/components/ServiceStatsCards";
+import { Button } from "@/components/ui/button";
+import { ArrowLeft, Plug } from "lucide-react";
+import Link from "next/link";
 
-const colorMap: Record<string, string> = {
-  google: "bg-red-500",
-  github: "bg-gray-800",
-  discord_webhook: "bg-indigo-500",
-};
-
-function ServicesView() {
-  const { services, isLoading, error } = useServices();
-  const { connectedServices } = useUserServices();
-
-  const servicesData = useMemo(() => {
-    return services.map((service) => ({
-      id: service.name,
-      name: service.name,
-      displayName: service.display_name,
-      color: colorMap[service.name] || "bg-gray-500",
-      icon: service.icon_url ? (
-        <img src={service.icon_url} alt={`${service.display_name} icon`} width={32} height={32} className="object-contain"/>
-      ) : (<span className="text-2xl font-bold">{service.display_name.charAt(0).toUpperCase()}</span>),
-    }));
-  }, [services]);
+export default function ServicesView() {
+  const {
+    services,
+    isLoading,
+    isConnecting,
+    isServiceConnected,
+    getServiceDetails,
+    connectService,
+    disconnectService,
+    stats,
+  } = useServicesViewModel();
 
   return (
-    <ProtectedRoute>
-      <div className="min-h-screen">
-        <DashboardHeader />
-        <main className="container mx-auto my-4 px-4 md:my-8 md:px-0">
-          <ServicesHeader />
+    <div className="min-h-screen">
+      <ServicesHeader />
+      <main className="container mx-auto my-4 px-4 md:my-8 md:px-0">
+        <Link href="/dashboard">
+          <Button variant="ghost" size="sm" className="mb-4 gap-2">
+            <ArrowLeft className="h-4 w-4" />
+            Back to Dashboard
+          </Button>
+        </Link>
+        <div className="mb-6 md:mb-8">
+          <h1 className="mb-2 text-2xl font-bold md:text-4xl">
+            Connect Your Services
+          </h1>
+          <p className="text-base text-muted-foreground md:text-lg">
+            Link your favorite services to create powerful automations
+          </p>
+        </div>
 
-          <div className="mb-8">
-            <h2 className="mb-4 text-xl font-semibold md:mb-6 md:text-2xl">
-              Available Services
-            </h2>
-            {isLoading ? (
-              <LoadingState />
-            ) : error ? (
-              <ErrorState error={error} />
-            ) : servicesData.length === 0 ? (
-              <EmptyState />
-            ) : (
-              <ServicesList 
-                services={servicesData} 
-                connectedServices={connectedServices} 
-              />
-            )}
-          </div>
-        </main>
-      </div>
-    </ProtectedRoute>
+        <ServiceStatsCards
+          totalServices={stats.totalServices}
+          connectedServices={stats.connectedServices}
+          isLoading={isLoading}
+        />
+
+        <div className="mb-8">
+          <h2 className="mb-4 text-xl font-semibold md:mb-6 md:text-2xl">
+            Available Services
+          </h2>
+
+          {isLoading ? (
+            <div className="rounded-2xl border border-dashed bg-card/50 py-8 text-center text-muted-foreground md:py-12">
+              <div className="mb-4 inline-flex animate-spin items-center justify-center rounded-full">
+                <div className="h-8 w-8 rounded-full border-3 border-primary border-t-transparent" />
+              </div>
+              <p>Loading services...</p>
+            </div>
+          ) : services.length === 0 ? (
+            <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed bg-card/50 py-12 text-center text-muted-foreground md:py-16">
+              <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-primary/10">
+                <Plug className="h-8 w-8 text-primary" />
+              </div>
+              <h3 className="mb-2 text-xl font-semibold text-foreground">
+                No services available
+              </h3>
+              <p className="max-w-sm text-balance">
+                No services are currently configured. Please contact your
+                administrator.
+              </p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
+              {services.map((service) => {
+                const connected = isServiceConnected(service.name);
+                const userService = getServiceDetails(service.name);
+                const connecting = isConnecting === service.name;
+
+                return (
+                  <ServiceCard
+                    key={service.name}
+                    service={service}
+                    isConnected={connected}
+                    userService={userService}
+                    isConnecting={connecting}
+                    onConnect={() => connectService(service)}
+                    onDisconnect={() => {
+                      if (userService) {
+                        void disconnectService(
+                          userService.id,
+                          service.display_name
+                        );
+                      }
+                    }}
+                  />
+                );
+              })}
+            </div>
+          )}
+        </div>
+      </main>
+    </div>
   );
 }
-
-export default ServicesView;
