@@ -21,11 +21,20 @@ export function ActionList({ items, onSelect, selectedItem }: ActionListProps) {
         <Card
           key={item.name}
           className={cn(
-            "cursor-pointer transition-all hover:border-primary/50 hover:bg-accent",
+            "cursor-pointer transition-all hover:border-primary/50 hover:bg-accent focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none",
             selectedItem?.name === item.name &&
               "border-primary bg-accent ring-1 ring-primary",
           )}
           onClick={() => onSelect(item)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              onSelect(item);
+            }
+          }}
+          role="button"
+          tabIndex={0}
+          aria-pressed={selectedItem?.name === item.name}
         >
           <CardHeader className="p-4">
             <CardTitle className="text-base">{item.name}</CardTitle>
