@@ -11,6 +11,8 @@ function useDashboard() {
   const { accessToken } = useAuth();
 
   const fetchAreas = useCallback(async () => {
+    let isMounted = true;
+
     if (!accessToken) {
       setIsLoading(false);
       return;
@@ -19,10 +21,13 @@ function useDashboard() {
     setIsLoading(true);
     try {
       const response = await api.get("areas").json<AreasResponse>();
-      if (response.success && response.data && response.data.length > 0) {
-        setAreas(response.data.map((area) => ({ ...area, is_active: true })));
-      } else {
-        setAreas([]);
+
+      if (isMounted) {
+        if (response.success && response.data && response.data.length > 0) {
+          setAreas(response.data.map((area) => ({ ...area, is_active: true })));
+        } else {
+          setAreas([]);
+        }
       }
     } catch (error) {
       console.error("Failed to fetch areas:", error);
@@ -30,6 +35,10 @@ function useDashboard() {
     } finally {
       setIsLoading(false);
     }
+
+    return () => {
+      isMounted = false;
+    };
   }, [accessToken]);
 
   useEffect(() => {
