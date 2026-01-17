@@ -44,26 +44,28 @@ export function ServiceCard({
             </div>
           </div>
 
-          <div
-            className={cn(
-              "flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium",
-              isConnected
-                ? "bg-green-500/10 text-green-600 dark:text-green-400"
-                : "bg-muted text-muted-foreground"
-            )}
-          >
-            {isConnected ? (
-              <>
-                <Check className="h-3 w-3" />
-                Connected
-              </>
-            ) : (
-              <>
-                <X className="h-3 w-3" />
-                Not connected
-              </>
-            )}
-          </div>
+          {service.oauth_url && (
+            <div
+              className={cn(
+                "flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium",
+                isConnected
+                  ? "bg-green-500/10 text-green-600 dark:text-green-400"
+                  : "bg-muted text-muted-foreground"
+              )}
+            >
+              {isConnected ? (
+                <>
+                  <Check className="h-3 w-3" />
+                  Connected
+                </>
+              ) : (
+                <>
+                  <X className="h-3 w-3" />
+                  Not connected
+                </>
+              )}
+            </div>
+          )}
         </div>
 
         <div className="mb-4 flex gap-4 text-sm text-muted-foreground">
