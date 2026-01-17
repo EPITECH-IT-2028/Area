@@ -182,6 +182,29 @@ export function ConfigForm({
       );
     }
 
+    if (prop.type === "boolean" || prop.format === "boolean") {
+      return (
+        <div key={fieldId} className="grid w-full items-center gap-1.5">
+          <div className="flex items-center gap-2">
+            <input
+              id={fieldId}
+              type="checkbox"
+              checked={currentValue === true || currentValue === "true"}
+              onChange={(e) => setDeepValue(path, e.target.checked)}
+              className="h-4 w-4 rounded border-input bg-background accent-primary shadow-sm transition-colors focus-visible:ring-1 focus-visible:ring-ring focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+            />
+            <Label htmlFor={fieldId} className="cursor-pointer capitalize">
+              {key.replace(/_/g, " ")}{" "}
+              {isRequired && <span className="text-red-500">*</span>}
+            </Label>
+          </div>
+          {description && (
+            <p className="ml-6 text-xs text-muted-foreground">{description}</p>
+          )}
+        </div>
+      );
+    }
+
     const inputType =
       prop.format === "password"
         ? "password"
