@@ -45,7 +45,21 @@ function useDashboard() {
     void fetchAreas();
   }, [fetchAreas]);
 
-  return { areas, isLoading, refetch: fetchAreas };
+  const deleteArea = useCallback(
+    async (id: string) => {
+      try {
+        await api.delete(`areas/${id}`).json();
+        toast.success("Automation deleted successfully");
+        await fetchAreas();
+      } catch (error) {
+        console.error("Failed to delete area:", error);
+        toast.error("Failed to delete automation. Please try again.");
+      }
+    },
+    [fetchAreas],
+  );
+
+  return { areas, isLoading, refetch: fetchAreas, deleteArea };
 }
 
 export default useDashboard;

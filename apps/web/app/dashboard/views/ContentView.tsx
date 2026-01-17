@@ -20,6 +20,7 @@ export default function ContentView() {
     isCreateModalOpen,
     setIsCreateModalOpen,
     refetch,
+    deleteArea,
   } = useDashboardViewModel();
 
   return (
@@ -88,6 +89,7 @@ export default function ContentView() {
                   key={area.id}
                   area={area}
                   getStatusColor={getStatusColor}
+                  onDelete={deleteArea}
                 />
               ))}
             </div>

@@ -1,13 +1,16 @@
 import { Area } from "@/app/dashboard/models/areasResponse";
 import { cn } from "@/lib/utils";
-import { ArrowRight, Play, Zap } from "lucide-react";
+import { ArrowRight, Play, Trash2, Zap } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
 
 interface AreaCardProps {
   area: Area;
   getStatusColor?: (status: string) => string;
+  onDelete?: (id: string) => void;
 }
 
-export function AreaCard({ area }: AreaCardProps) {
+export function AreaCard({ area, onDelete }: AreaCardProps) {
   return (
     <div className="group relative overflow-hidden rounded-xl border bg-card p-4 text-card-foreground shadow-sm transition-all hover:border-primary/20 hover:shadow-md md:p-5">
       <div className="absolute -top-4 -right-4 h-24 w-24 rounded-full bg-primary/5 blur-2xl transition-all group-hover:bg-primary/10" />
@@ -48,13 +51,14 @@ export function AreaCard({ area }: AreaCardProps) {
             />
             {area.is_active ? "Active" : "Disabled"}
           </div>
-          {/*<Button*/}
-          {/*  variant="ghost"*/}
-          {/*  size="icon"*/}
-          {/*  className="h-8 w-8 rounded-full opacity-25 transition-opacity group-hover:opacity-100"*/}
-          {/*>*/}
-          {/*  <MoreHorizontal className="h-4 w-4" />*/}
-          {/*</Button>*/}
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-8 w-8 rounded-full text-muted-foreground transition-colors hover:bg-destructive/10 hover:text-destructive"
+            onClick={() => onDelete?.(area.id)}
+          >
+            <Trash2 className="h-4 w-4" />
+          </Button>
         </div>
       </div>
 
