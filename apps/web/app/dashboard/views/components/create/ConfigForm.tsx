@@ -31,7 +31,27 @@ export function ConfigForm({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSubmit(formData);
+    const processedData = { ...formData };
+
+    if (schema.properties) {
+      Object.entries(schema.properties).forEach(([key, prop]) => {
+        const value = processedData[key];
+        if (typeof value === "string") {
+          if (prop.type === "number") {
+            const parsed = parseFloat(value);
+            if (!isNaN(parsed)) processedData[key] = parsed;
+          } else if (prop.type === "integer") {
+            const parsed = parseInt(value, 10);
+            if (!isNaN(parsed)) processedData[key] = parsed;
+          } else if (prop.type === "boolean") {
+            if (value === "true") processedData[key] = true;
+            if (value === "false") processedData[key] = false;
+          }
+        }
+      });
+    }
+
+    onSubmit(processedData);
   };
 
   const handleChange = (key: string, value: string) => {
@@ -53,6 +73,12 @@ export function ConfigForm({
     <form onSubmit={handleSubmit} className="space-y-4">
       {Object.entries(schema.properties).map(([key, prop]) => {
         const isRequired = schema.required?.includes(key);
+        const inputType =
+          prop.format === "password"
+            ? "password"
+            : prop.type === "number" || prop.type === "integer"
+              ? "number"
+              : "text";
 
         return (
           <div key={key} className="grid w-full items-center gap-1.5">
@@ -67,11 +93,12 @@ export function ConfigForm({
             )}
             <Input
               id={key}
-              type={prop.format === "password" ? "password" : "text"}
+              type={inputType}
               required={isRequired}
               placeholder={prop.default ? String(prop.default) : ""}
               value={(formData[key] as string) || ""}
               onChange={(e) => handleChange(key, e.target.value)}
+              step={prop.type === "number" ? "any" : undefined}
             />
           </div>
         );
