@@ -17,7 +17,7 @@ struct LoginView: View {
 
 			Spacer()
 
-			Text("AREA")
+			Text(LocalizedStringResource.projectNameTitle)
 				.font(.titleFont)
 
 			VStack {

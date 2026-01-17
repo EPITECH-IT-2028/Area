@@ -30,8 +30,22 @@ struct Service: Decodable, Identifiable, Hashable {
 	let reactions: [ServiceAction]
 }
 
-struct ServiceAction: Decodable, Hashable {
+struct ServiceAction: Decodable, Hashable, Identifiable {
 	var id: String { name }
 	let name: String
 	let description: String
+	let configSchema: ConfigSchemaInfo
+}
+
+struct ConfigSchemaInfo: Decodable, Hashable {
+		let type: String
+		let properties: [String: PropertyInfo]
+		let required: [String]?
+}
+
+struct PropertyInfo: Decodable, Hashable {
+		let type: String
+		let description: String
+		let format: String?
+		let `default`: String?
 }

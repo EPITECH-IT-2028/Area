@@ -41,7 +41,13 @@ struct ContentView: View {
 							LocalizedStringResource.servicesTitle,
 							systemImage: Constants.servicesIconString
 						) {
-							ServicesView()
+							AreaCreationView()
+						}
+						Tab(
+							LocalizedStringResource.areaTabTitle,
+							systemImage: Constants.areasIconString
+						) {
+							AreaCreationView()
 						}
 						Tab(
 							LocalizedStringResource.settingsTitle,
@@ -72,7 +78,7 @@ struct ContentView: View {
 								}
 							}
 						}
-						Button("OK", role: .cancel) {}
+						Button(LocalizedStringResource.okTitle, role: .cancel) {}
 					} message: {
 						Text(errorMessage)
 					}
