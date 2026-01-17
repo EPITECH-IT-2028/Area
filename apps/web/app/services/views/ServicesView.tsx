@@ -73,7 +73,7 @@ export default function ServicesView() {
           ) : (
             <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
               {services.map((service) => {
-                const connected = isServiceConnected(service.name);
+                const connected = isServiceConnected(service);
                 const userService = getServiceDetails(service.name);
                 const connecting = isConnecting === service.name;
 

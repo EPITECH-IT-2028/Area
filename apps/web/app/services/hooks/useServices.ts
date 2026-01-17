@@ -47,9 +47,13 @@ export const useServices = () => {
   }, [loadData]);
 
   const isServiceConnected = useCallback(
-    (serviceName: string): boolean => {
+    (service: ServiceRequest): boolean => {
+      // Services sans oauth_url sont toujours connectés (pas d'auth requise)
+      if (!service.oauth_url) {
+        return true;
+      }
       return userServices.some(
-        (us) => us.service.name === serviceName && us.is_connected
+        (us) => us.service.name === service.name && us.is_connected
       );
     },
     [userServices]
@@ -64,7 +68,12 @@ export const useServices = () => {
 
   const connectService = useCallback(
     async (service: ServiceRequest) => {
-      if (isServiceConnected(service.name)) {
+      // Les services sans oauth_url ne peuvent pas être connectés manuellement
+      if (!service.oauth_url) {
+        toast.info("This service doesn't require authentication");
+        return;
+      }
+      if (isServiceConnected(service)) {
         toast.info("Service is already connected");
         return;
       }

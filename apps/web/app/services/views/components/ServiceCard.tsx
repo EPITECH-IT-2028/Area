@@ -119,6 +119,10 @@ export function ServiceCard({
                 </>
               )}
             </Button>
+          ) : !service.oauth_url ? (
+            <div className="w-full rounded-lg bg-muted/50 p-3 text-center text-sm text-muted-foreground">
+              No authentication required
+            </div>
           ) : (
             <Button
               onClick={onDisconnect}
