@@ -76,6 +76,14 @@ export class DiscordLinkGuard extends AuthGuard('discord') {
 
   private extractTokenFromHeader(request: Request): string | undefined {
     const [type, token] = request.headers.authorization?.split(' ') ?? [];
-    return type === 'Bearer' ? token : undefined;
+    if (type === 'Bearer') {
+      return token;
+    }
+
+    if (request.query && request.query.token) {
+      return request.query.token as string;
+    }
+
+    return undefined;
   }
 }

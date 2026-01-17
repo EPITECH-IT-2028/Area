@@ -42,6 +42,12 @@ class AuthState: ObservableObject {
 		}
 	}
 
+	func getAuthToken() -> String? {
+		return try? KeychainManager.shared.keychain.string(
+			forKey: Constants.keychainJWTKey
+		)
+	}
+
 	func getToken(for serviceName: String) -> String? {
 		let key = "token_\(serviceName.lowercased())"
 		return try? KeychainManager.shared.keychain.string(forKey: key)

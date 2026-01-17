@@ -16,7 +16,6 @@ class ServicesViewModel: ObservableObject {
 
 	@MainActor
 	func connect(to service: Service, store: ServiceStore) async {
-		
 
 		self.isAuthenticating = true
 
@@ -28,10 +27,6 @@ class ServicesViewModel: ObservableObject {
 
 		do {
 			let _ = try await action.signIn()
-
-			if let index = store.services.firstIndex(where: { $0.id == service.id }) {
-				store.services[index].isAuthenticated = true
-			}
 
 			self.authSuccessMessage =
 				"Connexion réussie avec \(service.displayName) !"

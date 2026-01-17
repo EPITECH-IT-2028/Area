@@ -8,6 +8,7 @@
 internal import AuthenticationServices
 internal import Combine
 import Foundation
+import SimpleKeychain
 import UIKit
 
 class ServiceAuthAction: NSObject, ObservableObject {
@@ -52,6 +53,12 @@ class ServiceAuthAction: NSObject, ObservableObject {
 					value: Constants.valueForOauth2
 				)
 			]
+
+			if let token = AuthState.shared.getAuthToken() {
+				var queryItems = components.queryItems ?? []
+				queryItems.append(URLQueryItem(name: "token", value: token))
+				components.queryItems = queryItems
+			}
 
 			guard let finalAuthURL = components.url else {
 				DispatchQueue.main.async {
@@ -168,3 +175,4 @@ extension ServiceAuthAction: ASWebAuthenticationPresentationContextProviding {
 		return ASPresentationAnchor()
 	}
 }
+
