@@ -1,5 +1,10 @@
 import ServicesView from "@/app/services/views/ServicesView";
+import ProtectedRoute from "@/components/ProtectedRoute";
 
 export default function Page() {
-  return <ServicesView />;
+  return (
+    <ProtectedRoute>
+      <ServicesView />
+    </ProtectedRoute>
+  );
 }
