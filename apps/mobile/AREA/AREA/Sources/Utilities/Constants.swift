@@ -33,8 +33,8 @@ struct Constants {
 	static let registerServerPath = "/auth/register"
 	static let aboutJsonPath = "/about.json"
 	static let createAREAsPath = "/areas"
-	static let githubOAuth2ServerPath = "http://localhost:8080/auth/github"
-	static let googleOAuth2ServerPath = "http://localhost:8080/auth/google"
+	static let githubOAuth2ServerPath = "/auth/github"
+	static let googleOAuth2ServerPath = "/auth/google"
 
 	// OAuth2 query items
 	static let keyForOauth2 = "platform"
