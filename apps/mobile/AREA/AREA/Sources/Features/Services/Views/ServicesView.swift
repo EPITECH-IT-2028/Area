@@ -10,34 +10,21 @@ import SwiftUI
 struct ServicesView: View {
 	@State private var searchText: String = ""
 	@EnvironmentObject var serviceStore: ServiceStore
-	@StateObject private var viewModel = AreaCreationViewModel()
+	@ObservedObject var viewModel: ServicesViewModel
 	@State private var navigationPath = NavigationPath()
 
 	var body: some View {
 		NavigationStack(path: $navigationPath) {
 			VStack {
-				if let action = viewModel.selectedAction {
-					HStack {
-						Image(systemName: "checkmark.circle.fill")
-							.foregroundColor(.green)
-						Text("\(LocalizedStringResource.actionsTitle): \(action.name)")
-							.font(.caption)
-							.foregroundColor(.secondary)
-					}
-					.padding(.horizontal)
-					.padding(.top, 8)
-				}
-
 				ServiceCollectionView(
 					searchText: searchText,
-					allCards: serviceStore.fromServiceToCardItem()
+					allCards: serviceStore.fromServiceToCardItem(),
+					viewModel: viewModel
 				)
 				.searchable(text: $searchText)
 			}
 			.navigationTitle(
-				viewModel.selectedAction == nil
-					? LocalizedStringResource.servicesTitle
-					: LocalizedStringResource.areaCreationChooseReactionTitle
+				LocalizedStringResource.servicesConnectionTitle
 			)
 		}
 	}

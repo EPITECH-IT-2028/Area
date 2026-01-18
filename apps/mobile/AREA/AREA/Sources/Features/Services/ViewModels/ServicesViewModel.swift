@@ -11,9 +11,6 @@ class ServicesViewModel: ObservableObject {
 	@Published var authSuccessMessage: String?
 	@Published var isAuthenticating: Bool = false
 
-	var googleAuthAction = GoogleAuthAction()
-	var githubAuthAction = GitHubAuthAction()
-
 	@MainActor
 	func connect(to service: Service, store: ServiceStore) async {
 
