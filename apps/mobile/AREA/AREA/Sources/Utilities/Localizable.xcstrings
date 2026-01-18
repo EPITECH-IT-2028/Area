@@ -99,6 +99,23 @@
         }
       }
     },
+    "AreaCreation.Action.Title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Actions services"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Services d'actions"
+          }
+        }
+      }
+    },
     "AreaCreation.ActionLocked.Title" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -129,23 +146,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Votre AREA a bien été créée !"
-          }
-        }
-      }
-    },
-    "AreaCreation.ChooseReaction.Title" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Choose the reaction service"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Choisir le service de réaction"
           }
         }
       }
@@ -231,6 +231,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Suivant: Choisir la réaction"
+          }
+        }
+      }
+    },
+    "AreaCreation.Reaction.Title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reactions services"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Services de réactions"
           }
         }
       }

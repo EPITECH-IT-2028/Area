@@ -46,7 +46,7 @@ struct ServiceCollectionView: View {
 		}
 		.background(Color.backgroundColor)
 		.alert(
-			LocalizedStringResource.servicesAlertConnexion,
+			LocalizedStringResource.servicesConnectionAlertTitle,
 			isPresented: $viewModel.showAuthAlert
 		) {
 			Button(LocalizedStringResource.okTitle, role: .cancel) {}
