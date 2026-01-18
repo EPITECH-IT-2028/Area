@@ -36,7 +36,7 @@ struct AREACardView: View {
 
 				Spacer()
 
-				if area.isActive == true {
+				if area.isActive {
 					Text(LocalizedStringResource.homeCardActive)
 						.font(.caption)
 						.fontWeight(.semibold)
@@ -45,7 +45,7 @@ struct AREACardView: View {
 						.padding(.vertical, 6)
 						.background(Color.green.opacity(0.15))
 						.cornerRadius(8)
-				} else if area.isActive == false {
+				} else {
 					Text(LocalizedStringResource.homeCardInactive)
 						.font(.caption)
 						.fontWeight(.semibold)
