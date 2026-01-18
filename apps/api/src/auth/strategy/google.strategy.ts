@@ -94,12 +94,22 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
       await this.userServicesService.getServiceByName('google');
 
     if (googleService) {
+      if (mode === 'link' && userId && user.id === userId) {
+        const existingUser = await this.usersService.findByEmail(email);
+        if (existingUser && existingUser.id !== user.id) {
+          await this.userServicesService.deleteByUserAndService(
+            existingUser.id,
+            googleService.id,
+          );
+        }
+      }
+
       await this.userServicesService.createOrUpdate({
         userId: user.id,
         serviceId: googleService.id,
         accessToken,
         refreshToken,
-        tokenExpiry: new Date(Date.now() + 3600 * 1000).toISOString(), // 1hour
+        tokenExpiry: new Date(Date.now() + 3600 * 1000).toISOString(),
         credentials: {
           profile: {
             id: profile.id,
