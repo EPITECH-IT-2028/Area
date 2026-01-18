@@ -17,6 +17,7 @@ import {
   MinLength,
 } from 'class-validator';
 import type { Response } from 'express';
+import { ApiProperty } from '@nestjs/swagger';
 import { AuthService, AuthResponse } from './auth.service';
 import { GoogleOauthGuard } from './guards/google-auth.guard';
 import { GithubOauthGuard } from './guards/github-auth.guard';
@@ -29,26 +30,47 @@ import { MicrosoftOauthGuard } from './guards/microsoft-auth.guard';
 import { DiscordOauthGuard } from './guards/discord-auth.guard';
 
 class RegisterDto {
+  @ApiProperty({
+    example: 'user@example.com',
+    description: 'The email of the user',
+  })
   @IsEmail()
   @IsNotEmpty()
   email: string;
 
+  @ApiProperty({
+    example: 'StrongP@ssw0rd!',
+    description: 'The password of the user (must be strong)',
+    minLength: 6,
+  })
   @IsString()
   @MinLength(6)
   @IsNotEmpty()
   @IsStrongPassword()
   password: string;
 
+  @ApiProperty({
+    example: 'John Doe',
+    description: 'The name of the user',
+  })
   @IsString()
   @IsNotEmpty()
   name: string;
 }
 
 class LoginDto {
+  @ApiProperty({
+    example: 'user@example.com',
+    description: 'The email of the user',
+  })
   @IsEmail()
   @IsNotEmpty()
   email: string;
 
+  @ApiProperty({
+    example: 'StrongP@ssw0rd!',
+    description: 'The password of the user',
+  })
   @IsString()
   @IsNotEmpty()
   password: string;
