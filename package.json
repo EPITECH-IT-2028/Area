@@ -5,7 +5,7 @@
     "build": "turbo run build",
     "dev": "turbo run dev",
     "hasura:console": "cd hasura && hasura metadata apply && hasura console",
-    "hasura:setup": "cd hasura && hasura metadata apply && hasura migrate apply --database-name Area && hasura metadata apply && cd ..",
+    "hasura:setup": "cd hasura && hasura metadata apply && hasura migrate apply --database-name Area && hasura metadata apply && hasura seed apply --database-name Area && cd ..",
     "codegen": "turbo run codegen",
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
@@ -19,5 +19,8 @@
   "packageManager": "pnpm@9.0.0",
   "engines": {
     "node": ">=18"
+  },
+  "dependencies": {
+    "@radix-ui/react-dialog": "^1.1.15"
   }
 }

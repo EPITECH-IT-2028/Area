@@ -15,6 +15,8 @@ struct ContentView: View {
 	@StateObject private var loginViewModel = LoginViewModel()
 	@StateObject private var registerViewModel = RegisterViewModel()
 	@StateObject private var homeViewModel = HomeViewModel()
+	@StateObject private var areaViewModel = AreaCreationViewModel()
+	@StateObject private var servicesViewModel = ServicesViewModel()
 	@State private var showSplash = true
 	@State private var showingRegister = false
 	@State private var showError = false
@@ -45,13 +47,15 @@ struct ContentView: View {
 							LocalizedStringResource.servicesTitle,
 							systemImage: Constants.servicesIconString
 						) {
-							ServicesView()
+							ServicesView(viewModel: servicesViewModel)
 						}
 						Tab(
 							LocalizedStringResource.areaTabTitle,
 							systemImage: Constants.areasIconString
 						) {
-							AreaCreationView()
+							AreaCreationView(
+								viewModel: areaViewModel
+							)
 						}
 						Tab(
 							LocalizedStringResource.settingsTitle,
