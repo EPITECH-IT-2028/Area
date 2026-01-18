@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 import { Check, ExternalLink, Loader2, Plug, X } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import Image from "next/image";
 
 interface ServiceCardProps {
   service: ServiceRequest;
@@ -30,9 +31,11 @@ export function ServiceCard({
         <div className="mb-4 flex items-start justify-between">
           <div className="flex items-center gap-3">
             {service.icon_url ? (
-              <img
+              <Image
                 src={service.icon_url}
                 alt={service.display_name}
+                width={50}
+                height={50}
                 className="h-12 w-12 rounded-lg object-cover"
               />
             ) : (
