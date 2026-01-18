@@ -11,7 +11,7 @@ import SwiftUI
 struct HomeView: View {
 	@EnvironmentObject var authState: AuthState
 	@EnvironmentObject var serviceStore: ServiceStore
-	let viewModel: HomeViewModel = HomeViewModel()
+	@ObservedObject var viewModel: HomeViewModel
 	@State private var errorMessage: String?
 	@State private var showError = false
 	@State private var areas: [AREAItem] = []

@@ -10,7 +10,6 @@ import SwiftUI
 
 struct UpdateLanguageView: View {
 	@AppStorage("language") private var languageString = "fr"
-	@State private var showRestartAlert = false
 	@State private var previousLanguage = ""
 
 	var body: some View {
@@ -52,7 +51,6 @@ struct UpdateLanguageView: View {
 		guard code != languageString else { return }
 		previousLanguage = languageString
 		languageString = code
-		showRestartAlert = true
 	}
 }
 

@@ -14,6 +14,7 @@ struct ContentView: View {
 	@EnvironmentObject var serviceStore: ServiceStore
 	@StateObject private var loginViewModel = LoginViewModel()
 	@StateObject private var registerViewModel = RegisterViewModel()
+	@StateObject private var homeViewModel = HomeViewModel()
 	@State private var showSplash = true
 	@State private var showingRegister = false
 	@State private var showError = false

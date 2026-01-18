@@ -134,9 +134,6 @@ struct AREAEditModal: View {
 					}
 				}
 			}
-			.onAppear {
-				print(area)
-			}
 			.navigationTitle(LocalizedStringResource.homeEditModalEditAREA)
 			.navigationBarTitleDisplayMode(.inline)
 			.toolbar {
