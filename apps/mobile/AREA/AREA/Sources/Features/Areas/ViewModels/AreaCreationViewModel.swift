@@ -127,7 +127,7 @@ class AreaCreationViewModel: ObservableObject {
 		isSubmitting = false
 
 		switch result {
-		case .success(let response):
+		case .success(_):
 			success = true
 			return true
 

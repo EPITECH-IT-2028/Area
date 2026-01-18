@@ -23,18 +23,22 @@ export interface DiscordGuild {
 
 @Injectable()
 export class DiscordService {
-
-  constructor(
-    private readonly configService: ConfigService
-  ) {}
+  constructor(private readonly configService: ConfigService) {}
 
   private readonly logger = new Logger(DiscordService.name);
   private readonly API_URL = 'https://discord.com/api/v10';
   private readonly REQUEST_TIMEOUT_MS = 10000;
 
-  async fetchRecentMessages(token: string, channelId: string, limit = 5): Promise<DiscordMessage[]> {
+  async fetchRecentMessages(
+    token: string,
+    channelId: string,
+    limit = 5,
+  ): Promise<DiscordMessage[]> {
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), this.REQUEST_TIMEOUT_MS);
+    const timeoutId = setTimeout(
+      () => controller.abort(),
+      this.REQUEST_TIMEOUT_MS,
+    );
 
     const botToken = this.configService.get<string>('DISCORD_BOT_TOKEN');
 
@@ -51,7 +55,9 @@ export class DiscordService {
 
       if (!response.ok) {
         const errText = await response.text();
-        this.logger.error(`Discord API Error (Messages) ${response.status}: ${errText}`);
+        this.logger.error(
+          `Discord API Error (Messages) ${response.status}: ${errText}`,
+        );
         return [];
       }
 
@@ -63,10 +69,17 @@ export class DiscordService {
       clearTimeout(timeoutId);
     }
   }
-  
-  async sendDirectMessage(token: string, userId: string, content: string): Promise<void> {
+
+  async sendDirectMessage(
+    token: string,
+    userId: string,
+    content: string,
+  ): Promise<void> {
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), this.REQUEST_TIMEOUT_MS);
+    const timeoutId = setTimeout(
+      () => controller.abort(),
+      this.REQUEST_TIMEOUT_MS,
+    );
 
     const botToken = this.configService.get<string>('DISCORD_BOT_TOKEN');
 
@@ -77,29 +90,34 @@ export class DiscordService {
     try {
       const channelRes = await fetch(`${this.API_URL}/users/@me/channels`, {
         method: 'POST',
-        headers: { 
-          Authorization: `Bot ${botToken}`, 
-          'Content-Type': 'application/json' 
+        headers: {
+          Authorization: `Bot ${botToken}`,
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({ recipient_id: userId }),
         signal: controller.signal,
       });
 
       if (!channelRes.ok) {
-        throw new Error(`Could not open DM channel: ${await channelRes.text()}`);
+        throw new Error(
+          `Could not open DM channel: ${await channelRes.text()}`,
+        );
       }
 
       const dmChannel = await channelRes.json();
 
-      const messageRes = await fetch(`${this.API_URL}/channels/${dmChannel.id}/messages`, {
-        method: 'POST',
-        headers: { 
-          Authorization: `Bot ${botToken}`, 
-          'Content-Type': 'application/json' 
+      const messageRes = await fetch(
+        `${this.API_URL}/channels/${dmChannel.id}/messages`,
+        {
+          method: 'POST',
+          headers: {
+            Authorization: `Bot ${botToken}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ content }),
+          signal: controller.signal,
         },
-        body: JSON.stringify({ content }),
-        signal: controller.signal,
-      });
+      );
 
       if (!messageRes.ok) {
         throw new Error(`Could not send message: ${await messageRes.text()}`);
@@ -116,7 +134,9 @@ export class DiscordService {
 
   private handleError(error: any, context: string) {
     if (error?.name === 'AbortError') {
-      this.logger.error(`Discord API request timed out (${this.REQUEST_TIMEOUT_MS}ms) in ${context}`);
+      this.logger.error(
+        `Discord API request timed out (${this.REQUEST_TIMEOUT_MS}ms) in ${context}`,
+      );
     } else {
       this.logger.error(`Network error in DiscordService [${context}]:`, error);
     }

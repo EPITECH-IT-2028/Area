@@ -52,6 +52,9 @@ struct SettingsView: View {
 						}
 					}
 				}
+				.listStyle(.insetGrouped)
+				.scrollContentBackground(.hidden)
+				.background(Color.backgroundColor)
 			}
 		}
 		.alert(
