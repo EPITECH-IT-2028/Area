@@ -10,7 +10,7 @@ import SwiftUI
 struct AreaCreationView: View {
 	@State private var searchText: String = ""
 	@EnvironmentObject var serviceStore: ServiceStore
-	@StateObject private var viewModel = AreaCreationViewModel()
+	@ObservedObject var viewModel: AreaCreationViewModel
 	@State private var navigationPath = NavigationPath()
 
 	var body: some View {

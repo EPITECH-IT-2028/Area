@@ -1,4 +1,3 @@
-
 import { Injectable, Logger } from '@nestjs/common';
 import { Maybe } from 'src/generated/graphql';
 
@@ -51,10 +50,15 @@ export class GithubService {
 
     const sinceIso = sinceDate.toISOString();
 
-    this.logger.log(`[GitHub] Fetching commits for ${repo} on ${branch} since ${sinceIso}`);
+    this.logger.log(
+      `[GitHub] Fetching commits for ${repo} on ${branch} since ${sinceIso}`,
+    );
 
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), this.REQUEST_TIMEOUT_MS);
+    const timeoutId = setTimeout(
+      () => controller.abort(),
+      this.REQUEST_TIMEOUT_MS,
+    );
 
     try {
       const url = `https://api.github.com/repos/${repo}/commits?sha=${branch}&since=${sinceIso}`;
@@ -96,7 +100,9 @@ export class GithubService {
       return commits;
     } catch (error) {
       if ((error as any)?.name === 'AbortError') {
-        this.logger.error(`GitHub API request timed out after ${this.REQUEST_TIMEOUT_MS}ms for ${repo}`);
+        this.logger.error(
+          `GitHub API request timed out after ${this.REQUEST_TIMEOUT_MS}ms for ${repo}`,
+        );
       } else {
         this.logger.error('Network error fetching GitHub commits:', error);
       }
@@ -110,7 +116,16 @@ export class GithubService {
     token: string,
     repository: string,
     lastTriggeredStr: Maybe<string> | undefined,
-  ): Promise<Array<{ number: number; title: string; body?: string | null; user: { login: string }; html_url: string; created_at: string }>> {
+  ): Promise<
+    Array<{
+      number: number;
+      title: string;
+      body?: string | null;
+      user: { login: string };
+      html_url: string;
+      created_at: string;
+    }>
+  > {
     const perPage = 50;
     const [owner, repo] = repository.split('/');
     if (!owner || !repo) {
@@ -123,15 +138,27 @@ export class GithubService {
       : new Date(Date.now() - 5 * 60 * 1000);
     const sinceIso = sinceDate.toISOString();
 
-    this.logger.log(`[GitHub] Fetching pull requests for ${repository} since ${sinceIso}`);
+    this.logger.log(
+      `[GitHub] Fetching pull requests for ${repository} since ${sinceIso}`,
+    );
 
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), this.REQUEST_TIMEOUT_MS);
+    const timeoutId = setTimeout(
+      () => controller.abort(),
+      this.REQUEST_TIMEOUT_MS,
+    );
 
     try {
       let page = 1;
-      const found: Array<{ number: number; title: string; body?: string | null; user: { login: string }; html_url: string; created_at: string }> = [];
-      
+      const found: Array<{
+        number: number;
+        title: string;
+        body?: string | null;
+        user: { login: string };
+        html_url: string;
+        created_at: string;
+      }> = [];
+
       while (true) {
         const url = `https://api.github.com/repos/${owner}/${repo}/pulls?state=all&sort=created&direction=desc&per_page=${perPage}&page=${page}`;
 
@@ -181,11 +208,16 @@ export class GithubService {
         if (page > 10) break;
       }
 
-      found.sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime());
+      found.sort(
+        (a, b) =>
+          new Date(a.created_at).getTime() - new Date(b.created_at).getTime(),
+      );
       return found;
     } catch (error) {
       if ((error as any)?.name === 'AbortError') {
-        this.logger.error(`[GitHub] PRs request timed out after ${this.REQUEST_TIMEOUT_MS}ms for ${repository}`);
+        this.logger.error(
+          `[GitHub] PRs request timed out after ${this.REQUEST_TIMEOUT_MS}ms for ${repository}`,
+        );
       } else {
         this.logger.error('[GitHub] Network error fetching PRs:', error);
       }
@@ -195,7 +227,12 @@ export class GithubService {
     }
   }
 
-  async createIssue(token: string, repository: string, title: string, body?: string): Promise<any> {
+  async createIssue(
+    token: string,
+    repository: string,
+    title: string,
+    body?: string,
+  ): Promise<any> {
     const url = `https://api.github.com/repos/${repository}/issues`;
     const controller = new AbortController();
     const timeout = 10000;
@@ -281,13 +318,17 @@ export class GithubService {
 
       if (!putRes.ok) {
         const txt = await putRes.text();
-        throw new Error(`GitHub createOrUpdateFile error ${putRes.status}: ${txt}`);
+        throw new Error(
+          `GitHub createOrUpdateFile error ${putRes.status}: ${txt}`,
+        );
       }
 
       return await putRes.json();
     } catch (error) {
       if ((error as any)?.name === 'AbortError') {
-        throw new Error(`GitHub createOrUpdateFile timed out after ${timeout}ms`);
+        throw new Error(
+          `GitHub createOrUpdateFile timed out after ${timeout}ms`,
+        );
       }
       throw error;
     }

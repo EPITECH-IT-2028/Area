@@ -9,15 +9,22 @@ import {
 import { UserServicesService } from './user-services.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
+interface RequestWithUser {
+  user: {
+    id: string;
+    email: string;
+    name: string;
+  };
+}
+
 @Controller('user-services')
 @UseGuards(JwtAuthGuard)
 export class UserServicesController {
   constructor(private readonly userServicesService: UserServicesService) {}
 
   @Get()
-  async getUserServices(@Request() req: any) {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-    const userId = req.user.sub as string;
+  async getUserServices(@Request() req: RequestWithUser) {
+    const userId = req.user.id;
     const services =
       await this.userServicesService.findUserServicesByUser(userId);
 
@@ -39,11 +46,10 @@ export class UserServicesController {
 
   @Get(':serviceId')
   async getUserService(
-    @Request() req: any,
+    @Request() req: RequestWithUser,
     @Param('serviceId') serviceId: string,
   ) {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-    const userId = req.user.sub as string;
+    const userId = req.user.id;
     const service = await this.userServicesService.findUserService(
       userId,
       serviceId,
@@ -71,14 +77,18 @@ export class UserServicesController {
   }
 
   @Delete(':id')
-  async disconnectService(@Request() req: any, @Param('id') id: string) {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-    const userId = req.user.sub as string;
+  async disconnectService(
+    @Request() req: RequestWithUser,
+    @Param('id') id: string,
+  ) {
+    const userId = req.user.id;
 
     const userService =
-      await this.userServicesService.findUserServicesByUser(id);
+      await this.userServicesService.findUserServicesByUser(userId);
 
-    if (!userService || userService[0].user_id !== userId) {
+    const serviceToDisconnect = userService.find((s) => s.id === id);
+
+    if (!serviceToDisconnect || serviceToDisconnect.user_id !== userId) {
       throw new Error('Service not found or not owned by user');
     }
 

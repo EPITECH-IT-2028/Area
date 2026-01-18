@@ -21,6 +21,10 @@ import { ApiProperty } from '@nestjs/swagger';
 import { AuthService, AuthResponse } from './auth.service';
 import { GoogleOauthGuard } from './guards/google-auth.guard';
 import { GithubOauthGuard } from './guards/github-auth.guard';
+import { GoogleLinkGuard } from './guards/google-link.guard';
+import { GithubLinkGuard } from './guards/github-link.guard';
+import { MicrosoftLinkGuard } from './guards/microsoft-link.guard';
+import { DiscordLinkGuard } from './guards/discord-link.guard';
 import { Request } from 'express';
 import { MicrosoftOauthGuard } from './guards/microsoft-auth.guard';
 import { DiscordOauthGuard } from './guards/discord-auth.guard';
@@ -78,6 +82,7 @@ interface RequestWithUser extends Request {
     email: string;
     name: string;
     platform?: string;
+    mode?: 'login' | 'link';
   };
 }
 
@@ -106,6 +111,8 @@ export class AuthController {
       message: 'Login successful',
     };
   }
+
+  // ========== LOGIN ROUTES ==========
 
   @Get('google')
   @UseGuards(GoogleOauthGuard)
@@ -186,6 +193,60 @@ export class AuthController {
     );
   }
 
+  /* LINKS */
+
+  @Get('link/google')
+  @UseGuards(GoogleLinkGuard)
+  async linkGoogleAuth() {}
+
+  @Get('link/google/callback')
+  @UseGuards(GoogleLinkGuard)
+  linkGoogleAuthCallback(
+    @Req() req: RequestWithUser,
+    @Res({ passthrough: false }) res: Response,
+  ): void {
+    this.handleLinkCallback(req, res, 'Google');
+  }
+
+  @Get('link/github')
+  @UseGuards(GithubLinkGuard)
+  async linkGithubAuth() {}
+
+  @Get('link/github/callback')
+  @UseGuards(GithubLinkGuard)
+  linkGithubAuthCallback(
+    @Req() req: RequestWithUser,
+    @Res({ passthrough: false }) res: Response,
+  ): void {
+    this.handleLinkCallback(req, res, 'GitHub');
+  }
+
+  @Get('link/microsoft')
+  @UseGuards(MicrosoftLinkGuard)
+  async linkMicrosoftAuth() {}
+
+  @Get('link/microsoft/callback')
+  @UseGuards(MicrosoftLinkGuard)
+  linkMicrosoftAuthCallback(
+    @Req() req: RequestWithUser,
+    @Res({ passthrough: false }) res: Response,
+  ): void {
+    this.handleLinkCallback(req, res, 'Microsoft');
+  }
+
+  @Get('link/discord')
+  @UseGuards(DiscordLinkGuard)
+  async linkDiscordAuth() {}
+
+  @Get('link/discord/callback')
+  @UseGuards(DiscordLinkGuard)
+  linkDiscordAuthCallback(
+    @Req() req: RequestWithUser,
+    @Res({ passthrough: false }) res: Response,
+  ): void {
+    this.handleLinkCallback(req, res, 'Discord');
+  }
+
   private handleOAuthCallback(
     req: RequestWithUser,
     res: Response,
@@ -224,6 +285,45 @@ export class AuthController {
       );
     }
   }
+
+  private handleLinkCallback(
+    req: RequestWithUser,
+    res: Response,
+    serviceName: string,
+  ) {
+    const platform = req.user?.platform || 'web';
+
+    if (!req.user) {
+      redirectToApp(
+        platform,
+        res,
+        '',
+        `Failed to link ${serviceName} account`,
+        true,
+      );
+      return;
+    }
+
+    try {
+      redirectToApp(
+        platform,
+        res,
+        '',
+        undefined,
+        true,
+        `${serviceName} account linked successfully`,
+      );
+    } catch (error) {
+      console.error(`Error linking ${serviceName}:`, error);
+      redirectToApp(
+        platform,
+        res,
+        '',
+        `An error occurred while linking ${serviceName}`,
+        true,
+      );
+    }
+  }
 }
 
 function redirectToApp(
@@ -231,30 +331,38 @@ function redirectToApp(
   res: Response,
   token: string,
   error?: string,
+  isLink: boolean = false,
+  success?: string,
 ) {
   if (!['web', 'mobile'].includes(platform)) {
     platform = 'web';
   }
+
+  const params = new URLSearchParams();
+
   if (error) {
-    if (platform === 'web') {
-      const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:8081';
-      return res.redirect(
-        `${frontendUrl}/auth/callback?error=${encodeURIComponent(error)}`,
-      );
-    }
-    const frontendScheme = process.env.FRONTEND_MOBILE_SCHEME || 'area://';
-    return res.redirect(
-      `${frontendScheme}auth/callback?error=${encodeURIComponent(error)}`,
-    );
+    params.append('error', error);
   }
 
-  const encodedToken = encodeURIComponent(token);
+  if (token) {
+    params.append('token', token);
+  }
+
+  if (success) {
+    params.append('success', success);
+  }
+
+  if (isLink) {
+    params.append('action', 'link');
+  }
+
+  const queryString = params.toString();
 
   if (platform === 'mobile') {
     const frontendScheme = process.env.FRONTEND_MOBILE_SCHEME || 'area://';
-    return res.redirect(`${frontendScheme}auth/callback?token=${encodedToken}`);
+    return res.redirect(`${frontendScheme}auth/callback?${queryString}`);
   }
 
   const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:8081';
-  return res.redirect(`${frontendUrl}/auth/callback?token=${encodedToken}`);
+  return res.redirect(`${frontendUrl}/auth/callback?${queryString}`);
 }

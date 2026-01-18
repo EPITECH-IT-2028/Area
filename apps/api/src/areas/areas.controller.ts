@@ -7,6 +7,7 @@ import {
   Post,
   Body,
   Req,
+  Param,
 } from '@nestjs/common';
 import { AreasService } from './areas.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
@@ -120,6 +121,18 @@ export class AreasController {
     type: CreateAreaDto,
   })
   @ApiResponse({ status: 400, description: 'Bad Request.' })
+  
+  @Get('user')
+  async getAreaByUserId(@Req() req: any) {
+    const userId = req.user.id as string;
+
+    const area = await this.areasService.getAreaByUserId(userId);
+    return {
+      success: true,
+      data: area,
+    };
+  }
+
   @Post()
   @HttpCode(HttpStatus.CREATED)
   async create(@Body() createAreaDto: CreateAreaDto, @Req() req: any) {

@@ -16,14 +16,17 @@ class ServiceStore: ObservableObject {
 	@Published var isLoading: Bool = false
 
 	func fromServiceToCardItem() -> [CardItem] {
-		let cardItems = services.map { service in
-			return CardItem(
-				title: service.displayName,
-				description: nil,
-				iconURL: service.iconUrl
-			)
+		return services.compactMap { service in
+			if service.oauthUrl != nil {
+				return CardItem(
+					title: service.displayName,
+					description: nil,
+					iconURL: service.iconUrl
+				)
+			} else {
+				return nil
+			}
 		}
-		return cardItems
 	}
 
 	func fromActionsToCard(serviceName: String?) -> [CardItem] {
