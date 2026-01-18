@@ -114,7 +114,7 @@ struct AREACardView: View {
 			.cornerRadius(12)
 		}
 		.padding(16)
-		.background(Color.white)
+		.background(Color.cardBackgroundColor)
 		.cornerRadius(20)
 		.overlay(
 			RoundedRectangle(cornerRadius: 20)

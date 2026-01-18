@@ -43,7 +43,7 @@ struct ResetPasswordView: View {
 					Text(LocalizedStringResource.loginResetButtonTitle)
 						.font(.system(size: 24, weight: .bold, design: .default))
 						.frame(maxWidth: .infinity, maxHeight: 60)
-						.foregroundColor(Color.white)
+						.foregroundColor(Color.cardBackgroundColor)
 						.background(Color.mainColor)
 						.cornerRadius(10)
 				}

@@ -27,13 +27,13 @@ struct TableView: View {
 			VStack(alignment: .center) {
 				Text(item.title)
 					.font(.system(size: 24, weight: .bold))
-					.foregroundStyle(.black)
+					.foregroundStyle(Color.primary)
 					.multilineTextAlignment(.center)
 
 				if let description = item.description {
 					Text(description)
 						.font(.body)
-						.foregroundStyle(.gray)
+						.foregroundStyle(Color.secondary)
 						.lineLimit(2)
 						.multilineTextAlignment(.center)
 				}
@@ -43,7 +43,7 @@ struct TableView: View {
 		}
 		.frame(maxWidth: .infinity)
 		.frame(height: 100)
-		.background(Color.white)
+		.background(Color.cardBackgroundColor)
 		.cornerRadius(20)
 		.overlay(
 			RoundedRectangle(cornerRadius: 20).stroke(
