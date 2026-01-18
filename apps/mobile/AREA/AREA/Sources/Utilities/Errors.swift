@@ -59,7 +59,7 @@ enum NetworkError: Error, LocalizedError {
 		case .missingToken:
 			return "The network request was missing a token."
 		case .missingUserId:
-		+		return "The network response was missing the user ID."
+			return "The network response was missing the user ID."
 		}
 	}
 }

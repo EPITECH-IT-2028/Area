@@ -39,7 +39,7 @@ struct ContentView: View {
 							LocalizedStringResource.homeTitle,
 							systemImage: Constants.homeIconString
 						) {
-							HomeView()
+							HomeView(viewModel: homeViewModel)
 						}
 						Tab(
 							LocalizedStringResource.servicesTitle,
