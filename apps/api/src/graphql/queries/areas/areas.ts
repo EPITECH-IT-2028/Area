@@ -208,3 +208,58 @@ export const CreateAreaQuery = gql`
     }
   }
 `;
+
+export const DeleteAreaMutation = gql`
+  mutation DeleteArea($id: uuid!, $user_id: uuid!) {
+    delete_areas(
+      where: { id: { _eq: $id }, user_id: { _eq: $user_id } }
+    ) {
+      affected_rows
+    }
+  }
+`;
+
+export const ModifyAreaNameMutation = gql`
+  mutation ModifyAreaName($id: uuid!, $name: String!, $user_id: uuid!) {
+    update_areas(
+      where: { id: { _eq: $id }, user_id: { _eq: $user_id } }
+      _set: { name: $name }
+    ) {
+      affected_rows
+      returning {
+        id
+        name
+      }
+    }
+  }
+`;
+
+export const ModifyAreaStatusMutation = gql`
+  mutation ModifyAreaStatus($id: uuid!, $is_active: Boolean!, $user_id: uuid!) {
+    update_areas(
+      where: { id: { _eq: $id }, user_id: { _eq: $user_id } }
+      _set: { is_active: $is_active }
+    ) {
+      affected_rows
+      returning {
+        id
+        is_active
+      }
+    }
+  }
+`;
+
+export const ModifyAreaDescriptionMutation = gql`
+  mutation ModifyAreaDescription($id: uuid!, $description: String!, $user_id: uuid!) {
+    update_areas(
+      where: { id: { _eq: $id }, user_id: { _eq: $user_id } }
+      _set: { description: $description }
+    ) {
+      affected_rows
+      returning {
+        id
+        description
+      }
+    }
+  }
+`;
