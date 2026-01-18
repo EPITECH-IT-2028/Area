@@ -60,6 +60,13 @@ export class MicrosoftStrategy extends PassportStrategy(Strategy, 'microsoft') {
       }
 
       user = foundUser;
+
+      const existingUser = await this.usersService.findByEmail(email);
+      if (existingUser && existingUser.id !== userId) {
+        throw new ConflictException(
+          'This Microsoft account is already linked to another user',
+        );
+      }
     } else {
       const foundUser = await this.usersService.findByEmail(email);
 

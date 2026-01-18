@@ -50,6 +50,13 @@ export class GithubStrategy extends PassportStrategy(Strategy, 'github') {
       }
 
       user = foundUser;
+
+      const existingUser = await this.usersService.findByEmail(email);
+      if (existingUser && existingUser.id !== userId) {
+        throw new ConflictException(
+          'This GitHub account is already linked to another user',
+        );
+      }
     } else {
       const foundUser = await this.usersService.findByEmail(email);
 
