@@ -39,7 +39,6 @@ class AuthState: ObservableObject {
 				userId,
 				forKey: Constants.keychainUserIdKey
 			)
-			isAuthenticated = true
 		} catch {
 			throw AuthError.keychainSetFailed
 		}
