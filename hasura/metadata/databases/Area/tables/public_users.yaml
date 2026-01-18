@@ -24,6 +24,7 @@ select_permissions:
         - email
         - id
         - name
+        - updated_at
       filter:
         id:
           _eq: X-Hasura-User-Id
@@ -35,6 +36,7 @@ update_permissions:
         - created_at
         - email
         - name
+        - updated_at
       filter:
         id:
           _eq: X-Hasura-User-Id
