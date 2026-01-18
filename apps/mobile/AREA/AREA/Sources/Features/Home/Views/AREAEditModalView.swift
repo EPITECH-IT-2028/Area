@@ -18,13 +18,15 @@ struct AREAEditModal: View {
 	@State private var showDeleteConfirmation = false
 	@State private var errorMessage: String?
 	@State private var showError = false
+	@ObservedObject var viewModel: HomeViewModel
 
-	init(area: AREAItem, isPresented: Binding<Bool>) {
+	init(area: AREAItem, isPresented: Binding<Bool>, viewModel: HomeViewModel) {
 		self.area = area
 		self._isPresented = isPresented
 		self._editedName = State(initialValue: area.title)
 		self._editedDescription = State(initialValue: area.description)
 		self._isActive = State(initialValue: area.isActive)
+		self.viewModel = viewModel
 	}
 
 	var body: some View {
@@ -185,13 +187,12 @@ struct AREAEditModal: View {
 
 		Task {
 			do {
-				//				let updateAction = UpdateAREAAction()
-				//				try await updateAction.call(
-				//					id: area.id,
-				//					name: editedName,
-				//					description: editedDescription,
-				//					isActive: isActive
-				//				)
+				try await viewModel.updateAreaById(
+					id: area.id,
+					name: editedName,
+					description: editedDescription,
+					isActive: isActive
+				)
 
 				await MainActor.run {
 					isSaving = false
@@ -210,8 +211,7 @@ struct AREAEditModal: View {
 	private func deleteArea() {
 		Task {
 			do {
-				//				let deleteAction = DeleteAREAAction()
-				//				try await deleteAction.call(id: area.id)
+				try await viewModel.deleteArea(id: area.id)
 
 				await MainActor.run {
 					isPresented = false

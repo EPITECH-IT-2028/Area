@@ -17,6 +17,7 @@ struct HomeView: View {
 	@State private var areas: [AREAItem] = []
 	@State private var selectedArea: AREAItem?
 	@State private var showEditModal = false
+
 	var body: some View {
 		let stats: [HomepageCard] = [
 			HomepageCard(title: "Services", number: serviceStore.services.count),
@@ -87,7 +88,8 @@ struct HomeView: View {
 					isPresented: Binding(
 						get: { true },
 						set: { if !$0 { selectedArea = nil } }
-					)
+					),
+					viewModel: viewModel
 				)
 			}
 		}

@@ -24,4 +24,38 @@ class HomeViewModel: ObservableObject {
 			return []
 		}
 	}
+
+	func updateAreaById(
+		id: String,
+		name: String,
+		description: String,
+		isActive: Bool
+	) async throws {
+		do {
+			try await action.updateNameById(
+				id: id,
+				parameters: UpdateNameModel(name: name)
+			)
+			try await action.updateDescriptionById(
+				id: id,
+				parameters: UpdateDescriptionModel(description: description)
+			)
+			try await action.updateIsActiveById(
+				id: id,
+				parameters: UpdateIsActiveModel(isActive: isActive)
+			)
+		} catch {
+			// TODO
+		}
+	}
+
+	func deleteArea(
+		id: String
+	) async throws {
+		do {
+			try await action.deleteAreaById(id: id)
+		} catch {
+			// TODO
+		}
+	}
 }

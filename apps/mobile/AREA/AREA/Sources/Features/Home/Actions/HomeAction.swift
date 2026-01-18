@@ -9,6 +9,181 @@ import Foundation
 
 struct HomeAction {
 
+	func deleteAreaById(id: String)
+		async throws
+	{
+		let builder = BuilderAPI()
+		let path = "\(Constants.createAREAsPath)/\(id)/"
+		let url = try builder.buildURL(path: path)
+		let request = try builder.buildRequest(
+			url: url,
+			method: "DELETE",
+			token: AuthState.shared.getAuthToken()
+		)
+
+		let (data, urlResponse) = try await URLSession.shared.data(for: request)
+
+		guard let response = urlResponse as? HTTPURLResponse else {
+			throw NetworkError.badURLResponse(
+				underlyingError: NSError(
+					domain: "DeleteArea",
+					code: -1,
+					userInfo: [
+						NSLocalizedDescriptionKey: "Response is not an HTTP response"
+					]
+				)
+			)
+		}
+		guard (200...299).contains(response.statusCode) else {
+			let errorMessage = parseErrorMessage(
+				from: data,
+				statusCode: response.statusCode
+			)
+			throw NetworkError.badURLResponse(
+				underlyingError: NSError(
+					domain: "DeleteArea",
+					code: response.statusCode,
+					userInfo: [
+						NSLocalizedDescriptionKey: errorMessage,
+						"statusCode": response.statusCode,
+					]
+				)
+			)
+		}
+	}
+	
+	func updateNameById(id: String, parameters: UpdateNameModel)
+		async throws
+	{
+		let builder = BuilderAPI()
+		let path = "\(Constants.createAREAsPath)/\(id)/name"
+		let url = try builder.buildURL(path: path)
+		let request = try builder.buildRequest(
+			url: url,
+			method: "PATCH",
+			parameters: parameters,
+			token: AuthState.shared.getAuthToken()
+		)
+
+		let (data, urlResponse) = try await URLSession.shared.data(for: request)
+
+		guard let response = urlResponse as? HTTPURLResponse else {
+			throw NetworkError.badURLResponse(
+				underlyingError: NSError(
+					domain: "UpdateName",
+					code: -1,
+					userInfo: [
+						NSLocalizedDescriptionKey: "Response is not an HTTP response"
+					]
+				)
+			)
+		}
+		guard (200...299).contains(response.statusCode) else {
+			let errorMessage = parseErrorMessage(
+				from: data,
+				statusCode: response.statusCode
+			)
+			throw NetworkError.badURLResponse(
+				underlyingError: NSError(
+					domain: "UpdateName",
+					code: response.statusCode,
+					userInfo: [
+						NSLocalizedDescriptionKey: errorMessage,
+						"statusCode": response.statusCode,
+					]
+				)
+			)
+		}
+	}
+	
+	func updateDescriptionById(id: String, parameters: UpdateDescriptionModel)
+		async throws
+	{
+		let builder = BuilderAPI()
+		let path = "\(Constants.createAREAsPath)/\(id)/description"
+		let url = try builder.buildURL(path: path)
+		let request = try builder.buildRequest(
+			url: url,
+			method: "PATCH",
+			parameters: parameters,
+			token: AuthState.shared.getAuthToken()
+		)
+
+		let (data, urlResponse) = try await URLSession.shared.data(for: request)
+
+		guard let response = urlResponse as? HTTPURLResponse else {
+			throw NetworkError.badURLResponse(
+				underlyingError: NSError(
+					domain: "UpdateDescription",
+					code: -1,
+					userInfo: [
+						NSLocalizedDescriptionKey: "Response is not an HTTP response"
+					]
+				)
+			)
+		}
+		guard (200...299).contains(response.statusCode) else {
+			let errorMessage = parseErrorMessage(
+				from: data,
+				statusCode: response.statusCode
+			)
+			throw NetworkError.badURLResponse(
+				underlyingError: NSError(
+					domain: "UpdateDescription",
+					code: response.statusCode,
+					userInfo: [
+						NSLocalizedDescriptionKey: errorMessage,
+						"statusCode": response.statusCode,
+					]
+				)
+			)
+		}
+	}
+	
+	func updateIsActiveById(id: String, parameters: UpdateIsActiveModel)
+		async throws
+	{
+		let builder = BuilderAPI()
+		let path = "\(Constants.createAREAsPath)/\(id)/isActive"
+		let url = try builder.buildURL(path: path)
+		let request = try builder.buildRequest(
+			url: url,
+			method: "PATCH",
+			parameters: parameters,
+			token: AuthState.shared.getAuthToken()
+		)
+
+		let (data, urlResponse) = try await URLSession.shared.data(for: request)
+
+		guard let response = urlResponse as? HTTPURLResponse else {
+			throw NetworkError.badURLResponse(
+				underlyingError: NSError(
+					domain: "UpdateIsActive",
+					code: -1,
+					userInfo: [
+						NSLocalizedDescriptionKey: "Response is not an HTTP response"
+					]
+				)
+			)
+		}
+		guard (200...299).contains(response.statusCode) else {
+			let errorMessage = parseErrorMessage(
+				from: data,
+				statusCode: response.statusCode
+			)
+			throw NetworkError.badURLResponse(
+				underlyingError: NSError(
+					domain: "UpdateIsActive",
+					code: response.statusCode,
+					userInfo: [
+						NSLocalizedDescriptionKey: errorMessage,
+						"statusCode": response.statusCode,
+					]
+				)
+			)
+		}
+	}
+	
 	/// This function is used to fetch the user's AREAs
 	func call() async throws -> [AREAItem] {
 		let builder = BuilderAPI()
@@ -49,17 +224,17 @@ struct HomeAction {
 				)
 			)
 		}
-		
+
 		let decoder = JSONDecoder()
 		decoder.keyDecodingStrategy = .convertFromSnakeCase
-		
+
 		do {
 			let homeModel = try decoder.decode(HomeModel.self, from: data)
-			
+
 			let areaItems = homeModel.data.map { homeData in
 				AREAItem(from: homeData)
 			}
-			
+
 			return areaItems
 		} catch {
 			throw NetworkError.decodingError(
