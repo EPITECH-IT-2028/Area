@@ -81,6 +81,9 @@ class AuthState: ObservableObject {
 			try KeychainManager.shared.keychain.deleteItem(
 				forKey: Constants.keychainJWTKey
 			)
+			try KeychainManager.shared.keychain.deleteItem(
+				forKey: Constants.keychainUserIdKey
+			)
 			isAuthenticated = false
 		} catch {
 			throw AuthError.keychainDeleteFailed

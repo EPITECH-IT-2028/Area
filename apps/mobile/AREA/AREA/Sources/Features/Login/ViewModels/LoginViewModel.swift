@@ -78,7 +78,7 @@ class LoginViewModel: ObservableObject {
 		}
 
 		guard let userId = data.user?.id else {
-			throw NetworkError.missingAccessToken
+			throw NetworkError.missingUserId
 		}
 		do {
 			try AuthState.shared.authenticate(accessToken: accessToken)
