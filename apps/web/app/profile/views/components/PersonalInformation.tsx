@@ -110,12 +110,16 @@ export function PersonalInformation({
             <User className="h-5 w-5 text-primary" />
           </div>
           <div className="flex-1 space-y-1">
-            <p className="text-sm font-medium text-muted-foreground">
+            <label
+              htmlFor="full-name"
+              className="text-sm font-medium text-muted-foreground"
+            >
               Full Name
-            </p>
+            </label>
             {isEditingName ? (
               <div className="flex items-center gap-2">
                 <Input
+                  id="full-name"
                   value={editedName}
                   onChange={(e) => setEditedName(e.target.value)}
                   className="h-8 max-w-[200px]"
