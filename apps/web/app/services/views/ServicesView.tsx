@@ -2,10 +2,10 @@
 
 import Link from "next/link";
 
+import { DashboardHeader } from "@/app/dashboard/views/components/DashboardHeader";
 import { useServices } from "@/app/services/hooks/useServices";
 import { ServiceCard } from "@/app/services/views/components/ServiceCard";
 import { ServiceStatsCards } from "@/app/services/views/components/ServiceStatsCards";
-import { ServicesHeader } from "@/app/services/views/components/ServicesHeader";
 import { ArrowLeft, Plug } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -27,7 +27,7 @@ export default function ServicesView() {
 
   return (
     <div className="min-h-screen">
-      <ServicesHeader />
+      <DashboardHeader />
       <main className="container mx-auto my-4 px-4 md:my-8 md:px-0">
         <Link href="/dashboard">
           <Button variant="ghost" size="sm" className="mb-4 gap-2">
