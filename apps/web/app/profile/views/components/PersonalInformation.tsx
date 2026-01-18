@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { LoginResponse } from "@/app/login/models/loginResponse";
 import { useAuth } from "@/context/AuthContext";
@@ -212,12 +212,29 @@ function InfoRow({
 
 function CopyButton({ onCopy }: { onCopy: () => void }) {
   const [copied, setCopied] = useState(false);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const handleClick = () => {
     onCopy();
     setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+
+    timeoutRef.current = setTimeout(() => {
+      setCopied(false);
+      timeoutRef.current = null;
+    }, 2000);
   };
+
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, []);
 
   return (
     <Button
