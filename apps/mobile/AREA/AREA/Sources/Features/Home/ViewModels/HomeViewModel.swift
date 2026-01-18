@@ -11,16 +11,19 @@ import Foundation
 @MainActor
 class HomeViewModel: ObservableObject {
 	@Published var isLoading: Bool = true
+	@Published var errorMessage: String?
 	var action = HomeAction()
 
 	func retrieveAREA() async -> [AREAItem] {
 		isLoading = true
+		errorMessage = nil
 		defer { isLoading = false }
 		do {
 			let items: [AREAItem] = try await action.call()
 			return items
 		} catch {
 			print(error)
+			errorMessage = error.localizedDescription
 			return []
 		}
 	}
