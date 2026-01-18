@@ -1,7 +1,10 @@
+import ServicesView from "@/app/services/views/ServicesView";
+import ProtectedRoute from "@/components/ProtectedRoute";
+
 export default function Page() {
   return (
-    <main className="flex min-h-screen items-center justify-center">
-      <h1 className="text-4xl select-none">Services page</h1>
-    </main>
+    <ProtectedRoute>
+      <ServicesView />
+    </ProtectedRoute>
   );
 }
