@@ -5,6 +5,7 @@ import { useState, useEffect, useCallback } from "react";
 import { ServiceRequest, UserServiceRequest } from "@/app/services/models/serviceRequest";
 import {AboutResponse, UserServicesResponse } from "@/app/services/models/serviceResponse";
 import { toast } from "sonner";
+import Cookies from "js-cookie";
 
 export const useServices = () => {
   const [services, setServices] = useState<ServiceRequest[]>([]);
@@ -78,12 +79,24 @@ export const useServices = () => {
       setIsConnecting(service.name);
 
       try {
+        let oauthUrl = service.oauth_url;
+        oauthUrl = oauthUrl.replace('/auth/google/callback', '/auth/link/google');
+        oauthUrl = oauthUrl.replace('/auth/github/callback', '/auth/link/github');
+        oauthUrl = oauthUrl.replace('/auth/microsoft/callback', '/auth/link/microsoft');
+        oauthUrl = oauthUrl.replace('/auth/discord/callback', '/auth/link/discord');
+        
+        const token = Cookies.get("access_token");
+        if (token) {
+          const separator = oauthUrl.includes('?') ? '&' : '?';
+          oauthUrl = `${oauthUrl}${separator}token=${token}`;
+        }
+
         const width = 600;
         const height = 700;
         const left = window.screenX + (window.outerWidth - width) / 2;
         const top = window.screenY + (window.outerHeight - height) / 2;
         const popup = window.open(
-          service.oauth_url,
+          oauthUrl,
           "OAuth",
           `width=${width},height=${height},left=${left},top=${top}`
         );
