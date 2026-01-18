@@ -1,4 +1,5 @@
-import { ServiceAction, ServiceReaction } from "./Action";
+import { ServiceAction } from "./serviceAction";
+import { ServiceReaction } from "./serviceReaction";
 
 export interface ServiceRequest {
   name: string;
