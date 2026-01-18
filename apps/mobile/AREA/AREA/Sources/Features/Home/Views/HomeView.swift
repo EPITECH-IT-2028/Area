@@ -83,11 +83,13 @@ struct HomeView: View {
 			}
 			.navigationTitle(LocalizedStringResource.homeTitle)
 			.background(Color.backgroundColor)
-			.sheet(isPresented: $showEditModal) {
-				Task {
-					await loadAreas()
+			.sheet(
+				isPresented: $showEditModal,
+				onDismiss: {
+					selectedArea = nil
+					Task { await loadAreas() }
 				}
-			} content: {
+			) {
 				if let area = selectedArea {
 					AREAEditModal(
 						area: area,
@@ -99,6 +101,7 @@ struct HomeView: View {
 		}
 	}
 
+	@MainActor
 	private func loadAreas() async {
 		areas = await viewModel.retrieveAREA()
 	}

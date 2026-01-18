@@ -144,7 +144,7 @@ struct HomeAction {
 		async throws
 	{
 		let builder = BuilderAPI()
-		let path = "\(Constants.createAREAsPath)/\(id)/isActive"
+		let path = "\(Constants.createAREAsPath)/\(id)/status"
 		let url = try builder.buildURL(path: path)
 		let request = try builder.buildRequest(
 			url: url,
@@ -187,7 +187,7 @@ struct HomeAction {
 	/// This function is used to fetch the user's AREAs
 	func call() async throws -> [AREAItem] {
 		let builder = BuilderAPI()
-		let url = try builder.buildURL(path: Constants.createAREAsPath)
+		let url = try builder.buildURL(path: "\(Constants.createAREAsPath)/user")
 		let request = try builder.buildRequest(
 			url: url,
 			method: "GET",

@@ -16,6 +16,6 @@ struct UpdateDescriptionModel: Encodable {
 }
 
 struct UpdateIsActiveModel: Encodable {
-	let isActive: Bool
+	let is_active: Bool
 }
 

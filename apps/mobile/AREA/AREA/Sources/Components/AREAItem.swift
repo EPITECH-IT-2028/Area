@@ -14,13 +14,14 @@ struct AREAItem: Identifiable {
 	let reactionEventType: String?
 	let actionServiceName: String
 	let reactionServiceName: String
-	let isActive: Bool = true
+	let isActive: Bool
 	let description: String
 	let lastTriggered: String?
 
 	init(from homeData: HomeDataModel) {
 		self.id = homeData.id
 		self.title = homeData.name
+		self.isActive = homeData.isActive
 		self.actionEventType = homeData.action.eventType
 		self.reactionEventType = homeData.reaction.eventType
 		self.actionServiceName = homeData.action.service.name
@@ -36,6 +37,7 @@ struct AREAItem: Identifiable {
 		reactionEventType: String,
 		actionServiceName: String,
 		reactionServiceName: String,
+		isActive: Bool,
 		description: String = "",
 		lastTriggered: String = ""
 	) {
@@ -47,5 +49,6 @@ struct AREAItem: Identifiable {
 		self.reactionServiceName = reactionServiceName
 		self.description = description
 		self.lastTriggered = lastTriggered
+		self.isActive = isActive
 	}
 }

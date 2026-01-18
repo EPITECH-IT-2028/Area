@@ -31,18 +31,32 @@ class HomeViewModel: ObservableObject {
 		description: String,
 		isActive: Bool
 	) async throws {
-		try await action.updateNameById(
-			id: id,
-			parameters: UpdateNameModel(name: name)
-		)
-		try await action.updateDescriptionById(
-			id: id,
-			parameters: UpdateDescriptionModel(description: description)
-		)
-		try await action.updateIsActiveById(
-			id: id,
-			parameters: UpdateIsActiveModel(isActive: isActive)
-		)
+		do {
+			try await action.updateNameById(
+				id: id,
+				parameters: UpdateNameModel(name: name)
+			)
+		} catch {
+			throw error
+		}
+
+		do {
+			try await action.updateDescriptionById(
+				id: id,
+				parameters: UpdateDescriptionModel(description: description.isEmpty ? " " : description)
+			)
+		} catch {
+			throw error
+		}
+
+		do {
+			try await action.updateIsActiveById(
+				id: id,
+				parameters: UpdateIsActiveModel(is_active: isActive)
+			)
+		} catch {
+			throw error
+		}
 	}
 
 	func deleteArea(

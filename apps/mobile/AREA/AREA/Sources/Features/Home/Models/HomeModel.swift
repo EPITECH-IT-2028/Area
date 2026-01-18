@@ -18,6 +18,7 @@ struct HomeDataModel: Decodable, Identifiable {
 	let id: String
 	let userId: String
 	let name: String
+	let isActive: Bool
 	let lastTriggered: String?
 	let actionId: String
 	let actionConfig: [String: String]

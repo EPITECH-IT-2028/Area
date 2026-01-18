@@ -11,9 +11,9 @@ struct AREAEditModal: View {
 	let area: AREAItem
 	@Binding var isPresented: Bool
 
-	@State private var editedName: String
-	@State private var editedDescription: String
-	@State private var isActive: Bool
+	@State private var editedName: String = ""
+	@State private var editedDescription: String = ""
+	@State private var isActive: Bool = false
 	@State private var isSaving = false
 	@State private var showDeleteConfirmation = false
 	@State private var errorMessage: String?
@@ -23,9 +23,6 @@ struct AREAEditModal: View {
 	init(area: AREAItem, isPresented: Binding<Bool>, viewModel: HomeViewModel) {
 		self.area = area
 		self._isPresented = isPresented
-		self._editedName = State(initialValue: area.title)
-		self._editedDescription = State(initialValue: area.description)
-		self._isActive = State(initialValue: area.isActive)
 		self.viewModel = viewModel
 	}
 
@@ -135,6 +132,11 @@ struct AREAEditModal: View {
 						}
 					}
 				}
+			}
+			.onAppear {
+				editedName = area.title
+				editedDescription = area.description
+				isActive = area.isActive
 			}
 			.navigationTitle(LocalizedStringResource.homeEditModalEditAREA)
 			.navigationBarTitleDisplayMode(.inline)
