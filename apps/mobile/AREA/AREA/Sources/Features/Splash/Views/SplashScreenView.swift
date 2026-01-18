@@ -12,7 +12,7 @@ struct SplashScreenView: View {
 	@EnvironmentObject var serviceStore: ServiceStore
 	var body: some View {
 		ZStack {
-			Color.black.ignoresSafeArea()
+			Color.mainColor.ignoresSafeArea()
 			Text(LocalizedStringResource.splashScreenTitle)
 				.font(.title)
 				.foregroundStyle(Color.white)

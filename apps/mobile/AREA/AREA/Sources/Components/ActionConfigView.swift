@@ -29,9 +29,9 @@ struct ActionConfigView: View {
 					.padding()
 			}
 			.background(
-				viewModel.validateActionConfig(for: action) ? Color.blue : Color.gray
+				viewModel.validateActionConfig(for: action) ? Color.mainColor : Color.gray
 			)
-			.foregroundColor(.white)
+			.foregroundColor(.black)
 			.cornerRadius(10)
 			.disabled(!viewModel.validateActionConfig(for: action))
 			.padding()
@@ -43,6 +43,7 @@ struct ActionConfigView: View {
 					.padding(.horizontal)
 			}
 		}
+		.navigationBarTitleDisplayMode(.inline)
 		.navigationTitle(
 			"\(LocalizedStringResource.areaCreationConfigTitle) \(action.name)"
 		)

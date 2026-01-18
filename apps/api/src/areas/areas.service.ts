@@ -9,7 +9,12 @@ import {
   CreateAreaQuery,
   GetActionByNameQuery,
   GetAllActiveAreasQuery,
+  GetAreasByUserIdQuery,
   GetReactionByNameQuery,
+  DeleteAreaMutation,
+  ModifyAreaNameMutation,
+  ModifyAreaStatusMutation,
+  ModifyAreaDescriptionMutation,
 } from 'src/graphql/queries/areas/areas';
 import { CreateAreaDto } from './areas.controller';
 
@@ -25,6 +30,19 @@ export class AreasService {
 
     if (!result.areas) {
       throw new NotFoundException('No active areas found');
+    }
+
+    return result.areas;
+  }
+
+  async getAreaByUserId(id: string): Promise<Areas[]> {
+    const result = await this.graphqlService.adminQuery<{ areas: Areas[] }>(
+      GetAreasByUserIdQuery,
+      { user_id: id },
+    );
+
+    if (!result.areas || result.areas.length === 0) {
+      throw new NotFoundException(`Area with user ID '${id}' not found`);
     }
 
     return result.areas;
@@ -77,6 +95,99 @@ export class AreasService {
         throw error;
       }
       throw new Error(`Failed to create area: ${error}`);
+    }
+  }
+
+  async delete(areaId: string, userId: string): Promise<boolean> {
+    try {
+      await this.graphqlService.adminMutation(DeleteAreaMutation, {
+        id: areaId,
+        user_id: userId,
+      });
+      return true;
+    } catch (error) {
+      throw new Error(`Failed to delete area: ${error}`);
+    }
+  }
+
+  async modifyName(
+    areaId: string,
+    userId: string,
+    newName: string,
+  ): Promise<Areas> {
+    try {
+      const data = await this.graphqlService.adminMutation<{
+        update_areas: Areas;
+      }>(ModifyAreaNameMutation, {
+        id: areaId,
+        name: newName,
+        user_id: userId,
+      });
+
+      if (!data.update_areas) {
+        throw new NotFoundException('Area not found or not owned by user');
+      }
+
+      return data.update_areas;
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw error;
+      }
+      throw new Error(`Failed to modify area name: ${error}`);
+    }
+  }
+
+  async modifyStatus(
+    areaId: string,
+    userId: string,
+    isActive: boolean,
+  ): Promise<Areas> {
+    try {
+      const data = await this.graphqlService.adminMutation<{
+        update_areas: Areas;
+      }>(ModifyAreaStatusMutation, {
+        id: areaId,
+        is_active: isActive,
+        user_id: userId,
+      });
+
+      if (!data.update_areas) {
+        throw new NotFoundException('Area not found or not owned by user');
+      }
+
+      return data.update_areas;
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw error;
+      }
+      throw new Error(`Failed to modify area status: ${error}`);
+    }
+  }
+
+  async modifyDescription(
+    areaId: string,
+    userId: string,
+    newDescription: string,
+  ): Promise<Areas> {
+    try {
+      const data = await this.graphqlService.adminMutation<{
+        update_areas: Areas;
+      }>(ModifyAreaDescriptionMutation, {
+        id: areaId,
+        description: newDescription,
+        user_id: userId,
+      });
+
+      if (!data.update_areas) {
+        throw new NotFoundException('Area not found or not owned by user');
+      }
+
+      return data.update_areas;
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw error;
+      }
+      throw new Error(`Failed to modify area description: ${error}`);
     }
   }
 }

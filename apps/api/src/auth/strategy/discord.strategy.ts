@@ -1,11 +1,14 @@
-import { Injectable } from '@nestjs/common';
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+import { Injectable, ConflictException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy } from 'passport-discord-auth';
 import { ConfigService } from '@nestjs/config';
 import { UsersService } from '../../users/users.service';
 import { UserServicesService } from '../../user-services/user-services.service';
 import { Request } from 'express';
-import { parsePlatformFromState } from 'src/utils/parsePlatform';
+import { parseOAuthState } from 'src/utils/parsePlatform';
 
 @Injectable()
 export class DiscordStrategy extends PassportStrategy(Strategy, 'discord') {
@@ -29,22 +32,42 @@ export class DiscordStrategy extends PassportStrategy(Strategy, 'discord') {
     refreshToken: string,
     profile: any,
   ) {
-    const platform = parsePlatformFromState(req);
+    const oauthState = parseOAuthState(req);
+    const { platform, mode, userId } = oauthState;
+
     const email = profile.email;
 
     if (!email) throw new Error('No email found in Discord profile');
 
-    let user = await this.usersService.findByEmail(email);
+    let user;
 
-    if (!user) {
-      user = await this.usersService.create({
-        email,
-        name: profile.global_name || profile.username || email.split('@')[0],
-        password: null,
-      });
+    if (mode === 'link' && userId) {
+      user = await this.usersService.findOne(userId);
+
+      if (!user) {
+        throw new Error('Authenticated user not found');
+      }
+
+      const existingUser = await this.usersService.findByEmail(email);
+      if (existingUser && existingUser.id !== userId) {
+        throw new ConflictException(
+          'This Discord account is already linked to another user',
+        );
+      }
+    } else {
+      user = await this.usersService.findByEmail(email);
+
+      if (!user) {
+        user = await this.usersService.create({
+          email,
+          name: profile.global_name || profile.username || email.split('@')[0],
+          password: null,
+        });
+      }
     }
 
-    const discordService = await this.userServicesService.getServiceByName('discord');
+    const discordService =
+      await this.userServicesService.getServiceByName('discord');
 
     if (discordService) {
       await this.userServicesService.createOrUpdate({
@@ -56,15 +79,18 @@ export class DiscordStrategy extends PassportStrategy(Strategy, 'discord') {
         credentials: {
           profile: {
             id: profile.id,
-            username: profile.username
-          }
+            username: profile.username,
+          },
         },
       });
+    } else {
+      throw new Error('Discord service not found');
     }
 
     return {
       ...user,
-      platform
+      platform,
+      mode,
     };
   }
 }

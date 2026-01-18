@@ -18,6 +18,7 @@ interface AuthContextType {
   isLoading: boolean;
   login: (authData: LoginResponse["data"]) => void;
   logout: () => void;
+  updateUser: (user: LoginResponse["data"]["user"]) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -75,6 +76,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     });
   };
 
+  const updateUser = (updatedUser: LoginResponse["data"]["user"]) => {
+    setUser(updatedUser);
+    Cookies.set("user", JSON.stringify(updatedUser), {
+      expires: 7,
+      secure: true,
+      sameSite: "strict",
+    });
+  };
+
   const logout = () => {
     setUser(null);
     setAccessToken(null);
@@ -91,6 +101,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         isLoading,
         login,
         logout,
+        updateUser,
       }}
     >
       {children}

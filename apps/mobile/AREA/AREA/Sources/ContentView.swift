@@ -14,6 +14,8 @@ struct ContentView: View {
 	@EnvironmentObject var serviceStore: ServiceStore
 	@StateObject private var loginViewModel = LoginViewModel()
 	@StateObject private var registerViewModel = RegisterViewModel()
+	@StateObject private var areaViewModel = AreaCreationViewModel()
+	@StateObject private var servicesViewModel = ServicesViewModel()
 	@State private var showSplash = true
 	@State private var showingRegister = false
 	@State private var showError = false
@@ -34,20 +36,25 @@ struct ContentView: View {
 			} else {
 				if authState.isAuthenticated {
 					TabView {
-						Tab(LocalizedStringResource.homeTitle, systemImage: Constants.homeIconString) {
+						Tab(
+							LocalizedStringResource.homeTitle,
+							systemImage: Constants.homeIconString
+						) {
 							HomeView()
 						}
 						Tab(
 							LocalizedStringResource.servicesTitle,
 							systemImage: Constants.servicesIconString
 						) {
-							AreaCreationView()
+							ServicesView(viewModel: servicesViewModel)
 						}
 						Tab(
 							LocalizedStringResource.areaTabTitle,
 							systemImage: Constants.areasIconString
 						) {
-							AreaCreationView()
+							AreaCreationView(
+								viewModel: areaViewModel
+							)
 						}
 						Tab(
 							LocalizedStringResource.settingsTitle,
@@ -55,7 +62,9 @@ struct ContentView: View {
 						) {
 							SettingsView()
 						}
-					}.onAppear {
+					}
+					.tint(Color.mainColor)
+					.onAppear {
 						Task {
 							if serviceStore.services.isEmpty {
 								do {
