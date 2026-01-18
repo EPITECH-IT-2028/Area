@@ -105,7 +105,6 @@ export function ConfigForm({
 
   const cleanDescription = (description?: string) => {
     if (!description) return undefined;
-    // Remove "Variables: {{...}}" or "Variables: var1, var2" part
     return description.replace(/Variables:.*$/i, "").trim();
   };
 
