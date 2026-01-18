@@ -1366,13 +1366,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Languages Settings"
+            "value" : "Language Settings"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Paramètres de langues"
+            "value" : "Paramètres de langue"
           }
         }
       }

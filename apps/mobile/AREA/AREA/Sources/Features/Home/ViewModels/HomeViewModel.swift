@@ -17,7 +17,7 @@ class HomeViewModel: ObservableObject {
 		isLoading = true
 		defer { isLoading = false }
 		do {
-			let items: [AREAItem] = try await HomeAction().call()
+			let items: [AREAItem] = try await action.call()
 			return items
 		} catch {
 			print(error)

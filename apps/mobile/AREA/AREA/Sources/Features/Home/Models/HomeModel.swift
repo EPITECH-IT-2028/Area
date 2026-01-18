@@ -41,32 +41,83 @@ struct HomeServiceModel: Decodable {
 	let name: String
 }
 
-enum HomeJSONValue: Decodable, Hashable, Sendable {
+enum HomeJSONValue: Codable, Hashable, Sendable {
 	case string(String)
-	case number(Double)
+	case int(Int)
+	case double(Double)
 	case bool(Bool)
+	case object([String: HomeJSONValue])
+	case array([HomeJSONValue])
+	case null
 
 	init(from decoder: Decoder) throws {
 		let container = try decoder.singleValueContainer()
-
-		if let x = try? container.decode(Double.self) {
-			self = .number(x)
+		if container.decodeNil() {
+			self = .null
 			return
 		}
-		if let x = try? container.decode(Bool.self) {
-			self = .bool(x)
-			return
-		}
-		if let x = try? container.decode(String.self) {
-			self = .string(x)
-			return
-		}
-		throw DecodingError.typeMismatch(
-			HomeJSONValue.self,
-			DecodingError.Context(
-				codingPath: decoder.codingPath,
-				debugDescription: "Type non supporté"
+		if let value = try? container.decode(String.self) {
+			self = .string(value)
+		} else if let value = try? container.decode(Int.self) {
+			self = .int(value)
+		} else if let value = try? container.decode(Double.self) {
+			self = .double(value)
+		} else if let value = try? container.decode(Bool.self) {
+			self = .bool(value)
+		} else if let value = try? container.decode([String: HomeJSONValue].self) {
+			self = .object(value)
+		} else if let value = try? container.decode([HomeJSONValue].self) {
+			self = .array(value)
+		} else {
+			throw DecodingError.dataCorruptedError(
+				in: container,
+				debugDescription: "Unable to decode HomeJSONValue"
 			)
-		)
+		}
+	}
+
+	func encode(to encoder: Encoder) throws {
+		var container = encoder.singleValueContainer()
+		switch self {
+		case .string(let value):
+			try container.encode(value)
+		case .int(let value):
+			try container.encode(value)
+		case .double(let value):
+			try container.encode(value)
+		case .bool(let value):
+			try container.encode(value)
+		case .object(let value):
+			try container.encode(value)
+		case .array(let value):
+			try container.encode(value)
+		case .null:
+			try container.encodeNil()
+		}
+	}
+
+	func hash(into hasher: inout Hasher) {
+		switch self {
+		case .string(let value):
+			hasher.combine(0)
+			hasher.combine(value)
+		case .int(let value):
+			hasher.combine(1)
+			hasher.combine(value)
+		case .double(let value):
+			hasher.combine(2)
+			hasher.combine(value)
+		case .bool(let value):
+			hasher.combine(3)
+			hasher.combine(value)
+		case .object(let value):
+			hasher.combine(4)
+			hasher.combine(value)
+		case .array(let value):
+			hasher.combine(5)
+			hasher.combine(value)
+		case .null:
+			hasher.combine(6)
+		}
 	}
 }

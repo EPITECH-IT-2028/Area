@@ -57,7 +57,18 @@ class ServiceAuthAction: NSObject, ObservableObject {
 				)
 			}
 			if let token = AuthState.shared.getAuthToken() {
-				queryItems.append(URLQueryItem(name: "token", value: token))
+				if let idx = queryItems.firstIndex(where: {
+					$0.name == Constants.tokenString
+				}) {
+					queryItems[idx] = URLQueryItem(
+						name: Constants.tokenString,
+						value: token
+					)
+				} else {
+					queryItems.append(
+						URLQueryItem(name: Constants.tokenString, value: token)
+					)
+				}
 			}
 			components.queryItems = queryItems
 
