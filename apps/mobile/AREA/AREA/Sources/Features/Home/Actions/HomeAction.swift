@@ -9,24 +9,13 @@ import Foundation
 
 struct HomeAction {
 
-	func deleteAreaById(id: String)
-		async throws
-	{
-		let builder = BuilderAPI()
-		let path = "\(Constants.createAREAsPath)/\(id)/"
-		let url = try builder.buildURL(path: path)
-		let request = try builder.buildRequest(
-			url: url,
-			method: "DELETE",
-			token: AuthState.shared.getAuthToken()
-		)
-
+	private func performRequest(request: URLRequest, domain: String) async throws -> Data {
 		let (data, urlResponse) = try await URLSession.shared.data(for: request)
 
 		guard let response = urlResponse as? HTTPURLResponse else {
 			throw NetworkError.badURLResponse(
 				underlyingError: NSError(
-					domain: "DeleteArea",
+					domain: domain,
 					code: -1,
 					userInfo: [
 						NSLocalizedDescriptionKey: "Response is not an HTTP response"
@@ -41,7 +30,7 @@ struct HomeAction {
 			)
 			throw NetworkError.badURLResponse(
 				underlyingError: NSError(
-					domain: "DeleteArea",
+					domain: domain,
 					code: response.statusCode,
 					userInfo: [
 						NSLocalizedDescriptionKey: errorMessage,
@@ -50,6 +39,22 @@ struct HomeAction {
 				)
 			)
 		}
+		return data
+	}
+
+	func deleteAreaById(id: String)
+		async throws
+	{
+		let builder = BuilderAPI()
+		let path = "\(Constants.createAREAsPath)/\(id)/"
+		let url = try builder.buildURL(path: path)
+		let request = try builder.buildRequest(
+			url: url,
+			method: "DELETE",
+			token: AuthState.shared.getAuthToken()
+		)
+
+		_ = try await performRequest(request: request, domain: "DeleteArea")
 	}
 	
 	func updateNameById(id: String, parameters: UpdateNameModel)
@@ -65,35 +70,7 @@ struct HomeAction {
 			token: AuthState.shared.getAuthToken()
 		)
 
-		let (data, urlResponse) = try await URLSession.shared.data(for: request)
-
-		guard let response = urlResponse as? HTTPURLResponse else {
-			throw NetworkError.badURLResponse(
-				underlyingError: NSError(
-					domain: "UpdateName",
-					code: -1,
-					userInfo: [
-						NSLocalizedDescriptionKey: "Response is not an HTTP response"
-					]
-				)
-			)
-		}
-		guard (200...299).contains(response.statusCode) else {
-			let errorMessage = parseErrorMessage(
-				from: data,
-				statusCode: response.statusCode
-			)
-			throw NetworkError.badURLResponse(
-				underlyingError: NSError(
-					domain: "UpdateName",
-					code: response.statusCode,
-					userInfo: [
-						NSLocalizedDescriptionKey: errorMessage,
-						"statusCode": response.statusCode,
-					]
-				)
-			)
-		}
+		_ = try await performRequest(request: request, domain: "UpdateName")
 	}
 	
 	func updateDescriptionById(id: String, parameters: UpdateDescriptionModel)
@@ -109,35 +86,7 @@ struct HomeAction {
 			token: AuthState.shared.getAuthToken()
 		)
 
-		let (data, urlResponse) = try await URLSession.shared.data(for: request)
-
-		guard let response = urlResponse as? HTTPURLResponse else {
-			throw NetworkError.badURLResponse(
-				underlyingError: NSError(
-					domain: "UpdateDescription",
-					code: -1,
-					userInfo: [
-						NSLocalizedDescriptionKey: "Response is not an HTTP response"
-					]
-				)
-			)
-		}
-		guard (200...299).contains(response.statusCode) else {
-			let errorMessage = parseErrorMessage(
-				from: data,
-				statusCode: response.statusCode
-			)
-			throw NetworkError.badURLResponse(
-				underlyingError: NSError(
-					domain: "UpdateDescription",
-					code: response.statusCode,
-					userInfo: [
-						NSLocalizedDescriptionKey: errorMessage,
-						"statusCode": response.statusCode,
-					]
-				)
-			)
-		}
+		_ = try await performRequest(request: request, domain: "UpdateDescription")
 	}
 	
 	func updateIsActiveById(id: String, parameters: UpdateIsActiveModel)
@@ -153,35 +102,7 @@ struct HomeAction {
 			token: AuthState.shared.getAuthToken()
 		)
 
-		let (data, urlResponse) = try await URLSession.shared.data(for: request)
-
-		guard let response = urlResponse as? HTTPURLResponse else {
-			throw NetworkError.badURLResponse(
-				underlyingError: NSError(
-					domain: "UpdateIsActive",
-					code: -1,
-					userInfo: [
-						NSLocalizedDescriptionKey: "Response is not an HTTP response"
-					]
-				)
-			)
-		}
-		guard (200...299).contains(response.statusCode) else {
-			let errorMessage = parseErrorMessage(
-				from: data,
-				statusCode: response.statusCode
-			)
-			throw NetworkError.badURLResponse(
-				underlyingError: NSError(
-					domain: "UpdateIsActive",
-					code: response.statusCode,
-					userInfo: [
-						NSLocalizedDescriptionKey: errorMessage,
-						"statusCode": response.statusCode,
-					]
-				)
-			)
-		}
+		_ = try await performRequest(request: request, domain: "UpdateIsActive")
 	}
 	
 	/// This function is used to fetch the user's AREAs
@@ -194,36 +115,7 @@ struct HomeAction {
 			token: AuthState.shared.getAuthToken()
 		)
 
-		let (data, urlResponse) = try await URLSession.shared.data(for: request)
-
-		guard let response = urlResponse as? HTTPURLResponse else {
-			throw NetworkError.badURLResponse(
-				underlyingError: NSError(
-					domain: "HomeAction",
-					code: -1,
-					userInfo: [
-						NSLocalizedDescriptionKey: "Response is not an HTTP response"
-					]
-				)
-			)
-		}
-
-		guard (200...299).contains(response.statusCode) else {
-			let errorMessage = parseErrorMessage(
-				from: data,
-				statusCode: response.statusCode
-			)
-			throw NetworkError.badURLResponse(
-				underlyingError: NSError(
-					domain: "HomeAction",
-					code: response.statusCode,
-					userInfo: [
-						NSLocalizedDescriptionKey: errorMessage,
-						"statusCode": response.statusCode,
-					]
-				)
-			)
-		}
+		let data = try await performRequest(request: request, domain: "HomeAction")
 
 		let decoder = JSONDecoder()
 		decoder.keyDecodingStrategy = .convertFromSnakeCase
