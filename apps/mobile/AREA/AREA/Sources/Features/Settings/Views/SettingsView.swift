@@ -20,6 +20,10 @@ struct SettingsView: View {
 						Text(LocalizedStringResource.settingsUpdateServerPathTitle)
 							.foregroundStyle(Color.primary)
 					}
+					NavigationLink(destination: UpdateLanguageView()) {
+						Text(LocalizedStringResource.settingsUpdateLanguage)
+							.foregroundStyle(Color.primary)
+					}
 					Button(
 						LocalizedStringResource.settingsLogout,
 						action: {

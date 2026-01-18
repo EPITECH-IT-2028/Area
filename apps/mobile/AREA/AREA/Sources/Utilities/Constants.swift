@@ -50,6 +50,12 @@ struct Constants {
 	static let keychainJWTKey = "jwt"
 	static let keychainUserIdKey = "userId"
 
+	static let languageFrCode = "fr"
+	static let languageEnCode = "en"
+
+	static let flagEn = "🇬🇧"
+	static let flagFr = "🇫🇷"
+
 	// Confirm both language
 	static let ok = "OK"
 

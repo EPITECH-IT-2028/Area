@@ -66,7 +66,7 @@ struct ReactionConfigView: View {
 					: (viewModel.validateReactionConfig(for: reaction)
 						 ? Color.mainColor : Color.gray)
 			)
-			.foregroundColor(.white)
+			.foregroundColor(.black)
 			.cornerRadius(10)
 			.disabled(
 				viewModel.isSubmitting
