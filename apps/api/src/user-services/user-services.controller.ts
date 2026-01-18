@@ -76,9 +76,9 @@ export class UserServicesController {
     const userId = req.user.id as string;
 
     const userService =
-      await this.userServicesService.findUserServicesByUser(id);
+      await this.userServicesService.findUserServiceById(id);
 
-    if (!userService || userService[0].user_id !== userId) {
+    if (!userService || userService.user_id !== userId) {
       throw new Error('Service not found or not owned by user');
     }
 

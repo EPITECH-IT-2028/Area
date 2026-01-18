@@ -40,6 +40,19 @@ export const GetUserServicesByUserQuery = gql`
   }
 `;
 
+export const GetUserServiceByIdQuery = gql`
+  query GetUserServiceById($id: uuid!) {
+    user_services_by_pk(id: $id) {
+      id
+      user_id
+      service_id
+      is_connected
+      created_at
+      updated_at
+    }
+  }
+`;
+
 export const CreateUserServiceMutation = gql`
   mutation CreateUserService(
     $userId: uuid!
