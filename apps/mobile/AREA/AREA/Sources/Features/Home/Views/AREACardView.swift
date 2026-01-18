@@ -20,6 +20,10 @@ struct AREACardView: View {
 						Image(systemName: "arrow.right")
 							.font(.caption)
 							.foregroundColor(.secondary)
+						
+						Text(area.reactionServiceName)
+							.font(.subheadline)
+							.foregroundColor(.secondary)
 					}
 				}
 
@@ -63,7 +67,7 @@ struct AREACardView: View {
 						.font(.body)
 						.fontWeight(.medium)
 
-					Text(getServiceType(from: area.actionServiceName))
+					Text(area.actionEventType ?? "")
 						.font(.caption)
 						.foregroundColor(.secondary)
 						.lineLimit(1)
@@ -91,7 +95,7 @@ struct AREACardView: View {
 						.font(.body)
 						.fontWeight(.medium)
 
-					Text(getServiceType(from: area.reactionServiceName))
+					Text(area.reactionEventType ?? "")
 						.font(.caption)
 						.foregroundColor(.secondary)
 						.lineLimit(1)
@@ -110,13 +114,5 @@ struct AREACardView: View {
 				.stroke(Color.black.opacity(0.1), lineWidth: 1)
 		)
 		.shadow(color: Color.black.opacity(0.05), radius: 8, x: 0, y: 2)
-	}
-
-	private func getServiceType(from serviceName: String) -> String {
-		if serviceName == area.actionServiceName {
-			return area.actionEventType ?? ""
-		} else {
-			return area.reactionEventType ?? ""
-		}
 	}
 }

@@ -8,13 +8,15 @@
 internal import Combine
 import Foundation
 
+@MainActor
 class HomeViewModel: ObservableObject {
 	@Published var isLoading: Bool = true
 	var action = HomeAction()
 
 	func retrieveAREA() async -> [AREAItem] {
+		isLoading = true
+		defer { isLoading = false }
 		do {
-			self.isLoading = true
 			let items: [AREAItem] = try await HomeAction().call()
 			return items
 		} catch {
