@@ -246,3 +246,17 @@ export const ModifyAreaStatusMutation = gql`
     }
   }
 `;
+
+export const ModifyAreaDescriptionMutation = gql`
+  mutation ModifyAreaDescription($id: uuid!, $description: String!, $user_id: uuid!) {
+    update_areas_where(
+      where: { id: { _eq: $id }, user_id: { _eq: $user_id } }
+      _set: { description: $description }
+    ) {
+      returning {
+        id
+        description
+      }
+    }
+  }
+`;

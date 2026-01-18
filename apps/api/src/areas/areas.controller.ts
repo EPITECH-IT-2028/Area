@@ -125,4 +125,19 @@ export class AreasController {
       message: 'Area status modified successfully',
     };
   }
+
+  @Patch(':id/description')
+  async modifyDescription(
+    @Param('id') id: string,
+    @Body('description') description: string,
+    @Req() req: any,
+  ) {
+    const userId = req.user.id as string;
+    const area = await this.areasService.modifyDescription(id, userId, description);
+    return {
+      success: true,
+      data: area,
+      message: 'Area description modified successfully',
+    };
+  }
 }

@@ -14,6 +14,7 @@ import {
   DeleteAreaMutation,
   ModifyAreaNameMutation,
   ModifyAreaStatusMutation,
+  ModifyAreaDescriptionMutation,
 } from 'src/graphql/queries/areas/areas';
 import { CreateAreaDto } from './areas.controller';
 
@@ -160,6 +161,33 @@ export class AreasService {
         throw error;
       }
       throw new Error(`Failed to modify area status: ${error}`);
+    }
+  }
+
+  async modifyDescription(
+    areaId: string,
+    userId: string,
+    newDescription: string,
+  ): Promise<Areas> {
+    try {
+      const data = await this.graphqlService.adminMutation<{
+        update_areas: Areas;
+      }>(ModifyAreaDescriptionMutation, {
+        id: areaId,
+        description: newDescription,
+        user_id: userId,
+      });
+
+      if (!data.update_areas) {
+        throw new NotFoundException('Area not found or not owned by user');
+      }
+
+      return data.update_areas;
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw error;
+      }
+      throw new Error(`Failed to modify area description: ${error}`);
     }
   }
 }
