@@ -103,6 +103,40 @@ class AreaCreationViewModel: ObservableObject {
 		return true
 	}
 
+	private func convertToTypedConfig(
+		values: [String: String],
+		schema: ConfigSchemaInfo?
+	) -> [String: JSONValue] {
+		var typedConfig: [String: JSONValue] = [:]
+
+		guard let schema = schema else { return [:] }
+
+		for (key, value) in values {
+			if let property = schema.properties[key] {
+				if property.type == "number" || property.type == "integer" {
+					if let numberValue = Double(value) {
+						typedConfig[key] = .number(numberValue)
+					} else {
+						typedConfig[key] = .string(value)
+					}
+				}
+				else if property.type == "boolean" {
+					if let boolValue = Bool(value) {
+						typedConfig[key] = .bool(boolValue)
+					} else {
+						typedConfig[key] = .bool(false)
+					}
+				}
+				else {
+					typedConfig[key] = .string(value)
+				}
+			} else {
+				typedConfig[key] = .string(value)
+			}
+		}
+		return typedConfig
+	}
+
 	func createArea() async -> Bool {
 		guard let action = selectedAction, let reaction = selectedReaction else {
 			return false
@@ -111,13 +145,22 @@ class AreaCreationViewModel: ObservableObject {
 		isSubmitting = true
 		errorMessage = nil
 
+		let typedActionConfig = convertToTypedConfig(
+			values: actionConfigValues,
+			schema: action.configSchema
+		)
+		let typedReactionConfig = convertToTypedConfig(
+			values: reactionConfigValues,
+			schema: reaction.configSchema
+		)
+
 		let request = AreaCreationRequest(
 			name: "\(action.name) → \(reaction.name)",
 			description: "",
 			actionName: action.name,
-			actionConfig: actionConfigValues,
+			actionConfig: typedActionConfig,
 			reactionName: reaction.name,
-			reactionConfig: reactionConfigValues,
+			reactionConfig: typedReactionConfig,
 			isActive: true
 		)
 

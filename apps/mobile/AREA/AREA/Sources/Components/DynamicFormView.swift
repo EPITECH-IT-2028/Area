@@ -16,6 +16,7 @@ struct DynamicFormView: View {
 			ForEach(schema.properties.keys.sorted(), id: \.self) { key in
 				if let property = schema.properties[key] {
 					let isRequired = schema.required?.contains(key) ?? false
+					let isNumber = property.type == "number" || property.type == "integer"
 
 					Section {
 						VStack(alignment: .leading, spacing: 8) {
@@ -40,6 +41,7 @@ struct DynamicFormView: View {
 							)
 							.autocapitalization(.none)
 							.textFieldStyle(RoundedBorderTextFieldStyle())
+							.keyboardType(isNumber ? .decimalPad : .default)
 						}
 						.padding(.vertical, 4)
 					}
