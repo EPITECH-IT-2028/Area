@@ -46,5 +46,7 @@ struct DynamicFormView: View {
 				}
 			}
 		}
+		.scrollContentBackground(.hidden)
+		.background(Color.backgroundColor)
 	}
 }

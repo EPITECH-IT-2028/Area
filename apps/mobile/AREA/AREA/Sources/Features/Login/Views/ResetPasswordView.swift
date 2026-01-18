@@ -44,7 +44,7 @@ struct ResetPasswordView: View {
 						.font(.system(size: 24, weight: .bold, design: .default))
 						.frame(maxWidth: .infinity, maxHeight: 60)
 						.foregroundColor(Color.white)
-						.background(Color.blue)
+						.background(Color.mainColor)
 						.cornerRadius(10)
 				}
 			)

@@ -86,7 +86,9 @@ export class GlobalWorkerService {
 
     if (!worker) {
       const available = [...this.actionWorkers.keys()].join(', ');
-      this.logger.warn(`No worker registered for action: ${actionName}. Available workers: ${available}`);
+      this.logger.warn(
+        `No worker registered for action: ${actionName}. Available workers: ${available}`,
+      );
       return;
     }
 

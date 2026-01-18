@@ -44,6 +44,53 @@ export const GetAllActiveAreasQuery = gql`
   }
 `;
 
+export const GetAreasByUserIdQuery = gql`
+  query GetAreasByUserId($user_id: uuid!) {
+    areas(where: { user_id: { _eq: $user_id } }) {
+      id
+      user_id
+      name
+      last_triggered
+      action_id
+      action_config
+      reaction_id
+      reaction_config
+      description
+      is_active
+      created_at
+      updated_at
+      action {
+        id
+        name
+        event_type
+        service {
+          name
+        }
+      }
+      reaction {
+        id
+        name
+        action_type
+        service {
+          name
+        }
+      }
+      user {
+        user_services {
+          id
+          access_token
+          refresh_token
+          token_expiry
+          credentials
+          service {
+            name
+          }
+        }
+      }
+    }
+  }
+`;
+
 export const UpdateAreaLastTriggeredMutation = gql`
   mutation UpdateAreaLastTriggered($id: uuid!, $last_triggered: timestamptz!) {
     update_areas_by_pk(pk_columns: { id: $id }, _set: { last_triggered: $last_triggered }) {
@@ -158,6 +205,61 @@ export const CreateAreaQuery = gql`
       name
       is_active
       created_at
+    }
+  }
+`;
+
+export const DeleteAreaMutation = gql`
+  mutation DeleteArea($id: uuid!, $user_id: uuid!) {
+    delete_areas(
+      where: { id: { _eq: $id }, user_id: { _eq: $user_id } }
+    ) {
+      affected_rows
+    }
+  }
+`;
+
+export const ModifyAreaNameMutation = gql`
+  mutation ModifyAreaName($id: uuid!, $name: String!, $user_id: uuid!) {
+    update_areas(
+      where: { id: { _eq: $id }, user_id: { _eq: $user_id } }
+      _set: { name: $name }
+    ) {
+      affected_rows
+      returning {
+        id
+        name
+      }
+    }
+  }
+`;
+
+export const ModifyAreaStatusMutation = gql`
+  mutation ModifyAreaStatus($id: uuid!, $is_active: Boolean!, $user_id: uuid!) {
+    update_areas(
+      where: { id: { _eq: $id }, user_id: { _eq: $user_id } }
+      _set: { is_active: $is_active }
+    ) {
+      affected_rows
+      returning {
+        id
+        is_active
+      }
+    }
+  }
+`;
+
+export const ModifyAreaDescriptionMutation = gql`
+  mutation ModifyAreaDescription($id: uuid!, $description: String!, $user_id: uuid!) {
+    update_areas(
+      where: { id: { _eq: $id }, user_id: { _eq: $user_id } }
+      _set: { description: $description }
+    ) {
+      affected_rows
+      returning {
+        id
+        description
+      }
     }
   }
 `;

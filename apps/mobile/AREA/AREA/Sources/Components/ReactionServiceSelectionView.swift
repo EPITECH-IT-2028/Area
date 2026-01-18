@@ -20,12 +20,10 @@ struct ReactionServiceSelectionView: View {
 			allCards: serviceStore.fromServiceToCardItem()
 		)
 		.searchable(text: $searchText)
+		.navigationBarTitleDisplayMode(.inline)
 		.navigationTitle(LocalizedStringResource.servicesTitle)
 		.onAppear {
 			viewModel.selectedAction = action
-			print(
-				"\(LocalizedStringResource.areaCreationActionLockedTitle) \(action.name)"
-			)
 		}
 	}
 }

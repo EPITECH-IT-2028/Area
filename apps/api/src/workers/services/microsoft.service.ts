@@ -36,9 +36,9 @@ export class OutlookService {
       )}&$top=${this.MAX_RESULTS}&$select=id,from,subject,bodyPreview`;
 
       const response = await fetch(url, {
-        headers: { 
+        headers: {
           Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         },
       });
 
@@ -82,20 +82,22 @@ export class OutlookService {
 
       if (!response.ok) {
         const errorText = await response.text();
-        this.logger.error(`Failed to mark Outlook message as read: ${errorText}`);
+        this.logger.error(
+          `Failed to mark Outlook message as read: ${errorText}`,
+        );
         return;
       }
 
       this.logger.log(`Outlook Message ${messageId} marked as READ.`);
     } catch (error) {
-      this.logger.error(`Error marking Outlook message ${messageId} as read:`, error);
+      this.logger.error(
+        `Error marking Outlook message ${messageId} as read:`,
+        error,
+      );
     }
   }
 
-  async sendEmail(
-    token: string,
-    payload: SendEmailPayload
-  ): Promise<void> {
+  async sendEmail(token: string, payload: SendEmailPayload): Promise<void> {
     try {
       const url = `${this.GRAPH_API_BASE}/me/sendMail`;
       const response = await fetch(url, {
@@ -143,10 +145,14 @@ export class OutlookService {
     const filters: string[] = ['isRead eq false'];
 
     if (config.from) {
-      filters.push(`from/emailAddress/address eq '${this.escapeODataString(config.from)}'`);
+      filters.push(
+        `from/emailAddress/address eq '${this.escapeODataString(config.from)}'`,
+      );
     }
     if (config.subject_contains) {
-      filters.push(`contains (subject,'${this.escapeODataString(config.subject_contains)}')`);
+      filters.push(
+        `contains (subject,'${this.escapeODataString(config.subject_contains)}')`,
+      );
     }
 
     if (filters.length === 1) {
