@@ -31,31 +31,23 @@ class HomeViewModel: ObservableObject {
 		description: String,
 		isActive: Bool
 	) async throws {
-		do {
-			try await action.updateNameById(
-				id: id,
-				parameters: UpdateNameModel(name: name)
-			)
-			try await action.updateDescriptionById(
-				id: id,
-				parameters: UpdateDescriptionModel(description: description)
-			)
-			try await action.updateIsActiveById(
-				id: id,
-				parameters: UpdateIsActiveModel(isActive: isActive)
-			)
-		} catch {
-			// TODO
-		}
+		try await action.updateNameById(
+			id: id,
+			parameters: UpdateNameModel(name: name)
+		)
+		try await action.updateDescriptionById(
+			id: id,
+			parameters: UpdateDescriptionModel(description: description)
+		)
+		try await action.updateIsActiveById(
+			id: id,
+			parameters: UpdateIsActiveModel(isActive: isActive)
+		)
 	}
 
 	func deleteArea(
 		id: String
 	) async throws {
-		do {
-			try await action.deleteAreaById(id: id)
-		} catch {
-			// TODO
-		}
+		try await action.deleteAreaById(id: id)
 	}
 }
