@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import { Area, AreasResponse } from "@/app/dashboard/models/areasResponse";
 import { useAuth } from "@/context/AuthContext";
@@ -10,29 +10,47 @@ function useDashboard() {
   const [isLoading, setIsLoading] = useState(true);
   const { accessToken } = useAuth();
 
-  useEffect(() => {
-    async function fetchAreas() {
-      if (!accessToken) {
-        setIsLoading(false);
-        return;
-      }
-
-      try {
-        const response = await api.get("areas").json<AreasResponse>();
-        if (response.success && response.data && response.data.length > 0) {
-          setAreas(response.data.map((area) => ({ ...area, is_active: true })));
-        }
-      } catch (error) {
-        console.error("Failed to fetch areas:", error);
-        toast.error("Failed to load your automations. Please try again.");
-      } finally {
-        setIsLoading(false);
-      }
+  const fetchAreas = useCallback(async () => {
+    if (!accessToken) {
+      setIsLoading(false);
+      return;
     }
 
-    void fetchAreas();
+    setIsLoading(true);
+    try {
+      const response = await api.get("areas").json<AreasResponse>();
+      if (response.success && response.data && response.data.length > 0) {
+        setAreas(response.data.map((area) => ({ ...area, is_active: true })));
+      } else {
+        setAreas([]);
+      }
+    } catch (error) {
+      console.error("Failed to fetch areas:", error);
+      toast.error("Failed to load your automations. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
   }, [accessToken]);
-  return { areas, isLoading };
+
+  useEffect(() => {
+    void fetchAreas();
+  }, [fetchAreas]);
+
+  const deleteArea = useCallback(
+    async (id: string) => {
+      try {
+        await api.delete(`areas/${id}`).json();
+        toast.success("Automation deleted successfully");
+        await fetchAreas();
+      } catch (error) {
+        console.error("Failed to delete area:", error);
+        toast.error("Failed to delete automation. Please try again.");
+      }
+    },
+    [fetchAreas],
+  );
+
+  return { areas, isLoading, refetch: fetchAreas, deleteArea };
 }
 
 export default useDashboard;

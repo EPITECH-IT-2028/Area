@@ -1,11 +1,12 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, ConflictException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy, Profile } from 'passport-github2';
 import { ConfigService } from '@nestjs/config';
 import { UsersService } from '../../users/users.service';
 import { UserServicesService } from '../../user-services/user-services.service';
 import { Request } from 'express';
-import { parsePlatformFromState } from 'src/utils/parsePlatform';
+import { parseOAuthState } from 'src/utils/parsePlatform';
+import type { Users } from 'src/generated/graphql';
 
 @Injectable()
 export class GithubStrategy extends PassportStrategy(Strategy, 'github') {
@@ -29,7 +30,9 @@ export class GithubStrategy extends PassportStrategy(Strategy, 'github') {
     refreshToken: string,
     profile: Profile,
   ) {
-    const platform = parsePlatformFromState(req);
+    const oauthState = parseOAuthState(req);
+    const { platform, mode, userId } = oauthState;
+
     const { displayName, emails, username } = profile;
 
     const email = emails && emails.length > 0 ? emails[0].value : null;
@@ -37,14 +40,35 @@ export class GithubStrategy extends PassportStrategy(Strategy, 'github') {
       throw new Error('No email found in GitHub profile');
     }
 
-    let user = await this.usersService.findByEmail(email);
+    let user: Users;
 
-    if (!user) {
-      user = await this.usersService.create({
-        email,
-        name: displayName || username || email.split('@')[0],
-        password: null,
-      });
+    if (mode === 'link' && userId) {
+      const foundUser = await this.usersService.findOne(userId);
+
+      if (!foundUser) {
+        throw new Error('Authenticated user not found');
+      }
+
+      user = foundUser;
+
+      const existingUser = await this.usersService.findByEmail(email);
+      if (existingUser && existingUser.id !== userId) {
+        throw new ConflictException(
+          'This GitHub account is already linked to another user',
+        );
+      }
+    } else {
+      const foundUser = await this.usersService.findByEmail(email);
+
+      if (!foundUser) {
+        user = await this.usersService.create({
+          email,
+          name: displayName || username || email.split('@')[0],
+          password: null,
+        });
+      } else {
+        user = foundUser;
+      }
     }
 
     const githubService =
@@ -71,8 +95,11 @@ export class GithubStrategy extends PassportStrategy(Strategy, 'github') {
     }
 
     return {
-      ...user,
+      id: user.id,
+      email: user.email,
+      name: user.name || '',
       platform,
+      mode,
     };
   }
 }

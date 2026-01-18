@@ -127,7 +127,7 @@ struct RegisterView: View {
 						.font(.system(size: 24, weight: .regular, design: .default))
 						.frame(maxWidth: .infinity, maxHeight: 60)
 						.foregroundColor(Color.white)
-						.background(Color.blue)
+						.background(Color.mainColor)
 						.cornerRadius(10)
 				}
 			)

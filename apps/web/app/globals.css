@@ -106,7 +106,7 @@ body {
 }
 
 :root {
-    --radius: 2rem;
+    --radius: 0.75rem;
 
     --background: hsl(0 0% 97.65%);
     --foreground: hsl(0 0% 12.55%);
@@ -230,6 +230,7 @@ body {
     [class*="rounded-"] {
         @supports (corner-shape: squircle) {
             corner-shape: squircle;
+            --radius: 2rem;
         }
     }
 
