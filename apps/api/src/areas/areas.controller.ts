@@ -135,14 +135,11 @@ export class AreasController {
     };
   }
 
-  @ApiOperation({ summary: 'Create a new area' })
+  @ApiOperation({ summary: 'Get areas by user ID' })
   @ApiResponse({
-    status: 201,
-    description: 'The area has been successfully created.',
-    type: CreateAreaDto,
+    status: 200,
+    description: 'List of areas for the authenticated user.',
   })
-  @ApiResponse({ status: 400, description: 'Bad Request.' })
-  
   @Get('user')
   async getAreaByUserId(@Req() req: any) {
     const userId = req.user.id as string;
@@ -154,6 +151,13 @@ export class AreasController {
     };
   }
 
+  @ApiOperation({ summary: 'Create a new area' })
+  @ApiResponse({
+    status: 201,
+    description: 'The area has been successfully created.',
+    type: CreateAreaDto,
+  })
+  @ApiResponse({ status: 400, description: 'Bad Request.' })
   @Post()
   @HttpCode(HttpStatus.CREATED)
   async create(@Body() createAreaDto: CreateAreaDto, @Req() req: any) {

@@ -6,7 +6,7 @@ import { DashboardHeader } from "@/app/dashboard/views/components/DashboardHeade
 import { PersonalInformation } from "@/app/profile/views/components/PersonalInformation";
 import { ProfileCard } from "@/app/profile/views/components/ProfileCard";
 import { useAuth } from "@/context/AuthContext";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Plug } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 
@@ -30,13 +30,19 @@ export default function ProfileView() {
             <ArrowLeft className="mr-2 h-4 w-4" />
             Back to Dashboard
           </Button>
-          <div className="space-y-1">
-            <h1 className="text-3xl font-bold tracking-tight md:text-4xl">
-              Profile
-            </h1>
-            <p className="text-muted-foreground">
-              Manage your account information and preferences
-            </p>
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <div className="space-y-1">
+              <h1 className="text-3xl font-bold tracking-tight md:text-4xl">
+                Profile
+              </h1>
+              <p className="text-muted-foreground">
+                Manage your account information and preferences
+              </p>
+            </div>
+            <Button onClick={() => router.push("/services")} className="w-fit">
+              <Plug className="mr-2 h-4 w-4" />
+              Manage Services
+            </Button>
           </div>
         </div>
 
