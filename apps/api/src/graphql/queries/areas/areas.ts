@@ -221,10 +221,11 @@ export const DeleteAreaMutation = gql`
 
 export const ModifyAreaNameMutation = gql`
   mutation ModifyAreaName($id: uuid!, $name: String!, $user_id: uuid!) {
-    update_areas_where(
+    update_areas(
       where: { id: { _eq: $id }, user_id: { _eq: $user_id } }
       _set: { name: $name }
     ) {
+      affected_rows
       returning {
         id
         name
@@ -235,10 +236,11 @@ export const ModifyAreaNameMutation = gql`
 
 export const ModifyAreaStatusMutation = gql`
   mutation ModifyAreaStatus($id: uuid!, $is_active: Boolean!, $user_id: uuid!) {
-    update_areas_where(
+    update_areas(
       where: { id: { _eq: $id }, user_id: { _eq: $user_id } }
       _set: { is_active: $is_active }
     ) {
+      affected_rows
       returning {
         id
         is_active
@@ -249,10 +251,11 @@ export const ModifyAreaStatusMutation = gql`
 
 export const ModifyAreaDescriptionMutation = gql`
   mutation ModifyAreaDescription($id: uuid!, $description: String!, $user_id: uuid!) {
-    update_areas_where(
+    update_areas(
       where: { id: { _eq: $id }, user_id: { _eq: $user_id } }
       _set: { description: $description }
     ) {
+      affected_rows
       returning {
         id
         description
