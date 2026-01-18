@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 
 import { useAuth } from "@/context/AuthContext";
 import { LogOut, User } from "lucide-react";
@@ -25,7 +26,10 @@ export function DashboardHeader() {
           </div>
 
           <div className="flex items-center gap-6">
-            <div className="hidden items-center gap-3 md:flex">
+            <Link
+              href="/profile"
+              className="hidden items-center gap-3 rounded-lg p-2 transition-colors hover:bg-muted/50 md:flex"
+            >
               <div className="flex flex-col text-right">
                 <p className="text-sm leading-none font-semibold">
                   {user?.name || "User"}
@@ -34,10 +38,21 @@ export function DashboardHeader() {
                   {user?.email}
                 </p>
               </div>
-              <div className="flex h-9 w-9 items-center justify-center rounded-full bg-muted ring-1 ring-border">
+              <div className="flex h-9 w-9 items-center justify-center rounded-full bg-muted ring-1 ring-border transition-all hover:ring-primary/50">
                 <User className="h-5 w-5 text-muted-foreground" />
               </div>
-            </div>
+            </Link>
+
+            <Link href="/profile" className="-mr-4 flex md:hidden">
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-9 w-9 bg-muted/50"
+              >
+                <User className="h-5 w-5" />
+                <span className="sr-only">Profile</span>
+              </Button>
+            </Link>
 
             <Button
               onClick={() => {
@@ -49,7 +64,7 @@ export function DashboardHeader() {
               className="text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
             >
               <LogOut className="mr-2 h-4 w-4" />
-              Logout
+              <span className="hidden md:inline">Logout</span>
             </Button>
           </div>
         </div>
