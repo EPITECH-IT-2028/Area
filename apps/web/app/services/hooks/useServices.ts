@@ -1,11 +1,18 @@
 "use client";
 
+import { useCallback, useEffect, useState } from "react";
+
+import {
+  ServiceRequest,
+  UserServiceRequest,
+} from "@/app/services/models/serviceRequest";
+import {
+  AboutResponse,
+  UserServicesResponse,
+} from "@/app/services/models/serviceResponse";
 import api from "@/lib/api";
-import { useState, useEffect, useCallback } from "react";
-import { ServiceRequest, UserServiceRequest } from "@/app/services/models/serviceRequest";
-import {AboutResponse, UserServicesResponse } from "@/app/services/models/serviceResponse";
-import { toast } from "sonner";
 import Cookies from "js-cookie";
+import { toast } from "sonner";
 
 export const useServices = () => {
   const [services, setServices] = useState<ServiceRequest[]>([]);
@@ -25,16 +32,16 @@ export const useServices = () => {
 
   const fetchUserServices = useCallback(async () => {
     try {
-      const data = await api
-        .get("user-services")
-        .json<UserServicesResponse>();
+      const data = await api.get("user-services").json<UserServicesResponse>();
       if (data.success) {
         setUserServices(data.data);
+        return data.data;
       }
     } catch (error) {
       console.error("Failed to fetch user services:", error);
       toast.error("Failed to load connected services");
     }
+    return [];
   }, []);
 
   const loadData = useCallback(async () => {
@@ -53,17 +60,17 @@ export const useServices = () => {
         return true;
       }
       return userServices.some(
-        (us) => us.service.name === service.name && us.is_connected
+        (us) => us.service.name === service.name && us.is_connected,
       );
     },
-    [userServices]
+    [userServices],
   );
 
   const getServiceDetails = useCallback(
     (serviceName: string): UserServiceRequest | undefined => {
       return userServices.find((us) => us.service.name === serviceName);
     },
-    [userServices]
+    [userServices],
   );
 
   const connectService = useCallback(
@@ -80,14 +87,14 @@ export const useServices = () => {
 
       try {
         let oauthUrl = service.oauth_url;
-        oauthUrl = oauthUrl.replace('/auth/google/callback', '/auth/link/google');
-        oauthUrl = oauthUrl.replace('/auth/github/callback', '/auth/link/github');
-        oauthUrl = oauthUrl.replace('/auth/microsoft/callback', '/auth/link/microsoft');
-        oauthUrl = oauthUrl.replace('/auth/discord/callback', '/auth/link/discord');
-        
+        oauthUrl = oauthUrl.replace(
+          /\/auth\/([^\/]+)\/callback/,
+          "/auth/link/$1",
+        );
+
         const token = Cookies.get("access_token");
         if (token) {
-          const separator = oauthUrl.includes('?') ? '&' : '?';
+          const separator = oauthUrl.includes("?") ? "&" : "?";
           oauthUrl = `${oauthUrl}${separator}token=${token}`;
         }
 
@@ -98,7 +105,7 @@ export const useServices = () => {
         const popup = window.open(
           oauthUrl,
           "OAuth",
-          `width=${width},height=${height},left=${left},top=${top}`
+          `width=${width},height=${height},left=${left},top=${top}`,
         );
 
         if (!popup) {
@@ -107,12 +114,58 @@ export const useServices = () => {
           return;
         }
 
-        const checkPopup = setInterval(() => {
-          if (popup.closed) {
-            clearInterval(checkPopup);
-            setIsConnecting(null);
+        let handled = false;
+        const intervalRef: { current: NodeJS.Timeout | null } = {
+          current: null,
+        };
+
+        const handleMessage = (event: MessageEvent) => {
+          if (event.origin !== window.location.origin) return;
+
+          if (event.data?.type === "OAUTH_LINK_RESULT") {
+            handled = true;
+            const { success: isSuccess, message } = event.data;
+
+            if (isSuccess) {
+              toast.success(`${service.display_name} connected successfully!`);
+            } else {
+              toast.error(
+                message || `Failed to connect ${service.display_name}`,
+              );
+            }
+
             void fetchUserServices();
-            toast.success(`${service.display_name} connected successfully!`);
+            cleanup();
+          }
+        };
+
+        const cleanup = () => {
+          if (intervalRef.current) clearInterval(intervalRef.current);
+          window.removeEventListener("message", handleMessage);
+          setIsConnecting(null);
+        };
+
+        window.addEventListener("message", handleMessage);
+
+        intervalRef.current = setInterval(() => {
+          if (popup.closed) {
+            if (intervalRef.current) clearInterval(intervalRef.current);
+            setTimeout(async () => {
+              if (!handled) {
+                handled = true;
+                const updatedServices = await fetchUserServices();
+                const isNowConnected = updatedServices.some(
+                  (us) => us.service.name === service.name && us.is_connected,
+                );
+
+                if (isNowConnected) {
+                  toast.success(
+                    `${service.display_name} connected successfully!`,
+                  );
+                }
+                cleanup();
+              }
+            }, 1000);
           }
         }, 500);
       } catch (error) {
@@ -121,7 +174,7 @@ export const useServices = () => {
         setIsConnecting(null);
       }
     },
-    [isServiceConnected, fetchUserServices]
+    [isServiceConnected, fetchUserServices],
   );
 
   const disconnectService = useCallback(
@@ -135,13 +188,14 @@ export const useServices = () => {
         toast.error("Failed to disconnect service");
       }
     },
-    [fetchUserServices]
+    [fetchUserServices],
   );
 
   const stats = {
     totalServices: services.length,
     connectedServices: userServices.filter((us) => us.is_connected).length,
-    availableServices: services.length - userServices.filter((us) => us.is_connected).length,
+    availableServices:
+      services.length - userServices.filter((us) => us.is_connected).length,
   };
 
   return {
