@@ -93,7 +93,7 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "AREAs"
           }
         }
@@ -280,7 +280,7 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Non autorisé. Veuillez vous reconnecter."
           }
         }
@@ -1302,7 +1302,7 @@
         },
         "fr" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Se connecter aux services"
           }
         }
