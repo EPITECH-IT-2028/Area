@@ -11,7 +11,7 @@ import SwiftUI
 struct HomeView: View {
 	@EnvironmentObject var authState: AuthState
 	@EnvironmentObject var serviceStore: ServiceStore
-	let viewModel: HomeViewModel = HomeViewModel()
+	@StateObject var viewModel: HomeViewModel = HomeViewModel()
 	@State private var errorMessage: String?
 	@State private var showError = false
 	@State private var areas: [AREAItem] = []
@@ -60,11 +60,12 @@ struct HomeView: View {
 					}
 				}
 				.padding(16)
-				.task {
-					areas = await viewModel.retrieveAREA()
-				}
+			}
+			.task {
+				await loadAreas()
 			}
 			.refreshable {
+				await loadAreas()
 				do {
 					_ = try await serviceStore.fetchServices()
 				} catch {
@@ -82,16 +83,23 @@ struct HomeView: View {
 			}
 			.navigationTitle(LocalizedStringResource.homeTitle)
 			.background(Color.backgroundColor)
-			.sheet(item: $selectedArea) { area in
-				AREAEditModal(
-					area: area,
-					isPresented: Binding(
-						get: { true },
-						set: { if !$0 { selectedArea = nil } }
-					),
-					viewModel: viewModel
-				)
+			.sheet(isPresented: $showEditModal) {
+				Task {
+					await loadAreas()
+				}
+			} content: {
+				if let area = selectedArea {
+					AREAEditModal(
+						area: area,
+						isPresented: $showEditModal,
+						viewModel: viewModel
+					)
+				}
 			}
 		}
+	}
+
+	private func loadAreas() async {
+		areas = await viewModel.retrieveAREA()
 	}
 }
