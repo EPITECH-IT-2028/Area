@@ -33,6 +33,17 @@ class AuthState: ObservableObject {
 		}
 	}
 
+	func setUserId(userId: String) throws {
+		do {
+			try KeychainManager.shared.keychain.set(
+				userId,
+				forKey: Constants.keychainUserIdKey
+			)
+		} catch {
+			throw AuthError.keychainSetFailed
+		}
+	}
+
 	func saveToken(_ token: String, for serviceName: String) throws {
 		do {
 			let key = "token_\(serviceName.lowercased())"
@@ -45,6 +56,12 @@ class AuthState: ObservableObject {
 	func getAuthToken() -> String? {
 		return try? KeychainManager.shared.keychain.string(
 			forKey: Constants.keychainJWTKey
+		)
+	}
+
+	func getUserId() -> String? {
+		return try? KeychainManager.shared.keychain.string(
+			forKey: Constants.keychainUserIdKey
 		)
 	}
 
@@ -63,6 +80,13 @@ class AuthState: ObservableObject {
 			try KeychainManager.shared.keychain.deleteItem(
 				forKey: Constants.keychainJWTKey
 			)
+			do {
+				try KeychainManager.shared.keychain.deleteItem(
+					forKey: Constants.keychainUserIdKey
+				)
+			} catch {
+				// NOTHING NEEDS TO BE THROW OR RETURN,
+			}
 			isAuthenticated = false
 		} catch {
 			throw AuthError.keychainDeleteFailed

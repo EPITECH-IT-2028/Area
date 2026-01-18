@@ -47,18 +47,30 @@ class ServiceAuthAction: NSObject, ObservableObject {
 				return
 			}
 
-			components.queryItems = [
-				URLQueryItem(
-					name: Constants.keyForOauth2,
-					value: Constants.valueForOauth2
+			var queryItems = components.queryItems ?? []
+			if !queryItems.contains(where: { $0.name == Constants.keyForOauth2 }) {
+				queryItems.append(
+					URLQueryItem(
+						name: Constants.keyForOauth2,
+						value: Constants.valueForOauth2
+					)
 				)
-			]
-
-			if let token = AuthState.shared.getAuthToken() {
-				var queryItems = components.queryItems ?? []
-				queryItems.append(URLQueryItem(name: "token", value: token))
-				components.queryItems = queryItems
 			}
+			if let token = AuthState.shared.getAuthToken() {
+				if let idx = queryItems.firstIndex(where: {
+					$0.name == Constants.tokenString
+				}) {
+					queryItems[idx] = URLQueryItem(
+						name: Constants.tokenString,
+						value: token
+					)
+				} else {
+					queryItems.append(
+						URLQueryItem(name: Constants.tokenString, value: token)
+					)
+				}
+			}
+			components.queryItems = queryItems
 
 			guard let finalAuthURL = components.url else {
 				DispatchQueue.main.async {
@@ -175,4 +187,3 @@ extension ServiceAuthAction: ASWebAuthenticationPresentationContextProviding {
 		return ASPresentationAnchor()
 	}
 }
-

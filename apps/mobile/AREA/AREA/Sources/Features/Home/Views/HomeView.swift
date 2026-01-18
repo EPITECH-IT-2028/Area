@@ -11,8 +11,11 @@ import SwiftUI
 struct HomeView: View {
 	@EnvironmentObject var authState: AuthState
 	@EnvironmentObject var serviceStore: ServiceStore
+	@ObservedObject var viewModel: HomeViewModel
 	@State private var errorMessage: String?
 	@State private var showError = false
+	@State private var areas: [AREAItem] = []
+	@State private var selectedArea: AREAItem?
 
 	var body: some View {
 		let stats: [HomepageCard] = [
@@ -47,10 +50,20 @@ struct HomeView: View {
 					if isOdd, let lastItem = stats.last {
 						HomepageCardView(item: lastItem, isSquare: false)
 					}
+					ForEach(areas) { area in
+						AREACardView(area: area)
+							.onTapGesture {
+								selectedArea = area
+							}
+					}
 				}
 				.padding(16)
 			}
+			.task {
+				await loadAreas()
+			}
 			.refreshable {
+				await loadAreas()
 				do {
 					_ = try await serviceStore.fetchServices()
 				} catch {
@@ -61,10 +74,29 @@ struct HomeView: View {
 			.alert(LocalizedStringResource.errorTitle, isPresented: $showError) {
 				Button(LocalizedStringResource.okTitle, role: .cancel) {}
 			} message: {
-				Text(errorMessage ?? String(localized: LocalizedStringResource.errorHappenedTitle))
+				Text(
+					errorMessage
+						?? String(localized: LocalizedStringResource.errorHappenedTitle)
+				)
 			}
 			.navigationTitle(LocalizedStringResource.homeTitle)
 			.background(Color.backgroundColor)
+			.sheet(
+				item: $selectedArea,
+				onDismiss: {
+					Task { await loadAreas() }
+				}
+			) { area in
+				AREAEditModal(
+					area: area,
+					viewModel: viewModel
+				)
+			}
 		}
+	}
+
+	@MainActor
+	private func loadAreas() async {
+		areas = await viewModel.retrieveAREA()
 	}
 }

@@ -36,8 +36,8 @@ struct AreaCreationView: View {
 			}
 			.navigationTitle(
 				viewModel.selectedAction == nil
-					? LocalizedStringResource.servicesTitle
-					: LocalizedStringResource.areaCreationChooseReactionTitle
+					? LocalizedStringResource.areaCreationActionTitle
+					: LocalizedStringResource.areaCreationReactionTitle
 			)
 			.navigationDestination(for: Service.self) { service in
 				if viewModel.selectedAction == nil {

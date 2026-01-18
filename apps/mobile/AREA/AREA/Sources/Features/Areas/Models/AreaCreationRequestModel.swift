@@ -7,13 +7,30 @@
 
 import Foundation
 
+enum JSONValue: Encodable {
+	case string(String)
+	case number(Double)
+	case integer(Int)
+	case bool(Bool)
+
+	func encode(to encoder: Encoder) throws {
+		var container = encoder.singleValueContainer()
+		switch self {
+		case .string(let x): try container.encode(x)
+		case .number(let x): try container.encode(x)
+		case .integer(let x): try container.encode(x)
+		case .bool(let x): try container.encode(x)
+		}
+	}
+}
+
 struct AreaCreationRequest: Encodable {
 	let name: String
 	let description: String?
 	let actionName: String
-	let actionConfig: [String: String]
+	let actionConfig: [String: JSONValue]
 	let reactionName: String
-	let reactionConfig: [String: String]
+	let reactionConfig: [String: JSONValue]
 	let isActive: Bool
 
 	enum CodingKeys: String, CodingKey {
@@ -30,9 +47,9 @@ struct AreaCreationRequest: Encodable {
 		name: String,
 		description: String? = nil,
 		actionName: String,
-		actionConfig: [String: String],
+		actionConfig: [String: JSONValue],
 		reactionName: String,
-		reactionConfig: [String: String],
+		reactionConfig: [String: JSONValue],
 		isActive: Bool = true
 	) {
 		self.name = name

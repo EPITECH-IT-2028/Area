@@ -85,8 +85,8 @@ struct UpdateServerPathView: View {
 					Text(LocalizedStringResource.updateServerPathSaveNewPathTitle)
 						.font(.system(size: 24, weight: .bold))
 						.frame(maxWidth: .infinity, maxHeight: 60)
-						.foregroundColor(.white)
-						.background(Color.blue)
+						.foregroundColor(.black)
+						.background(Color.mainColor)
 						.cornerRadius(10)
 				}
 			)
