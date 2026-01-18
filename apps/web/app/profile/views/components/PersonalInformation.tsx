@@ -150,6 +150,7 @@ export function PersonalInformation({
                   disabled={isSaving}
                 >
                   <X className="h-4 w-4" />
+                  <span className="sr-only">Cancel</span>
                 </Button>
               </div>
             ) : (
