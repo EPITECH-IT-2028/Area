@@ -41,7 +41,7 @@ struct HomeServiceModel: Decodable {
 	let name: String
 }
 
-enum HomeJSONValue: Decodable {
+enum HomeJSONValue: Decodable, Hashable, Sendable {
 	case string(String)
 	case number(Double)
 	case bool(Bool)

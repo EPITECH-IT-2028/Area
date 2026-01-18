@@ -9,7 +9,7 @@ import SwiftUI
 
 struct AREAEditModal: View {
 	let area: AREAItem
-	@Binding var isPresented: Bool
+	@Environment(\.dismiss) var dismiss
 
 	@State private var editedName: String = ""
 	@State private var editedDescription: String = ""
@@ -20,14 +20,12 @@ struct AREAEditModal: View {
 	@State private var showError = false
 	@ObservedObject var viewModel: HomeViewModel
 
-	init(area: AREAItem, isPresented: Binding<Bool>, viewModel: HomeViewModel) {
+	init(area: AREAItem, viewModel: HomeViewModel) {
 		self.area = area
-		self._isPresented = isPresented
 		self.viewModel = viewModel
 	}
 
 	var body: some View {
-
 		NavigationStack {
 			Form {
 				Section {
@@ -143,7 +141,7 @@ struct AREAEditModal: View {
 			.toolbar {
 				ToolbarItem(placement: .cancellationAction) {
 					Button(LocalizedStringResource.homeEditModalCancel) {
-						isPresented = false
+						dismiss()
 					}
 				}
 
@@ -198,7 +196,7 @@ struct AREAEditModal: View {
 
 				await MainActor.run {
 					isSaving = false
-					isPresented = false
+					dismiss()
 				}
 			} catch {
 				await MainActor.run {
@@ -216,7 +214,7 @@ struct AREAEditModal: View {
 				try await viewModel.deleteArea(id: area.id)
 
 				await MainActor.run {
-					isPresented = false
+					dismiss()
 				}
 			} catch {
 				await MainActor.run {

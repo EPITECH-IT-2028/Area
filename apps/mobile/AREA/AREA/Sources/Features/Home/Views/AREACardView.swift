@@ -1,3 +1,10 @@
+//
+//  AREACardView.swift
+//  AREA
+//
+//  Created by Arthur GUERINAULT on 18/01/2026.
+//
+
 import SwiftUI
 
 struct AREACardView: View {
@@ -20,7 +27,7 @@ struct AREACardView: View {
 						Image(systemName: "arrow.right")
 							.font(.caption)
 							.foregroundColor(.secondary)
-						
+
 						Text(area.reactionServiceName)
 							.font(.subheadline)
 							.foregroundColor(.secondary)

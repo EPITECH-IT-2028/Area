@@ -16,7 +16,6 @@ struct HomeView: View {
 	@State private var showError = false
 	@State private var areas: [AREAItem] = []
 	@State private var selectedArea: AREAItem?
-	@State private var showEditModal = false
 
 	var body: some View {
 		let stats: [HomepageCard] = [
@@ -55,7 +54,6 @@ struct HomeView: View {
 						AREACardView(area: area)
 							.onTapGesture {
 								selectedArea = area
-								showEditModal = true
 							}
 					}
 				}
@@ -84,19 +82,15 @@ struct HomeView: View {
 			.navigationTitle(LocalizedStringResource.homeTitle)
 			.background(Color.backgroundColor)
 			.sheet(
-				isPresented: $showEditModal,
+				item: $selectedArea,
 				onDismiss: {
-					selectedArea = nil
 					Task { await loadAreas() }
 				}
-			) {
-				if let area = selectedArea {
-					AREAEditModal(
-						area: area,
-						isPresented: $showEditModal,
-						viewModel: viewModel
-					)
-				}
+			) { area in
+				AREAEditModal(
+					area: area,
+					viewModel: viewModel
+				)
 			}
 		}
 	}
