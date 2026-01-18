@@ -148,6 +148,21 @@ export class UserServicesService {
     }
   }
 
+  async deleteByUserAndService(
+    userId: string,
+    serviceId: string,
+  ): Promise<{ success: boolean }> {
+    try {
+      const userService = await this.findUserService(userId, serviceId);
+      if (userService) {
+        return await this.delete(userService.id);
+      }
+      return { success: true };
+    } catch (error) {
+      throw new Error(`Failed to delete user service: ${error}`);
+    }
+  }
+
   async delete(id: string): Promise<{ success: boolean }> {
     try {
       const data = await this.graphqlService.adminMutation<{

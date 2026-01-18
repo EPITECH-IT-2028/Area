@@ -75,12 +75,22 @@ export class GithubStrategy extends PassportStrategy(Strategy, 'github') {
       await this.userServicesService.getServiceByName('github');
 
     if (githubService) {
+      if (mode === 'link' && userId && user.id === userId) {
+        const existingUser = await this.usersService.findByEmail(email);
+        if (existingUser && existingUser.id !== user.id) {
+          await this.userServicesService.deleteByUserAndService(
+            existingUser.id,
+            githubService.id,
+          );
+        }
+      }
+
       await this.userServicesService.createOrUpdate({
         userId: user.id,
         serviceId: githubService.id,
         accessToken,
         refreshToken: refreshToken || null,
-        tokenExpiry: null, // GitHub tokens do not expire
+        tokenExpiry: null,
         credentials: {
           profile: {
             id: profile.id,

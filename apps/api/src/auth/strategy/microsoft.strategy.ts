@@ -85,6 +85,16 @@ export class MicrosoftStrategy extends PassportStrategy(Strategy, 'microsoft') {
       await this.userServicesService.getServiceByName('microsoft');
 
     if (msService) {
+      if (mode === 'link' && userId && user.id === userId) {
+        const existingUser = await this.usersService.findByEmail(email);
+        if (existingUser && existingUser.id !== user.id) {
+          await this.userServicesService.deleteByUserAndService(
+            existingUser.id,
+            msService.id,
+          );
+        }
+      }
+
       await this.userServicesService.createOrUpdate({
         userId: user.id,
         serviceId: msService.id,
