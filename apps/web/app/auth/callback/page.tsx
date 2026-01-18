@@ -26,6 +26,30 @@ export default function AuthCallbackPage() {
   useEffect(() => {
     const token = searchParams.get("token");
     const error = searchParams.get("error");
+    const action = searchParams.get("action");
+    const success = searchParams.get("success");
+
+    if (action === "link") {
+      if (window.opener) {
+        window.opener.postMessage(
+          {
+            type: "OAUTH_LINK_RESULT",
+            success: !error,
+            message: success || error,
+          },
+          window.location.origin,
+        );
+        window.close();
+      } else {
+        if (error) {
+          toast.error(error);
+        } else {
+          toast.success(success || "Account linked successfully");
+        }
+        router.push("/services");
+      }
+      return;
+    }
 
     if (error) {
       toast.error("Connection failed, please try again.");
