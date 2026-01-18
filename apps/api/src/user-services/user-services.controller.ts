@@ -17,7 +17,7 @@ export class UserServicesController {
   @Get()
   async getUserServices(@Request() req: any) {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-    const userId = req.user.sub as string;
+    const userId = req.user.id as string;
     const services =
       await this.userServicesService.findUserServicesByUser(userId);
 
@@ -43,7 +43,7 @@ export class UserServicesController {
     @Param('serviceId') serviceId: string,
   ) {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-    const userId = req.user.sub as string;
+    const userId = req.user.id as string;
     const service = await this.userServicesService.findUserService(
       userId,
       serviceId,
@@ -73,12 +73,12 @@ export class UserServicesController {
   @Delete(':id')
   async disconnectService(@Request() req: any, @Param('id') id: string) {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-    const userId = req.user.sub as string;
+    const userId = req.user.id as string;
 
     const userService =
-      await this.userServicesService.findUserServicesByUser(id);
+      await this.userServicesService.findUserServiceById(id);
 
-    if (!userService || userService[0].user_id !== userId) {
+    if (!userService || userService.user_id !== userId) {
       throw new Error('Service not found or not owned by user');
     }
 

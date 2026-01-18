@@ -3,6 +3,7 @@ import { GraphQLService } from '../graphql/graphql.service';
 import {
   GetUserServiceQuery,
   GetUserServicesByUserQuery,
+  GetUserServiceByIdQuery,
   CreateUserServiceMutation,
   UpdateUserServiceTokensMutation,
   DisconnectUserServiceMutation,
@@ -54,6 +55,18 @@ export class UserServicesService {
       return data.user_services;
     } catch (error) {
       throw new Error(`Failed to fetch user services: ${error}`);
+    }
+  }
+
+  async findUserServiceById(id: string): Promise<User_Services | null> {
+    try {
+      const data = await this.graphqlService.adminQuery<{
+        user_services_by_pk: User_Services;
+      }>(GetUserServiceByIdQuery, { id });
+
+      return data.user_services_by_pk || null;
+    } catch (error) {
+      throw new Error(`Failed to fetch user service by id: ${error}`);
     }
   }
 
