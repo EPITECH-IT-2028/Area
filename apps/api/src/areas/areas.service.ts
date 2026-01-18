@@ -41,11 +41,7 @@ export class AreasService {
       { user_id: id },
     );
 
-    if (!result.areas || result.areas.length === 0) {
-      throw new NotFoundException(`Area with user ID '${id}' not found`);
-    }
-
-    return result.areas;
+    return result.areas || [];
   }
 
   async create(createAreaDto: CreateAreaDto, userId: string): Promise<Areas> {

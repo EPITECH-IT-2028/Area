@@ -30,7 +30,7 @@ struct RegisterView: View {
 				.disableAutocorrection(true)
 				.padding(.top, 20)
 				.font(.defaultFont)
-				.foregroundStyle(Color(.black))
+				.foregroundStyle(Color.primary)
 
 				Divider()
 
@@ -51,7 +51,7 @@ struct RegisterView: View {
 				.disableAutocorrection(true)
 				.padding(.top, 20)
 				.font(.defaultFont)
-				.foregroundStyle(!viewModel.emailValid ? Color(.red) : Color(.black))
+				.foregroundStyle(!viewModel.emailValid ? .red : .primary)
 
 				Divider()
 
@@ -67,7 +67,7 @@ struct RegisterView: View {
 				)
 				.foregroundStyle(
 					!viewModel.confirmPasswordValid || !viewModel.passwordValid
-						? Color(.red) : Color(.black)
+					? .red : .black
 				)
 				.padding(.top, 20)
 				.font(.defaultFont)
@@ -83,7 +83,7 @@ struct RegisterView: View {
 				)
 				.foregroundStyle(
 					!viewModel.confirmPasswordValid || !viewModel.passwordValid
-						? Color(.red) : Color(.black)
+					? .red : .black
 				)
 				.padding(.top, 20)
 				.font(.defaultFont)
@@ -126,7 +126,7 @@ struct RegisterView: View {
 					Text(LocalizedStringResource.registerRegisterButtonTitle)
 						.font(.system(size: 24, weight: .regular, design: .default))
 						.frame(maxWidth: .infinity, maxHeight: 60)
-						.foregroundColor(Color.white)
+						.foregroundColor(Color.cardBackgroundColor)
 						.background(Color.mainColor)
 						.cornerRadius(10)
 				}

@@ -18,19 +18,19 @@ struct HomepageCardView: View {
 
 				Text(item.title)
 					.font(.system(size: isSquare ? 20 : 24, weight: .bold))
-					.foregroundStyle(.black)
+					.foregroundStyle(Color.primary)
 					.multilineTextAlignment(.center)
 					.padding(.horizontal, 5)
 					.minimumScaleFactor(0.6)
 
 				Text(String(item.number))
 					.font(.system(size: isSquare ? 50 : 60, weight: .heavy))
-					.foregroundStyle(.black)
+					.foregroundStyle(Color.primary)
 
 				Spacer()
 			}
 			.frame(width: geometry.size.width, height: geometry.size.height)
-			.background(Color.white)
+			.background(Color.cardBackgroundColor)
 			.cornerRadius(20)
 			.overlay(
 				RoundedRectangle(cornerRadius: 20)

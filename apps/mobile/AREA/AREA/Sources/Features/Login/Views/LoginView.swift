@@ -30,7 +30,7 @@ struct LoginView: View {
 				.disableAutocorrection(true)
 				.padding(.top, 20)
 				.font(.defaultFont)
-				.foregroundStyle(Color(.black))
+				.foregroundStyle(Color.primary)
 
 				Divider()
 
@@ -38,7 +38,7 @@ struct LoginView: View {
 					LocalizedStringResource.loginPasswordFieldTitle,
 					text: $viewModel.password
 				)
-				.foregroundStyle(Color(.black))
+				.foregroundStyle(Color.primary)
 				.padding(.top, 20)
 				.font(.defaultFont)
 
@@ -126,7 +126,7 @@ struct LoginView: View {
 					Text(LocalizedStringResource.loginLoginButtonTitle)
 						.font(.system(size: 24, weight: .bold, design: .default))
 						.frame(maxWidth: .infinity, maxHeight: 60)
-						.foregroundColor(Color.white)
+						.foregroundColor(Color.cardBackgroundColor)
 						.background(Color.mainColor)
 						.cornerRadius(10)
 				}

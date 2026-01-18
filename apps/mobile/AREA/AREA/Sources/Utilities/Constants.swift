@@ -33,8 +33,8 @@ struct Constants {
 	static let registerServerPath = "/auth/register"
 	static let aboutJsonPath = "/about.json"
 	static let createAREAsPath = "/areas"
-	static let githubOAuth2ServerPath = "http://localhost:8080/auth/github"
-	static let googleOAuth2ServerPath = "http://localhost:8080/auth/google"
+	static let githubOAuth2ServerPath = "/auth/github"
+	static let googleOAuth2ServerPath = "/auth/google"
 
 	// OAuth2 query items
 	static let keyForOauth2 = "platform"
@@ -48,6 +48,16 @@ struct Constants {
 
 	// Keychain values
 	static let keychainJWTKey = "jwt"
+	static let keychainUserIdKey = "userId"
+
+	static let languageFrCode = "fr"
+	static let languageEnCode = "en"
+
+	static let flagEn = "🇬🇧"
+	static let flagFr = "🇫🇷"
+
+	static let iconLight = "☀️"
+	static let iconDark = "🌑"
 
 	// Confirm both language
 	static let ok = "OK"

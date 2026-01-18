@@ -15,7 +15,7 @@ struct SplashScreenView: View {
 			Color.mainColor.ignoresSafeArea()
 			Text(LocalizedStringResource.splashScreenTitle)
 				.font(.title)
-				.foregroundStyle(Color.white)
+				.foregroundStyle(Color.primary)
 		}
 		.onAppear {
 			Task {

@@ -18,13 +18,13 @@ struct ServicesView: View {
 			VStack {
 				ServiceCollectionView(
 					searchText: searchText,
-					allCards: serviceStore.fromServiceToCardItem(),
+					allCards: serviceStore.fromOAuthServiceToCardItem(),
 					viewModel: viewModel
 				)
 				.searchable(text: $searchText)
 			}
 			.navigationTitle(
-				LocalizedStringResource.servicesConnectionTitle
+				LocalizedStringResource.servicesTitle
 			)
 		}
 	}
