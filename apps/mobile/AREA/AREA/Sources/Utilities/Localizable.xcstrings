@@ -1257,7 +1257,7 @@
         }
       }
     },
-    "Services.Alert.Connexion" : {
+    "Services.Connection.Alert.Title" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
@@ -1270,6 +1270,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Connexion"
+          }
+        }
+      }
+    },
+    "Services.Connection.Title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Connect to services"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Se connecter aux services"
           }
         }
       }

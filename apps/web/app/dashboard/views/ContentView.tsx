@@ -1,18 +1,27 @@
 "use client";
 
 import { useDashboardViewModel } from "@/app/dashboard/viewModels/dashboardViewModel";
+import CreateAreaView from "@/app/dashboard/views/CreateAreaView";
 import { AreaCard } from "@/app/dashboard/views/components/AreaCard";
 import { DashboardHeader } from "@/app/dashboard/views/components/DashboardHeader";
 import { StatsCards } from "@/app/dashboard/views/components/StatsCards";
 import { useAuth } from "@/context/AuthContext";
 import { Plus, Workflow } from "lucide-react";
-import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 
 export default function ContentView() {
   const { user } = useAuth();
-  const { areas, isLoading, stats, getStatusColor } = useDashboardViewModel();
+  const {
+    areas,
+    isLoading,
+    stats,
+    getStatusColor,
+    isCreateModalOpen,
+    setIsCreateModalOpen,
+    refetch,
+    deleteArea,
+  } = useDashboardViewModel();
 
   return (
     <div className="min-h-screen">
@@ -32,9 +41,20 @@ export default function ContentView() {
           isLoading={isLoading}
         />
         <div className="mb-8">
-          <h2 className="mb-4 text-xl font-semibold md:mb-6 md:text-2xl">
-            Your AREAs
-          </h2>
+          <div className="mb-4 flex items-center justify-between md:mb-6">
+            <h2 className="text-xl font-semibold md:text-2xl">Your AREAs</h2>
+            {!isLoading && areas.length > 0 && (
+              <Button
+                onClick={() => setIsCreateModalOpen(true)}
+                size="sm"
+                className="gap-2"
+              >
+                <Plus className="h-4 w-4" />
+                <span className="hidden sm:inline">Create Automation</span>
+                <span className="sm:hidden">Create</span>
+              </Button>
+            )}
+          </div>
           {isLoading ? (
             <div className="rounded-2xl border border-dashed bg-card/50 py-8 text-center text-muted-foreground md:py-12">
               <div className="mb-4 inline-flex animate-spin items-center justify-center rounded-full">
@@ -55,7 +75,7 @@ export default function ContentView() {
                 services.
               </p>
               <Button
-                onClick={() => toast.info("Area creation coming soon!")}
+                onClick={() => setIsCreateModalOpen(true)}
                 className="gap-2"
               >
                 <Plus className="h-4 w-4" />
@@ -69,12 +89,21 @@ export default function ContentView() {
                   key={area.id}
                   area={area}
                   getStatusColor={getStatusColor}
+                  onDelete={deleteArea}
                 />
               ))}
             </div>
           )}
         </div>
       </main>
+
+      {isCreateModalOpen && (
+        <CreateAreaView
+          open={isCreateModalOpen}
+          onOpenChange={setIsCreateModalOpen}
+          onAreaCreated={refetch}
+        />
+      )}
     </div>
   );
 }

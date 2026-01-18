@@ -1,3 +1,10 @@
+//
+//  ServicesCollectionView.swift
+//  AREA
+//
+//  Created by Arthur GUERINAULT on 15/01/2026.
+//
+
 import SwiftUI
 
 struct ServiceCollectionView: View {
@@ -5,7 +12,7 @@ struct ServiceCollectionView: View {
 	var searchText: String
 	var allCards: [CardItem]
 
-	@StateObject private var viewModel = ServicesViewModel()
+	@ObservedObject var viewModel: ServicesViewModel
 
 	var body: some View {
 		let filteredCards =
@@ -36,11 +43,10 @@ struct ServiceCollectionView: View {
 				}
 			}
 			.padding()
-			.navigationTitle(LocalizedStringResource.servicesTitle)
 		}
 		.background(Color.backgroundColor)
 		.alert(
-			LocalizedStringResource.servicesAlertConnexion,
+			LocalizedStringResource.servicesConnectionAlertTitle,
 			isPresented: $viewModel.showAuthAlert
 		) {
 			Button(LocalizedStringResource.okTitle, role: .cancel) {}
