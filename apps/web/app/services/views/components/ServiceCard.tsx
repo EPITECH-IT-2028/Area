@@ -1,7 +1,11 @@
-import { ServiceRequest, UserServiceRequest } from "@/app/services/models/serviceRequest";
-import { Button } from "@/components/ui/button";
+import {
+  ServiceRequest,
+  UserServiceRequest,
+} from "@/app/services/models/serviceRequest";
 import { cn } from "@/lib/utils";
 import { Check, ExternalLink, Loader2, Plug, X } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
 
 interface ServiceCardProps {
   service: ServiceRequest;
@@ -21,8 +25,8 @@ export function ServiceCard({
   onDisconnect,
 }: ServiceCardProps) {
   return (
-    <div className="group overflow-hidden rounded-2xl border bg-card shadow-sm transition-all hover:shadow-md">
-      <div className="p-6">
+    <div className="group flex h-full flex-col overflow-hidden rounded-2xl border bg-card shadow-sm transition-all hover:shadow-md">
+      <div className="flex flex-1 flex-col p-6">
         <div className="mb-4 flex items-start justify-between">
           <div className="flex items-center gap-3">
             {service.icon_url ? (
@@ -50,7 +54,7 @@ export function ServiceCard({
                 "flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium",
                 isConnected
                   ? "bg-green-500/10 text-green-600 dark:text-green-400"
-                  : "bg-muted text-muted-foreground"
+                  : "bg-muted text-muted-foreground",
               )}
             >
               {isConnected ? (
@@ -102,7 +106,7 @@ export function ServiceCard({
           </div>
         )}
 
-        <div className="flex gap-2">
+        <div className="mt-auto flex gap-2">
           {!isConnected ? (
             <Button
               onClick={onConnect}
