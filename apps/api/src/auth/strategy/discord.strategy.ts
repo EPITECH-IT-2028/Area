@@ -47,13 +47,6 @@ export class DiscordStrategy extends PassportStrategy(Strategy, 'discord') {
       if (!user) {
         throw new Error('Authenticated user not found');
       }
-
-      const existingUser = await this.usersService.findByEmail(email);
-      if (existingUser && existingUser.id !== userId) {
-        throw new ConflictException(
-          'This Discord account is already linked to another user',
-        );
-      }
     } else {
       user = await this.usersService.findByEmail(email);
 
@@ -70,6 +63,16 @@ export class DiscordStrategy extends PassportStrategy(Strategy, 'discord') {
       await this.userServicesService.getServiceByName('discord');
 
     if (discordService) {
+      if (mode === 'link') {
+        const existingUser = await this.usersService.findByEmail(email);
+        if (existingUser && existingUser.id !== userId) {
+          await this.userServicesService.deleteByUserAndService(
+            existingUser.id,
+            discordService.id,
+          );
+        }
+      }
+
       await this.userServicesService.createOrUpdate({
         userId: user.id,
         serviceId: discordService.id,

@@ -50,13 +50,6 @@ export class GithubStrategy extends PassportStrategy(Strategy, 'github') {
       }
 
       user = foundUser;
-
-      const existingUser = await this.usersService.findByEmail(email);
-      if (existingUser && existingUser.id !== userId) {
-        throw new ConflictException(
-          'This GitHub account is already linked to another user',
-        );
-      }
     } else {
       const foundUser = await this.usersService.findByEmail(email);
 
@@ -75,12 +68,22 @@ export class GithubStrategy extends PassportStrategy(Strategy, 'github') {
       await this.userServicesService.getServiceByName('github');
 
     if (githubService) {
+      if (mode === 'link') {
+        const existingUser = await this.usersService.findByEmail(email);
+        if (existingUser && existingUser.id !== userId) {
+          await this.userServicesService.deleteByUserAndService(
+            existingUser.id,
+            githubService.id,
+          );
+        }
+      }
+
       await this.userServicesService.createOrUpdate({
         userId: user.id,
         serviceId: githubService.id,
         accessToken,
         refreshToken: refreshToken || null,
-        tokenExpiry: null, // GitHub tokens do not expire
+        tokenExpiry: null,
         credentials: {
           profile: {
             id: profile.id,

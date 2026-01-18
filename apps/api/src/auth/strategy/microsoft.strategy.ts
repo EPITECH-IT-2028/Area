@@ -60,13 +60,6 @@ export class MicrosoftStrategy extends PassportStrategy(Strategy, 'microsoft') {
       }
 
       user = foundUser;
-
-      const existingUser = await this.usersService.findByEmail(email);
-      if (existingUser && existingUser.id !== userId) {
-        throw new ConflictException(
-          'This Microsoft account is already linked to another user',
-        );
-      }
     } else {
       const foundUser = await this.usersService.findByEmail(email);
 
@@ -85,6 +78,16 @@ export class MicrosoftStrategy extends PassportStrategy(Strategy, 'microsoft') {
       await this.userServicesService.getServiceByName('microsoft');
 
     if (msService) {
+      if (mode === 'link') {
+        const existingUser = await this.usersService.findByEmail(email);
+        if (existingUser && existingUser.id !== userId) {
+          await this.userServicesService.deleteByUserAndService(
+            existingUser.id,
+            msService.id,
+          );
+        }
+      }
+
       await this.userServicesService.createOrUpdate({
         userId: user.id,
         serviceId: msService.id,
