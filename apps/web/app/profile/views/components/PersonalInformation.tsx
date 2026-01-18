@@ -44,12 +44,14 @@ export function PersonalInformation({
   const [editedName, setEditedName] = useState(name);
   const [isSaving, setIsSaving] = useState(false);
 
-  const copyToClipboard = async (text: string) => {
+  const copyToClipboard = async (text: string): Promise<boolean> => {
     try {
       await navigator.clipboard.writeText(text);
       toast.success("User ID copied to clipboard");
+      return true;
     } catch {
       toast.error("Failed to copy User ID");
+      return false;
     }
   };
 
@@ -217,22 +219,24 @@ function InfoRow({
   );
 }
 
-function CopyButton({ onCopy }: { onCopy: () => void }) {
+function CopyButton({ onCopy }: { onCopy: () => Promise<boolean> | boolean }) {
   const [copied, setCopied] = useState(false);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const handleClick = () => {
-    onCopy();
-    setCopied(true);
+  const handleClick = async () => {
+    const success = await onCopy();
+    if (success) {
+      setCopied(true);
 
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+
+      timeoutRef.current = setTimeout(() => {
+        setCopied(false);
+        timeoutRef.current = null;
+      }, 2000);
     }
-
-    timeoutRef.current = setTimeout(() => {
-      setCopied(false);
-      timeoutRef.current = null;
-    }, 2000);
   };
 
   useEffect(() => {
