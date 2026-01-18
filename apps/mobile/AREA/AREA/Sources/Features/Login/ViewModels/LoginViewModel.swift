@@ -76,8 +76,13 @@ class LoginViewModel: ObservableObject {
 		guard let accessToken = data.accessToken else {
 			throw NetworkError.missingAccessToken
 		}
+
+		guard let userId = data.user?.id else {
+			throw NetworkError.missingAccessToken
+		}
 		do {
 			try AuthState.shared.authenticate(accessToken: accessToken)
+			try AuthState.shared.setUserId(userId: userId)
 			isLoggedIn = true
 			status = .success
 			errorMessage = nil

@@ -7,18 +7,18 @@
 
 import Foundation
 
-struct HomeModel: Encodable {
+struct HomeModel: Decodable {
 	let success: Bool
 	let message: String?
 	let data: [HomeDataModel]
 	let statusCode: Int?
 }
 
-struct HomeDataModel: Encodable {
-	let id: Int
-	let user_id: String
+struct HomeDataModel: Decodable, Identifiable {
+	let id: String
+	let userId: String
 	let name: String
-	let lastTriggered: String
+	let lastTriggered: String?
 	let actionId: String
 	let actionConfig: [String: String]
 	let reactionId: String
@@ -28,14 +28,14 @@ struct HomeDataModel: Encodable {
 	let reaction: HomeActionModel
 }
 
-struct HomeActionModel: Encodable {
+struct HomeActionModel: Decodable, Identifiable {
 	let id: String
 	let name: String
-	let eventType: String
+	let eventType: String?
 	let service: HomeServiceModel
 	
 }
 
-struct HomeServiceModel: Encodable {
+struct HomeServiceModel: Decodable {
 	let name: String
 }

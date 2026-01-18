@@ -40,13 +40,13 @@ struct ServiceCollectionView: View {
 		}
 		.background(Color.backgroundColor)
 		.alert(
-			"Connexion",
+			LocalizedStringResource.servicesAlertConnexion,
 			isPresented: $viewModel.showAuthAlert
 		) {
-			Button("OK", role: .cancel) {}
+			Button(LocalizedStringResource.okTitle, role: .cancel) {}
 		} message: {
 			if let error = viewModel.errorMessage {
-				Text("Erreur : \(error)")
+				Text(error)
 			} else if let success = viewModel.authSuccessMessage {
 				Text(success)
 			}

@@ -10,22 +10,16 @@ import Foundation
 
 class HomeViewModel: ObservableObject {
 	@Published var isLoading: Bool = true
-	var action = SplashScreenAction()
+	var action = HomeAction()
 
-	func retrieveServices(store: ServiceStore) async {
+	func retrieveAREA() async -> [AREAItem] {
 		do {
 			self.isLoading = true
-			let services = try await action.call(store: store)
-
-			DispatchQueue.main.async {
-				if !services {
-					try? AuthState.shared.logout()
-				}
-				self.isLoading = false
-			}
+			let items: [AREAItem] = try await HomeAction().call()
+			return items
 		} catch {
 			print(error)
-			try? AuthState.shared.logout()
+			return []
 		}
 	}
 }

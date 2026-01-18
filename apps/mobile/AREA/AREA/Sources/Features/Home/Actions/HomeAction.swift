@@ -2,47 +2,29 @@
 //  HomeAction.swift
 //  AREA
 //
-//  Created by Arthur GUERINAULT on 17/01/2026.
+//  Created by Arthur GUERINAULT on 20/11/2025.
 //
 
-internal import Combine
 import Foundation
-import SimpleKeychain
 
 struct HomeAction {
-	@Published var isLoading: Bool = false
 
-	func retrieveUserAREA() async throws -> [AREAItem] {
+	/// This function is used to fetch the user's AREAs
+	func call() async throws -> [AREAItem] {
 		let builder = BuilderAPI()
 		let url = try builder.buildURL(path: Constants.createAREAsPath)
-		guard
-			let tokenData = try? KeychainManager.shared.keychain.data(
-				forKey: Constants.keychainJWTKey
-			),
-			let token = String(data: tokenData, encoding: .utf8)
-		else {
-			throw NetworkError.missingToken
-		}
-
 		let request = try builder.buildRequest(
 			url: url,
 			method: "GET",
-			token: token
+			token: AuthState.shared.getAuthToken()
 		)
-
-		await MainActor.run { self.isLoading = true }
-		defer {
-			Task { @MainActor in
-				self.isLoading = false
-			}
-		}
 
 		let (data, urlResponse) = try await URLSession.shared.data(for: request)
 
 		guard let response = urlResponse as? HTTPURLResponse else {
 			throw NetworkError.badURLResponse(
 				underlyingError: NSError(
-					domain: "ServiceStore",
+					domain: "HomeAction",
 					code: -1,
 					userInfo: [
 						NSLocalizedDescriptionKey: "Response is not an HTTP response"
@@ -51,14 +33,14 @@ struct HomeAction {
 			)
 		}
 
-		guard response.statusCode == 200 else {
+		guard (200...299).contains(response.statusCode) else {
 			let errorMessage = parseErrorMessage(
 				from: data,
 				statusCode: response.statusCode
 			)
 			throw NetworkError.badURLResponse(
 				underlyingError: NSError(
-					domain: "ServiceStore",
+					domain: "HomeAction",
 					code: response.statusCode,
 					userInfo: [
 						NSLocalizedDescriptionKey: errorMessage,
@@ -67,22 +49,26 @@ struct HomeAction {
 				)
 			)
 		}
-
+		
+		let decoder = JSONDecoder()
+		decoder.keyDecodingStrategy = .convertFromSnakeCase
+		
 		do {
-			let decoder = JSONDecoder()
-			decoder.keyDecodingStrategy = .convertFromSnakeCase
-
-			let decodedResponse = try decoder.decode(
-				SplashScreenResponse.self,
-				from: data
-			)
+			let homeModel = try decoder.decode(HomeModel.self, from: data)
+			
+			let areaItems = homeModel.data.map { homeData in
+				AREAItem(from: homeData)
+			}
+			
+			return areaItems
 		} catch {
 			throw NetworkError.decodingError(
 				underlyingError: error
 			)
 		}
 	}
-	
+
+	/// This function is used to parse the error message in the HTTP response to make the error debugging easier
 	private func parseErrorMessage(from data: Data, statusCode: Int) -> String {
 		if let json = try? JSONSerialization.jsonObject(with: data)
 			as? [String: Any]
@@ -99,4 +85,5 @@ struct HomeAction {
 		}
 		return HTTPURLResponse.localizedString(forStatusCode: statusCode)
 	}
+
 }

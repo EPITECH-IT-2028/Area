@@ -48,6 +48,7 @@ struct Constants {
 
 	// Keychain values
 	static let keychainJWTKey = "jwt"
+	static let keychainUserIdKey = "userId"
 
 	// Confirm both language
 	static let ok = "OK"
