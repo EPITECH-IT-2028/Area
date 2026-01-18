@@ -75,9 +75,9 @@ export class GithubStrategy extends PassportStrategy(Strategy, 'github') {
       await this.userServicesService.getServiceByName('github');
 
     if (githubService) {
-      if (mode === 'link') {
+      if (mode === 'link' && userId && user.id === userId) {
         const existingUser = await this.usersService.findByEmail(email);
-        if (existingUser && existingUser.id !== userId) {
+        if (existingUser && existingUser.id !== user.id) {
           await this.userServicesService.deleteByUserAndService(
             existingUser.id,
             githubService.id,

@@ -94,9 +94,9 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
       await this.userServicesService.getServiceByName('google');
 
     if (googleService) {
-      if (mode === 'link') {
+      if (mode === 'link' && userId && user.id === userId) {
         const existingUser = await this.usersService.findByEmail(email);
-        if (existingUser && existingUser.id !== userId) {
+        if (existingUser && existingUser.id !== user.id) {
           await this.userServicesService.deleteByUserAndService(
             existingUser.id,
             googleService.id,

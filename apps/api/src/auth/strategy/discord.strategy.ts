@@ -70,9 +70,9 @@ export class DiscordStrategy extends PassportStrategy(Strategy, 'discord') {
       await this.userServicesService.getServiceByName('discord');
 
     if (discordService) {
-      if (mode === 'link') {
+      if (mode === 'link' && userId && user.id === userId) {
         const existingUser = await this.usersService.findByEmail(email);
-        if (existingUser && existingUser.id !== userId) {
+        if (existingUser && existingUser.id !== user.id) {
           await this.userServicesService.deleteByUserAndService(
             existingUser.id,
             discordService.id,
