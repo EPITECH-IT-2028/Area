@@ -1,12 +1,14 @@
 "use client";
 
+import Link from "next/link";
+
 import { useServices } from "@/app/services/hooks/useServices";
 import { ServiceCard } from "@/app/services/views/components/ServiceCard";
-import { ServicesHeader } from "@/app/services/views/components/ServicesHeader";
 import { ServiceStatsCards } from "@/app/services/views/components/ServiceStatsCards";
-import { Button } from "@/components/ui/button";
+import { ServicesHeader } from "@/app/services/views/components/ServicesHeader";
 import { ArrowLeft, Plug } from "lucide-react";
-import Link from "next/link";
+
+import { Button } from "@/components/ui/button";
 
 export default function ServicesView() {
   const {
@@ -93,7 +95,7 @@ export default function ServicesView() {
                           if (userService) {
                             void disconnectService(
                               userService.id,
-                              service.display_name
+                              service.display_name,
                             );
                           }
                         }}
@@ -110,7 +112,8 @@ export default function ServicesView() {
                   Public Services
                 </h2>
                 <p className="mb-4 text-sm text-muted-foreground">
-                  These services don't require authentication and are always available.
+                  These services don&apos;t require authentication and are
+                  always available.
                 </p>
                 <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
                   {servicesWithoutAuth.map((service) => {
@@ -130,7 +133,7 @@ export default function ServicesView() {
                           if (userService) {
                             void disconnectService(
                               userService.id,
-                              service.display_name
+                              service.display_name,
                             );
                           }
                         }}
