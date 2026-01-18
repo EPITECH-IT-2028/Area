@@ -65,6 +65,17 @@ export class AreasController {
     };
   }
 
+  @Get('user')
+  async getAreaByUserId(@Req() req: any) {
+    const userId = req.user.id as string;
+
+    const area = await this.areasService.getAreaByUserId(userId);
+    return {
+      success: true,
+      data: area,
+    };
+  }
+
   @Post()
   @HttpCode(HttpStatus.CREATED)
   async create(@Body() createAreaDto: CreateAreaDto, @Req() req: any) {
