@@ -16,9 +16,10 @@ class ServicesViewModel: ObservableObject {
 
 		self.isAuthenticating = true
 
+		let authURL = try? BuilderAPI().buildURL(path: "/auth/link/\(service.name)").absoluteString
 		let action = ServiceAuthAction(
 			serviceName: service.name,
-			authURL: "http://localhost:8080/auth/link/\(service.name)"
+			authURL: authURL ?? ""
 		)
 		self.currentAuthAction = action
 

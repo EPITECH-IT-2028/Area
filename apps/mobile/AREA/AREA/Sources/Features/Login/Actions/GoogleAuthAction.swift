@@ -25,8 +25,10 @@ class GoogleAuthAction: NSObject, ObservableObject {
 			DispatchQueue.main.async {
 				self.isLoading = true
 			}
+			let fullURL = try? BuilderAPI().buildURL(path: Constants.googleOAuth2ServerPath)
 			guard
-				var components = URLComponents(string: Constants.googleOAuth2ServerPath)
+				let url = fullURL,
+				var components = URLComponents(url: url, resolvingAgainstBaseURL: true)
 			else {
 				DispatchQueue.main.async {
 					self.errorMessage = "Invalid URL"
