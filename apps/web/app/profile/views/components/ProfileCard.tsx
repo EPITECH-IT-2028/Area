@@ -9,7 +9,7 @@ interface ProfileCardProps {
 
 export function ProfileCard({ name, email }: ProfileCardProps) {
   return (
-    <Card className="h-full overflow-hidden">
+    <Card className="h-full gap-0 overflow-hidden p-0">
       <div className="h-24 bg-linear-to-br from-primary to-secondary opacity-90" />
       <CardContent className="relative px-6 pb-6">
         <div className="-mt-12 mb-4 flex justify-center">
