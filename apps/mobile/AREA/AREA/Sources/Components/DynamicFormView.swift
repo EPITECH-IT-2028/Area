@@ -17,6 +17,7 @@ struct DynamicFormView: View {
 				if let property = schema.properties[key] {
 					let isRequired = schema.required?.contains(key) ?? false
 					let isNumber = property.type == "number" || property.type == "integer"
+					let isBoolean = property.type == "boolean"
 
 					Section {
 						VStack(alignment: .leading, spacing: 8) {
@@ -32,16 +33,27 @@ struct DynamicFormView: View {
 										.bold()
 								}
 							}
-							TextField(
-								key,
-								text: Binding(
-									get: { values[key] ?? property.default ?? "" },
-									set: { values[key] = $0 }
+
+							if isBoolean {
+								Toggle(isOn: Binding(
+									get: { (values[key] ?? property.default ?? "false").lowercased() == "true" },
+									set: { values[key] = $0 ? "true" : "false" }
+								)) {
+									Text("")
+								}
+								.labelsHidden()
+							} else {
+								TextField(
+									key,
+									text: Binding(
+										get: { values[key] ?? property.default ?? "" },
+										set: { values[key] = $0 }
+									)
 								)
-							)
-							.autocapitalization(.none)
-							.textFieldStyle(RoundedBorderTextFieldStyle())
-							.keyboardType(.default)
+								.autocapitalization(.none)
+								.textFieldStyle(RoundedBorderTextFieldStyle())
+								.keyboardType(.default)
+							}
 						}
 						.padding(.vertical, 4)
 					}
