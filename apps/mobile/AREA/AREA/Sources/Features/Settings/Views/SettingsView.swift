@@ -24,6 +24,10 @@ struct SettingsView: View {
 						Text(LocalizedStringResource.settingsUpdateLanguage)
 							.foregroundStyle(Color.primary)
 					}
+					NavigationLink(destination: UpdateThemeView()) {
+						Text(LocalizedStringResource.settingsThemePageTitle)
+							.foregroundStyle(Color.primary)
+					}
 					Button(
 						LocalizedStringResource.settingsLogout,
 						action: {

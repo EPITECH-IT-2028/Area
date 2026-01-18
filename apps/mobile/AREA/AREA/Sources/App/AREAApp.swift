@@ -16,6 +16,7 @@ struct AREAApp: App {
 	@StateObject private var serviceStore = ServiceStore.shared
 	@StateObject private var authState = AuthState.shared
 	@AppStorage("language") private var languageString = "fr"
+	@AppStorage("isDarkMode") private var isDarkMode = false
 
 	var body: some Scene {
 		WindowGroup {
@@ -26,6 +27,7 @@ struct AREAApp: App {
 				.onAppear {
 					SDImageCodersManager.shared.addCoder(SDImageSVGCoder.shared)
 				}
+				.preferredColorScheme(isDarkMode ? .dark : .light)
 		}
 	}
 }

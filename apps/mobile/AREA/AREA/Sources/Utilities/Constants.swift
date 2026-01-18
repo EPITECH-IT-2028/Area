@@ -56,6 +56,9 @@ struct Constants {
 	static let flagEn = "🇬🇧"
 	static let flagFr = "🇫🇷"
 
+	static let iconLight = "☀️"
+	static let iconDark = "🌑"
+
 	// Confirm both language
 	static let ok = "OK"
 
