@@ -20,7 +20,7 @@ function useDashboard() {
     try {
       const response = await api.get("areas/user").json<AreasResponse>();
       if (response.success && response.data && response.data.length > 0) {
-        setAreas(response.data.map((area) => ({ ...area, is_active: true })));
+        setAreas(response.data);
       } else {
         setAreas([]);
       }
@@ -50,7 +50,36 @@ function useDashboard() {
     [fetchAreas],
   );
 
-  return { areas, isLoading, refetch: fetchAreas, deleteArea };
+  const updateArea = useCallback(
+    async (
+      id: string,
+      data: { name?: string; description?: string; is_active?: boolean },
+    ) => {
+      try {
+        if (data.name) {
+          await api.patch(`areas/${id}/name`, { json: { name: data.name } });
+        }
+        if (data.description) {
+          await api.patch(`areas/${id}/description`, {
+            json: { description: data.description },
+          });
+        }
+        if (data.is_active !== undefined) {
+          await api.patch(`areas/${id}/status`, {
+            json: { is_active: data.is_active },
+          });
+        }
+        toast.success("Automation updated successfully");
+        await fetchAreas();
+      } catch (error) {
+        console.error("Failed to update area:", error);
+        toast.error("Failed to update automation. Please try again.");
+      }
+    },
+    [fetchAreas],
+  );
+
+  return { areas, isLoading, refetch: fetchAreas, deleteArea, updateArea };
 }
 
 export default useDashboard;
