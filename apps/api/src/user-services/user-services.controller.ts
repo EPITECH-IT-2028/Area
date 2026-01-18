@@ -28,7 +28,6 @@ export class UserServicesController {
     const services =
       await this.userServicesService.findUserServicesByUser(userId);
 
-    // We don't want to expose sensitive informations
     const sanitized = services.map((service) => ({
       id: service.id,
       service_id: service.service_id,
@@ -92,7 +91,7 @@ export class UserServicesController {
       throw new Error('Service not found or not owned by user');
     }
 
-    const result = await this.userServicesService.disconnect(id);
+    const result = await this.userServicesService.delete(id);
 
     return {
       success: true,
