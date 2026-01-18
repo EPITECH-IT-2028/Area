@@ -43,6 +43,17 @@ export function DashboardHeader() {
               </div>
             </Link>
 
+            <Link href="/profile" className="-mr-4 flex md:hidden">
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-9 w-9 bg-muted/50"
+              >
+                <User className="h-5 w-5" />
+                <span className="sr-only">Profile</span>
+              </Button>
+            </Link>
+
             <Button
               onClick={() => {
                 logout();
@@ -53,7 +64,7 @@ export function DashboardHeader() {
               className="text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
             >
               <LogOut className="mr-2 h-4 w-4" />
-              Logout
+              <span className="hidden md:inline">Logout</span>
             </Button>
           </div>
         </div>
