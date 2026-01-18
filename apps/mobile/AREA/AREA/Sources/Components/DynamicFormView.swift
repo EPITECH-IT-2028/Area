@@ -41,7 +41,7 @@ struct DynamicFormView: View {
 							)
 							.autocapitalization(.none)
 							.textFieldStyle(RoundedBorderTextFieldStyle())
-							.keyboardType(isNumber ? .decimalPad : .default)
+							.keyboardType(.default)
 						}
 						.padding(.vertical, 4)
 					}
