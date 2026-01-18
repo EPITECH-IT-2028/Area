@@ -10,6 +10,7 @@ import Foundation
 enum JSONValue: Encodable {
 	case string(String)
 	case number(Double)
+	case integer(Int)
 	case bool(Bool)
 
 	func encode(to encoder: Encoder) throws {
@@ -17,6 +18,7 @@ enum JSONValue: Encodable {
 		switch self {
 		case .string(let x): try container.encode(x)
 		case .number(let x): try container.encode(x)
+		case .integer(let x): try container.encode(x)
 		case .bool(let x): try container.encode(x)
 		}
 	}

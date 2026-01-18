@@ -113,7 +113,14 @@ class AreaCreationViewModel: ObservableObject {
 
 		for (key, value) in values {
 			if let property = schema.properties[key] {
-				if property.type == "number" || property.type == "integer" {
+				if property.type == "integer" {
+					if let intValue = Int(value) {
+						typedConfig[key] = .integer(intValue)
+					} else {
+						typedConfig[key] = .string(value)
+					}
+				}
+				else if property.type == "number" {
 					if let numberValue = Double(value) {
 						typedConfig[key] = .number(numberValue)
 					} else {
@@ -121,8 +128,9 @@ class AreaCreationViewModel: ObservableObject {
 					}
 				}
 				else if property.type == "boolean" {
-					if let boolValue = Bool(value) {
-						typedConfig[key] = .bool(boolValue)
+					let lowercasedValue = value.lowercased()
+					if lowercasedValue == "true" || lowercasedValue == "yes" || lowercasedValue == "1" {
+						typedConfig[key] = .bool(true)
 					} else {
 						typedConfig[key] = .bool(false)
 					}
