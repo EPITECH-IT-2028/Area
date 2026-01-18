@@ -1309,6 +1309,40 @@
         }
       }
     },
+    "Settings.Language.Available" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Available languages"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Langues disponibles"
+          }
+        }
+      }
+    },
+    "Settings.Language.LanguageSettings" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Languages Settings"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Paramètres de langues"
+          }
+        }
+      }
+    },
     "Settings.Logout" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1373,6 +1407,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Paramètres"
+          }
+        }
+      }
+    },
+    "Settings.UpdateLanguage" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Update language"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Modifier la langue"
           }
         }
       }
