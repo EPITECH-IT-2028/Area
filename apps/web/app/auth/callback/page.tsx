@@ -47,13 +47,15 @@ export default function AuthCallbackPage() {
           window.location.origin,
         );
 
-        if (error) {
-          setStatus("linked_error");
-          setMessage(error);
-        } else {
-          setStatus("linked_success");
-          setMessage(success || "Service connected successfully!");
-        }
+        setTimeout(() => {
+          if (error) {
+            setStatus("linked_error");
+            setMessage(error);
+          } else {
+            setStatus("linked_success");
+            setMessage(success || "Service connected successfully!");
+          }
+        }, 0);
       } else {
         if (error) {
           toast.error(error);
