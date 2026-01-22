@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { Globe, Plus, Zap } from "lucide-react";
+import { Globe, Sparkles, Zap } from "lucide-react";
 
 export interface StatsCardsProps {
   totalAreas: number;
@@ -68,10 +68,10 @@ export function StatsCards({
       <div className="group hidden cursor-not-allowed items-center justify-between rounded-2xl border border-dashed border-border bg-muted/30 p-4 transition-all md:p-6 lg:flex">
         <div className="flex items-center gap-4 opacity-50">
           <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-muted text-muted-foreground ring-1 ring-border">
-            <Plus className="h-6 w-6" />
+            <Sparkles className="h-6 w-6" />
           </div>
           <div>
-            <p className="text-sm font-semibold">New AREA</p>
+            <p className="text-sm font-semibold">Create using AI</p>
             <p className="mt-0.5 text-xs text-muted-foreground">Coming soon</p>
           </div>
         </div>

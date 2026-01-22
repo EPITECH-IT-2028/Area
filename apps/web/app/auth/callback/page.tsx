@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { useRouter, useSearchParams } from "next/navigation";
 
@@ -8,7 +8,10 @@ import { OAuthResponse } from "@/app/auth/models/oauthResponse";
 import { useAuth } from "@/context/AuthContext";
 import api from "@/lib/api";
 import Cookies from "js-cookie";
+import { CheckCircle2, XCircle } from "lucide-react";
 import { toast } from "sonner";
+
+import { Button } from "@/components/ui/button";
 
 interface JwtPayload {
   sub: string;
@@ -22,6 +25,10 @@ export default function AuthCallbackPage() {
   const searchParams = useSearchParams();
   const { login } = useAuth();
   const hasFetched = useRef(false);
+  const [status, setStatus] = useState<
+    "authenticating" | "linked_success" | "linked_error"
+  >("authenticating");
+  const [message, setMessage] = useState<string>("");
 
   useEffect(() => {
     const token = searchParams.get("token");
@@ -39,7 +46,16 @@ export default function AuthCallbackPage() {
           },
           window.location.origin,
         );
-        window.close();
+
+        setTimeout(() => {
+          if (error) {
+            setStatus("linked_error");
+            setMessage(error);
+          } else {
+            setStatus("linked_success");
+            setMessage(success || "Service connected successfully!");
+          }
+        }, 0);
       } else {
         if (error) {
           toast.error(error);
@@ -101,6 +117,50 @@ export default function AuthCallbackPage() {
 
     fetchUserAndLogin().then();
   }, [searchParams, router, login]);
+
+  if (status === "linked_success") {
+    return (
+      <div className="flex h-screen w-full flex-col items-center justify-center gap-6 bg-primary-foreground p-4 text-center">
+        <div className="flex h-20 w-20 items-center justify-center rounded-full bg-green-500/10 text-green-500">
+          <CheckCircle2 className="h-10 w-10" />
+        </div>
+        <div className="max-w-md space-y-2">
+          <h1 className="text-2xl font-bold">Service Connected</h1>
+          <p className="text-muted-foreground">
+            Your account has been successfully linked. You can now close this
+            window and return to the application.
+          </p>
+        </div>
+        <Button onClick={() => window.close()} className="mt-4">
+          Close Window
+        </Button>
+      </div>
+    );
+  }
+
+  if (status === "linked_error") {
+    return (
+      <div className="flex h-screen w-full flex-col items-center justify-center gap-6 bg-primary-foreground p-4 text-center">
+        <div className="flex h-20 w-20 items-center justify-center rounded-full bg-destructive/10 text-destructive">
+          <XCircle className="h-10 w-10" />
+        </div>
+        <div className="max-w-md space-y-2">
+          <h1 className="text-2xl font-bold">Connection Failed</h1>
+          <p className="text-muted-foreground">
+            {message ||
+              "An error occurred while connecting your account. Please try again."}
+          </p>
+        </div>
+        <Button
+          variant="outline"
+          onClick={() => window.close()}
+          className="mt-4"
+        >
+          Close Window
+        </Button>
+      </div>
+    );
+  }
 
   return (
     <div className="flex h-screen w-full flex-col items-center justify-center gap-4 bg-primary-foreground">

@@ -48,6 +48,7 @@ export default function CreateAreaView({
     updateDraftDetails,
     goBack,
     submit,
+    isServiceConnected,
   } = useCreateAreaViewModel(() => {
     handleClose();
     onAreaCreated?.();
@@ -133,6 +134,7 @@ export default function CreateAreaView({
                   services={services.filter((s) => s.actions.length > 0)}
                   onSelect={selectActionService}
                   selectedService={draft.actionService}
+                  isServiceConnected={isServiceConnected}
                 />
               )}
 
@@ -157,6 +159,7 @@ export default function CreateAreaView({
                   services={services.filter((s) => s.reactions.length > 0)}
                   onSelect={selectReactionService}
                   selectedService={draft.reactionService}
+                  isServiceConnected={isServiceConnected}
                 />
               )}
 
