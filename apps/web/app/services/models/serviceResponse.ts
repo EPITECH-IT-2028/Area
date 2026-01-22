@@ -1,4 +1,7 @@
-import { ServiceRequest, UserServiceRequest } from "@/app/services/models/serviceRequest";
+import {
+  ServiceRequest,
+  UserServiceRequest,
+} from "@/app/services/models/serviceRequest";
 
 export interface UserServicesResponse {
   success: boolean;
