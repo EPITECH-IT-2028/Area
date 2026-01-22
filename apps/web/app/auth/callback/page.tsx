@@ -26,7 +26,7 @@ export default function AuthCallbackPage() {
   const { login } = useAuth();
   const hasFetched = useRef(false);
   const [status, setStatus] = useState<
-    "authenticating" | "linked_success" | "linked_error" | "login_success"
+    "authenticating" | "linked_success" | "linked_error"
   >("authenticating");
   const [message, setMessage] = useState<string>("");
 
@@ -106,12 +106,6 @@ export default function AuthCallbackPage() {
 
         toast.success("Logged in successfully");
         router.push("/dashboard");
-        // if (window.opener) {
-        //   setStatus("login_success");
-        //   setMessage("Login successful! You can now close this window.");
-        // } else {
-        //   router.push("/dashboard");
-        // }
       } catch (err) {
         console.error(err);
         toast.error("Unable to login, please try again.");
@@ -122,7 +116,6 @@ export default function AuthCallbackPage() {
     fetchUserAndLogin().then();
   }, [searchParams, router, login]);
 
-  // if (status === "linked_success" || status === "login_success") {
   if (status === "linked_success") {
     return (
       <div className="flex h-screen w-full flex-col items-center justify-center gap-6 bg-primary-foreground p-4 text-center">

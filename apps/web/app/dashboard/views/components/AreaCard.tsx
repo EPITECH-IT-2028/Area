@@ -40,7 +40,6 @@ export function AreaCard({
   );
   const [isActive, setIsActive] = useState(area.is_active);
 
-  // Synchronize internal state with props when they change
   const [prevArea, setPrevArea] = useState(area);
   if (area !== prevArea) {
     setPrevArea(area);
