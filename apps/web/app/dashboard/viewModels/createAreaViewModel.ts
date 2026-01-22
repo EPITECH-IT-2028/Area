@@ -32,9 +32,24 @@ export function useCreateAreaViewModel(
   onSuccess: () => void,
   onCancel: () => void,
 ) {
-  const { services, isLoading, isSubmitting, fetchServices, createArea } =
-    useCreateArea();
+  const {
+    services,
+    userServices,
+    isLoading,
+    isSubmitting,
+    fetchServices,
+    createArea,
+  } = useCreateArea();
   const [step, setStep] = useState<Step>("select-action-service");
+
+  const isServiceConnected = (service: Service): boolean => {
+    if (!service.oauth_url) {
+      return true;
+    }
+    return userServices.some(
+      (us) => us.service.name === service.name && us.is_connected,
+    );
+  };
 
   const [draft, setDraft] = useState<AreaDraft>({
     name: "",
@@ -52,6 +67,10 @@ export function useCreateAreaViewModel(
   }, [fetchServices]);
 
   const selectActionService = (service: Service) => {
+    if (!isServiceConnected(service)) {
+      toast.error(`Please connect to ${service.display_name} first.`);
+      return;
+    }
     setDraft((prev) => ({
       ...prev,
       actionService: service,
@@ -102,6 +121,10 @@ export function useCreateAreaViewModel(
   };
 
   const selectReactionService = (service: Service) => {
+    if (!isServiceConnected(service)) {
+      toast.error(`Please connect to ${service.display_name} first.`);
+      return;
+    }
     setDraft((prev) => ({
       ...prev,
       reactionService: service,
@@ -226,5 +249,6 @@ export function useCreateAreaViewModel(
     updateDraftDetails,
     goBack,
     submit,
+    isServiceConnected,
   };
 }
