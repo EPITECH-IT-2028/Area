@@ -37,15 +37,20 @@ export function ServiceGrid({
                 ? "cursor-not-allowed opacity-70 grayscale-[0.5] select-none"
                 : "hover:border-primary/50 hover:bg-accent",
             )}
-            onClick={() => onSelect(service)}
+            onClick={() => {
+              if (!connected) return;
+              onSelect(service);
+            }}
             onKeyDown={(e) => {
+              if (!connected) return;
               if (e.key === "Enter" || e.key === " ") {
                 e.preventDefault();
                 onSelect(service);
               }
             }}
             role="button"
-            tabIndex={0}
+            tabIndex={connected ? 0 : -1}
+            aria-disabled={!connected}
             aria-pressed={selectedService?.name === service.name}
           >
             <CardContent className="flex flex-col items-center justify-center p-6 text-center">
