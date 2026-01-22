@@ -5,19 +5,24 @@ import {
   CreateAreaRequest,
   Service,
 } from "@/app/dashboard/models/aboutResponse";
+import { UserServiceRequest } from "@/app/services/models/serviceRequest";
+import { UserServicesResponse } from "@/app/services/models/serviceResponse";
 import api from "@/lib/api";
 import { toast } from "sonner";
 
 export function useCreateArea() {
   const [services, setServices] = useState<Service[]>([]);
+  const [userServices, setUserServices] = useState<UserServiceRequest[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const fetchServices = useCallback(async () => {
     setIsLoading(true);
     try {
-      const response = await api.get("about.json").json<AboutResponse>();
-      setServices(response.server.services);
+      const aboutResponse = await api.get("about.json").json<AboutResponse>();
+      setServices(aboutResponse.server.services);
+      const userServicesResponse = await api.get("user-services").json<UserServicesResponse>();
+      setUserServices(userServicesResponse.data);
     } catch (error) {
       console.error("Failed to load services", error);
       toast.error("Failed to load available services");
@@ -46,6 +51,7 @@ export function useCreateArea() {
 
   return {
     services,
+    userServices,
     isLoading: isLoading,
     isSubmitting: isSubmitting,
     fetchServices,
