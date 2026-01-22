@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import { Area } from "@/app/dashboard/models/areasResponse";
 import { cn } from "@/lib/utils";
@@ -41,11 +41,13 @@ export function AreaCard({
   const [isActive, setIsActive] = useState(area.is_active);
 
   // Synchronize internal state with props when they change
-  useEffect(() => {
+  const [prevArea, setPrevArea] = useState(area);
+  if (area !== prevArea) {
+    setPrevArea(area);
     setEditedName(area.name);
     setEditedDescription(area.description || "");
     setIsActive(area.is_active);
-  }, [area]);
+  }
 
   const status = area.is_active ? "success" : "disabled";
   const statusColorClass = getStatusColor

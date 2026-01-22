@@ -51,7 +51,10 @@ export const useServices = () => {
   }, [fetchServices, fetchUserServices]);
 
   useEffect(() => {
-    void loadData();
+    const timer = setTimeout(() => {
+      void loadData();
+    }, 0);
+    return () => clearTimeout(timer);
   }, [loadData]);
 
   const isServiceConnected = useCallback(

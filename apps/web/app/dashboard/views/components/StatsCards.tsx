@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { Globe, Plus, Sparkles, Zap } from "lucide-react";
+import { Globe, Sparkles, Zap } from "lucide-react";
 
 export interface StatsCardsProps {
   totalAreas: number;
