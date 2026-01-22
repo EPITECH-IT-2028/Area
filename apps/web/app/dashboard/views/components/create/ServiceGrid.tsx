@@ -30,7 +30,7 @@ export function ServiceGrid({
           <Card
             key={service.name}
             className={cn(
-              "transition-allfocus-visible:ring-2 relative cursor-pointer focus-visible:ring-primary focus-visible:outline-none",
+              "relative cursor-pointer transition-all focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none",
               selectedService?.name === service.name &&
                 "border-primary bg-accent ring-1 ring-primary",
               !connected
