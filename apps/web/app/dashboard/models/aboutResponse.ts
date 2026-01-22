@@ -31,6 +31,7 @@ export interface Service {
   name: string;
   display_name: string;
   icon_url: string;
+  oauth_url?: string | null;
   actions: Action[];
   reactions: Reaction[];
 }
