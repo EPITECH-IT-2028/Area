@@ -44,7 +44,7 @@ export function ServiceStatsCards({
                 "flex h-12 w-12 items-center justify-center rounded-xl ring-1 ring-inset",
                 stat.bg,
                 stat.color,
-                stat.ring
+                stat.ring,
               )}
             >
               <stat.icon className="h-6 w-6" />

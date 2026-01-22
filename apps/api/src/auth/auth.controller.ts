@@ -274,7 +274,16 @@ export class AuthController {
         );
         return;
       }
-      redirectToApp(platform || 'web', res, result.access_token);
+
+      const isLink = req.user?.mode === 'link';
+      redirectToApp(
+        platform || 'web',
+        res,
+        result.access_token,
+        undefined,
+        isLink,
+        isLink ? 'Service connected successfully' : undefined,
+      );
     } catch (error) {
       console.error('OAuth login error:', error);
       redirectToApp(

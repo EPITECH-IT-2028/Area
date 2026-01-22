@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 import {
   ServiceRequest,
   UserServiceRequest,
@@ -6,7 +8,6 @@ import { cn } from "@/lib/utils";
 import { Check, ExternalLink, Loader2, Plug, X } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import Image from "next/image";
 
 interface ServiceCardProps {
   service: ServiceRequest;

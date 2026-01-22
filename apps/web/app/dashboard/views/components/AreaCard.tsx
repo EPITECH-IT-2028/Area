@@ -40,12 +40,13 @@ export function AreaCard({
   );
   const [isActive, setIsActive] = useState(area.is_active);
 
-  // Synchronize internal state with props when they change
   useEffect(() => {
-    setEditedName(area.name);
-    setEditedDescription(area.description || "");
-    setIsActive(area.is_active);
-  }, [area]);
+    setTimeout(() => {
+      setEditedName(area.name);
+      setEditedDescription(area.description || "");
+      setIsActive(area.is_active);
+    }, 0);
+  }, [area.id, area.name, area.description, area.is_active]);
 
   const status = area.is_active ? "success" : "disabled";
   const statusColorClass = getStatusColor
