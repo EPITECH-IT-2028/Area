@@ -1,96 +1,101 @@
-# Area Project
+# AREA Project
 
-## Installation and Setup
+A powerful automation platform inspired by IFTTT and Zapier, built with a modern tech stack.
+
+## 🚀 Project Overview
+
+The project is organized as a monorepo using **TurboRepo** and **pnpm**, providing a seamless development experience across the backend, frontend, and mobile applications.
+
+- **Backend (`apps/api`)**: Built with **NestJS 11**, leveraging **GraphQL** and **Hasura** for a robust and scalable API.
+- **Frontend (`apps/web`)**: Developed with **Next.js 16** and **React 19**, styled with **Tailwind CSS 4** and **Radix UI**.
+- **Mobile (`apps/mobile`)**: A native iOS application built with **Swift** and **SwiftUI**.
+
+## 🛠️ Installation and Setup
 
 ### Prerequisites
-Ensure you have the following installed on your system:
-- [Docker](https://www.docker.com/): Used to containerize and manage the database and other services.
-- [Node.js](https://nodejs.org/) (v16 or higher recommended): A JavaScript runtime required for running the project.
-- [pnpm](https://pnpm.io/) (v8 or higher recommended): A fast, disk space-efficient package manager for Node.js.
+
+Ensure you have the following installed:
+
+- [Docker](https://www.docker.com/) & [Docker Compose](https://docs.docker.com/compose/)
+- [Node.js](https://nodejs.org/) (v20 or higher recommended)
+- [pnpm](https://pnpm.io/) (v9 or higher recommended)
 
 ### Steps
-1. Clone the repository:
+
+1. **Clone the repository:**
+
    ```bash
    git clone https://github.com/EPITECH-IT-2028/Area.git
    cd Area
    ```
-   This command clones the project repository from GitHub and navigates into the project directory.
 
-2. Install dependencies:
+2. **Install dependencies:**
+
    ```bash
    pnpm install
    ```
-   This command installs all the required dependencies for the project using `pnpm`.
 
-3. Launch the database:
+3. **Environment Variables:**
+   Copy the `.env.example` file to `.env` and fill in the required values.
+
+4. **Launch the infrastructure:**
+
    ```bash
-   docker compose up -d
+   docker compose up -d postgres graphql-engine data-connector-agent
    ```
-   This command starts the database in detached mode using Docker Compose. Ensure Docker is running before executing this command.
 
-4. Set up Hasura:
+   _Starts the PostgreSQL database and Hasura engine._
+
+5. **Initialize Hasura:**
    ```bash
    pnpm hasura:setup
    ```
-   This command initializes the Hasura configuration for the project.
+   _Applies migrations, metadata, and seeds._
 
-5. Start Hasura:
-   ```bash
-   pnpm hasura:console
-   ```
-   This command launches the Hasura console, allowing you to manage the GraphQL API and database schema.
+## 💻 Development
 
-## Project Architecture
+### Launch Locally (Recommended for Development)
 
-The project is organized as a monorepo with the following structure:
+To start the API and Web apps in development mode:
 
-- **apps/**: Contains the main applications.
-  - **api/**: Backend application built with NestJS. It includes modules for authentication, user management, and GraphQL services.
-  - **mobile/**: Mobile application developed entirely in Swift for iOS.
-  - **web/**: Frontend application built with Next.js, providing the user interface for the project.
-- **hasura/**: Contains Hasura configurations, metadata, migrations, and seeds for managing the database and GraphQL API.
-- **packages/**: Shared configurations and utilities.
-  - **eslint-config/**: Shared ESLint configurations for consistent code formatting.
-  - **typescript-config/**: Shared TypeScript configurations for type checking and development.
-
-## How to Launch the App
-
-### Launch the Entire Project
-To launch the entire project (backend and frontend):
 ```bash
 pnpm dev
 ```
-This command starts both the backend and frontend applications in development mode.
 
-### Launch Specific Parts
-- **Backend only**:
-  ```bash
-  pnpm --filter api dev
-  ```
-  This command starts only the backend application in development mode.
+- **Web App**: [http://localhost:8081](http://localhost:8081)
+- **API**: [http://localhost:8080](http://localhost:8080)
+- **Hasura Console**: `pnpm hasura:console` (at [http://localhost:9695](http://localhost:9695))
 
-- **Frontend only**:
-  ```bash
-  pnpm --filter web dev
-  ```
-  This command starts only the frontend application in development mode.
+### Launch with Docker
 
-## Technologies Used
+Alternatively, you can run the entire stack (including apps) via Docker:
 
-### Backend
-- [NestJS](https://nestjs.com/): A progressive Node.js framework for building efficient and scalable server-side applications. It provides a modular architecture, dependency injection, and built-in support for WebSockets and GraphQL.
-- [GraphQL](https://graphql.org/): A query language for APIs that allows clients to request only the data they need. It simplifies data fetching and improves performance.
-- [Hasura](https://hasura.io/): A GraphQL engine that provides instant APIs over PostgreSQL databases, with built-in support for authentication, authorization, and event triggers.
+```bash
+docker compose up -d
+```
 
-### Frontend
-- [Next.js](https://nextjs.org/): A React framework for building server-side rendered and static web applications. It supports features like API routes, image optimization, and incremental static regeneration.
+### Other Commands
 
-### Mobile
-- [Swift](https://www.swift.org/): A powerful and intuitive programming language for iOS development. It offers modern features like type safety, memory management, and interoperability with Objective-C.
+- **Build all**: `pnpm build`
+- **Lint all**: `pnpm lint`
+- **Format all**: `pnpm format`
+- **Type check**: `pnpm check-types`
+- **Generate GraphQL types**: `pnpm codegen`
 
-### Database
-- [PostgreSQL](https://www.postgresql.org/): A powerful, open-source object-relational database system known for its reliability, feature robustness, and performance. It supports advanced data types, full-text search, and JSON/JSONB storage.
+## 🏗️ Architecture
 
-### Others
-- [Docker](https://www.docker.com/): A platform for developing, shipping, and running applications in containers. It ensures consistency across development and production environments.
-- [pnpm](https://pnpm.io/): A fast, disk space-efficient package manager for Node.js. It uses a unique symlink-based approach to save storage space and speed up installations.
+- **`apps/`**: Main applications.
+  - `api/`: NestJS backend.
+  - `web/`: Next.js web application.
+  - `mobile/`: Swift/SwiftUI mobile app.
+- **`hasura/`**: Hasura GraphQL engine configuration, migrations, and metadata.
+- **`packages/`**: Shared configurations (ESLint, TypeScript).
+- **`docker/`**: Docker-related configuration files.
+
+## 🧰 Tech Stack
+
+- **Backend**: NestJS, Passport (OAuth2 integrations), GraphQL, Hasura.
+- **Frontend**: Next.js 16, React 19, Tailwind CSS 4, Radix UI, Sonner.
+- **Mobile**: Swift, SwiftUI (MVVM architecture).
+- **Database**: PostgreSQL.
+- **Tooling**: TurboRepo, pnpm, Prettier, ESLint.
