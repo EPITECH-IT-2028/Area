@@ -9,7 +9,9 @@ import Foundation
 
 struct HomeAction {
 
-	private func performRequest(request: URLRequest, domain: String) async throws -> Data {
+	private func performRequest(request: URLRequest, domain: String) async throws
+		-> Data
+	{
 		let (data, urlResponse) = try await URLSession.shared.data(for: request)
 
 		guard let response = urlResponse as? HTTPURLResponse else {
@@ -56,7 +58,7 @@ struct HomeAction {
 
 		_ = try await performRequest(request: request, domain: "DeleteArea")
 	}
-	
+
 	func updateNameById(id: String, parameters: UpdateNameModel)
 		async throws
 	{
@@ -72,7 +74,7 @@ struct HomeAction {
 
 		_ = try await performRequest(request: request, domain: "UpdateName")
 	}
-	
+
 	func updateDescriptionById(id: String, parameters: UpdateDescriptionModel)
 		async throws
 	{
@@ -88,7 +90,33 @@ struct HomeAction {
 
 		_ = try await performRequest(request: request, domain: "UpdateDescription")
 	}
-	
+
+	func retrieveUserServiceByUserId() async throws -> UserServiceResponse {
+		let builder = BuilderAPI()
+		let path = "\(Constants.userServicePath)/"
+		let url = try builder.buildURL(path: path)
+		let request = try builder.buildRequest(
+			url: url,
+			method: "GET",
+			token: AuthState.shared.getAuthToken()
+		)
+
+		let data = try await performRequest(
+			request: request,
+			domain: "RetrieveUserService"
+		)
+
+		let decoder = JSONDecoder()
+		decoder.keyDecodingStrategy = .convertFromSnakeCase
+		do {
+			return try decoder.decode(UserServiceResponse.self, from: data)
+		} catch {
+			throw NetworkError.decodingError(
+				underlyingError: error
+			)
+		}
+	}
+
 	func updateIsActiveById(id: String, parameters: UpdateIsActiveModel)
 		async throws
 	{
@@ -104,7 +132,7 @@ struct HomeAction {
 
 		_ = try await performRequest(request: request, domain: "UpdateIsActive")
 	}
-	
+
 	/// This function is used to fetch the user's AREAs
 	func call() async throws -> [AREAItem] {
 		let builder = BuilderAPI()
@@ -152,5 +180,4 @@ struct HomeAction {
 		}
 		return HTTPURLResponse.localizedString(forStatusCode: statusCode)
 	}
-
 }

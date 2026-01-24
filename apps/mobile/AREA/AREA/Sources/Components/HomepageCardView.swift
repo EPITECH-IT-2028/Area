@@ -8,36 +8,46 @@
 import SwiftUI
 
 struct HomepageCardView: View {
-	var item: HomepageCard
+	var card: HomepageCard
 	var isSquare: Bool = true
+	@Environment(\.colorScheme) var colorScheme
 
 	var body: some View {
-		GeometryReader { geometry in
-			VStack(alignment: .center, spacing: 5) {
-				Spacer()
+		HStack(spacing: 16) {
+			ZStack {
+				RoundedRectangle(cornerRadius: 16)
+					.fill(card.backgroundColor.opacity(0.15))
+					.frame(width: 60, height: 60)
 
-				Text(item.title)
-					.font(.system(size: isSquare ? 20 : 24, weight: .bold))
-					.foregroundStyle(Color.primary)
-					.multilineTextAlignment(.center)
-					.padding(.horizontal, 5)
-					.minimumScaleFactor(0.6)
-
-				Text(String(item.number))
-					.font(.system(size: isSquare ? 50 : 60, weight: .heavy))
-					.foregroundStyle(Color.primary)
-
-				Spacer()
+				Image(systemName: card.iconName)
+					.font(.system(size: 24, weight: .semibold))
+					.foregroundColor(card.iconColor)
 			}
-			.frame(width: geometry.size.width, height: geometry.size.height)
-			.background(Color.cardBackgroundColor)
-			.cornerRadius(20)
-			.overlay(
-				RoundedRectangle(cornerRadius: 20)
-					.stroke(Color.black.opacity(0.1), lineWidth: 1)
-			)
-			.shadow(color: .black.opacity(0.05), radius: 5, x: 0, y: 2)
+
+			VStack(alignment: .leading, spacing: 4) {
+				Text(card.title)
+					.font(.system(size: 15, weight: .regular))
+					.foregroundColor(.secondary)
+					.lineLimit(1)
+
+				Text("\(card.number)")
+					.font(.system(size: 36, weight: .bold))
+					.foregroundColor(.primary)
+			}
+
+			Spacer()
 		}
-		.aspectRatio(isSquare ? 1.0 : 2.2, contentMode: .fit)
+		.frame(maxWidth: .infinity, alignment: .leading)
+		.frame(height: 100)
+		.padding(.horizontal, 20)
+		.background(
+			RoundedRectangle(cornerRadius: 20)
+				.fill(Color(.systemBackground))
+				.shadow(color: Color.black.opacity(0.08), radius: 12, x: 0, y: 4)
+		)
+		.overlay(
+			RoundedRectangle(cornerRadius: 20)
+				.stroke(Color(.systemGray5), lineWidth: 1)
+		)
 	}
 }

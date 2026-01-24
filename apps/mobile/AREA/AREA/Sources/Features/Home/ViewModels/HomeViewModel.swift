@@ -46,7 +46,9 @@ class HomeViewModel: ObservableObject {
 		do {
 			try await action.updateDescriptionById(
 				id: id,
-				parameters: UpdateDescriptionModel(description: description.isEmpty ? " " : description)
+				parameters: UpdateDescriptionModel(
+					description: description.isEmpty ? " " : description
+				)
 			)
 		} catch {
 			throw error
@@ -66,5 +68,10 @@ class HomeViewModel: ObservableObject {
 		id: String
 	) async throws {
 		try await action.deleteAreaById(id: id)
+	}
+
+	func retrieveUserServiceByUserId() async throws -> Int {
+		let response = try await action.retrieveUserServiceByUserId()
+		return response.data.count
 	}
 }

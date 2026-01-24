@@ -15,41 +15,37 @@ struct HomeView: View {
 	@State private var errorMessage: String?
 	@State private var showError = false
 	@State private var areas: [AREAItem] = []
+	@State private var connectedServices: Int = 0
 	@State private var selectedArea: AREAItem?
 
 	var body: some View {
-		let stats: [HomepageCard] = [
-			HomepageCard(title: "Services", number: serviceStore.services.count),
+		let cards: [HomepageCard] = [
 			HomepageCard(
-				title: "Actions",
+				title: String(
+					localized: LocalizedStringResource.homeConnectedServicesTitle
+				),
+				iconName: "globe",
+				iconColor: .blue,
+				backgroundColor: .blue,
+				number: connectedServices
+			),
+			HomepageCard(
+				title: String(localized: LocalizedStringResource.homeCreateAreasTitle),
+				iconName: "bolt.fill",
+				iconColor: .orange,
+				backgroundColor: .orange,
 				number: serviceStore.services.flatMap(\.actions).count
 			),
-			HomepageCard(
-				title: "Reactions",
-				number: serviceStore.services.flatMap(\.reactions).count
-			),
 		]
-
-		let columns = [
-			GridItem(.flexible(), spacing: 16),
-			GridItem(.flexible(), spacing: 16),
-		]
-
-		let totalCards = stats.count
-		let isOdd = totalCards % 2 != 0
-		let gridCount = isOdd ? totalCards - 1 : totalCards
 
 		NavigationStack {
 			ScrollView {
-				VStack(spacing: 16) {
-					LazyVGrid(columns: columns, spacing: 16) {
-						ForEach(0..<gridCount, id: \.self) { index in
-							HomepageCardView(item: stats[index], isSquare: true)
+				VStack {
+					VStack(spacing: 16) {
+						ForEach(cards) { card in
+							HomepageCardView(card: card)
 						}
-					}
-					if isOdd, let lastItem = stats.last {
-						HomepageCardView(item: lastItem, isSquare: false)
-					}
+					}.padding()
 					ForEach(areas) { area in
 						AREACardView(area: area)
 							.onTapGesture {
@@ -57,7 +53,7 @@ struct HomeView: View {
 							}
 					}
 				}
-				.padding(16)
+				.padding(8)
 			}
 			.task {
 				await loadAreas()
@@ -98,5 +94,10 @@ struct HomeView: View {
 	@MainActor
 	private func loadAreas() async {
 		areas = await viewModel.retrieveAREA()
+		do {
+			connectedServices = try await viewModel.retrieveUserServiceByUserId()
+		} catch {
+			//
+		}
 	}
 }

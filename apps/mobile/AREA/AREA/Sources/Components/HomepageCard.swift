@@ -10,5 +10,8 @@ import SwiftUI
 struct HomepageCard: Identifiable {
 	let id = UUID()
 	let title: String
+	let iconName: String
+	let iconColor: Color
+	let backgroundColor: Color
 	let number: Int
 }
