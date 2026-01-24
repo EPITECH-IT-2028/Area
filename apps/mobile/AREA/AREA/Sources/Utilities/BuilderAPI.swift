@@ -11,13 +11,12 @@ struct BuilderAPI {
 	func buildURL(path: String) throws -> URL {
 		let scheme = SettingsUD.serverScheme
 		let host = SettingsUD.serverHost
-		let port = SettingsUD.serverPort
 
 		var components = URLComponents()
 		components.scheme = scheme
 		components.host = host
-		components.port = port
 		components.path = path
+		print(components)
 		guard let url = components.url else {
 			throw NetworkError.urlBuildFailed
 		}
