@@ -38,7 +38,7 @@ struct LoginView: View {
 						.frame(width: geometry.size.width * 0.45)
 
 						VStack(alignment: .leading, spacing: 20) {
-							Text("A WISE QUOTE")
+							Text(LocalizedStringResource.loginAwiseQuoteTitle)
 								.font(.system(size: 12, weight: .medium))
 								.foregroundColor(.white.opacity(0.8))
 								.tracking(2)
@@ -46,12 +46,12 @@ struct LoginView: View {
 							Spacer()
 
 							VStack(alignment: .leading, spacing: 16) {
-								Text("Believe in your journey")
+								Text(LocalizedStringResource.loginQuoteHeader)
 									.font(.system(size: 30, weight: .bold))
 									.foregroundColor(.white)
 
 								Text(
-									"Every step brings you closer to your goals when you stay focused and keep learning."
+									LocalizedStringResource.loginQuoteTitle
 								)
 								.font(.system(size: 16, weight: .regular))
 								.foregroundColor(.white.opacity(0.9))
@@ -171,6 +171,8 @@ struct LoginView: View {
 											.stroke(Color(.systemGray4), lineWidth: 1)
 									)
 								}
+								.accessibilityLabel(Text(LocalizedStringResource.loginLoginWithGoogleAccessibility))
+								.accessibilityHint(Text(LocalizedStringResource.loginLoginWithGoogleHint))
 								.disabled(viewModel.googleAuthAction.isLoading)
 								.opacity(viewModel.googleAuthAction.isLoading ? 0.6 : 1)
 
@@ -197,6 +199,8 @@ struct LoginView: View {
 											.stroke(Color(.systemGray4), lineWidth: 1)
 									)
 								}
+								.accessibilityLabel(Text(LocalizedStringResource.loginLoginWithGithubAccessibility))
+								.accessibilityHint(Text(LocalizedStringResource.loginLoginWithGithubHint))
 								.disabled(viewModel.githubAuthAction.isLoading)
 								.opacity(viewModel.githubAuthAction.isLoading ? 0.6 : 1)
 							}
@@ -220,6 +224,8 @@ struct LoginView: View {
 									.cornerRadius(8)
 							}
 						}
+						.accessibilityLabel(Text(LocalizedStringResource.loginLoginButtonTitle))
+						.accessibilityHint(Text(LocalizedStringResource.loginLoginHint))
 						.padding(.horizontal, geometry.size.width > 600 ? 80 : 30)
 						.padding(.bottom, 30)
 					}
@@ -243,10 +249,4 @@ struct LoginView: View {
 			} catch {}
 		}
 	}
-}
-
-#Preview {
-	let viewModel: LoginViewModel = LoginViewModel()
-	var showingRegister: Bool = false
-	LoginView(viewModel: viewModel, onShowRegister: { showingRegister = true })
 }

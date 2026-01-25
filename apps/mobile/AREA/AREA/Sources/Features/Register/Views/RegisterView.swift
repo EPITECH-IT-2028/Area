@@ -67,7 +67,7 @@ struct RegisterView: View {
 				)
 				.foregroundStyle(
 					!viewModel.confirmPasswordValid || !viewModel.passwordValid
-					? .red : .black
+						? .red : .black
 				)
 				.padding(.top, 20)
 				.font(.defaultFont)
@@ -83,7 +83,7 @@ struct RegisterView: View {
 				)
 				.foregroundStyle(
 					!viewModel.confirmPasswordValid || !viewModel.passwordValid
-					? .red : .black
+						? .red : .black
 				)
 				.padding(.top, 20)
 				.font(.defaultFont)
@@ -97,6 +97,8 @@ struct RegisterView: View {
 				Text(errorMessage)
 					.font(.callout)
 					.foregroundColor(Color.red)
+					.accessibilityLabel(Text("\(errorMessage)"))
+					.accessibilitySortPriority(1)
 			}
 
 			Spacer()
