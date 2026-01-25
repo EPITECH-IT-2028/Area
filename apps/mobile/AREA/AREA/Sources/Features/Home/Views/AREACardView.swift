@@ -121,5 +121,14 @@ struct AREACardView: View {
 				.stroke(Color.black.opacity(0.1), lineWidth: 1)
 		)
 		.shadow(color: Color.black.opacity(0.05), radius: 8, x: 0, y: 2)
+		.accessibilityElement(children: .ignore)
+		.accessibilityLabel(Text("Area \(area.title)"))
+		.accessibilityValue(Text(area.isActive ? "Active" : "Inactive"))
+		.accessibilityHint(
+			Text(
+				"Action : \(area.actionServiceName), Réaction : \(area.reactionServiceName). Double-tapez pour modifier."
+			)
+		)
+		.accessibilityAddTraits(.isButton)
 	}
 }
