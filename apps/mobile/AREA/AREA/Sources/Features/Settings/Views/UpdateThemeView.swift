@@ -67,8 +67,8 @@ struct ThemeOptionRow: View {
 
 			VStack(alignment: .leading, spacing: 2) {
 				Text(theme)
-				.font(.body)
-				.fontWeight(isSelected ? .semibold : .regular)
+					.font(.body)
+					.fontWeight(isSelected ? .semibold : .regular)
 			}
 
 			Spacer()
@@ -82,7 +82,11 @@ struct ThemeOptionRow: View {
 		.padding(.vertical, 8)
 		.padding(.horizontal, 8)
 		.background(Color.clear)
+		.accessibilityElement(children: .combine)
+		.accessibilityLabel(Text(theme))
+		.accessibilityAddTraits(
+			isSelected ? [.isButton, .isSelected] : [.isButton]
+		)
 		.cornerRadius(8)
 	}
 }
-

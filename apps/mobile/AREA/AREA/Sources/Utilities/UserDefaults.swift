@@ -22,12 +22,12 @@ struct SettingsUD {
 	@UserDefault(key: "isDarkMode", defaultValue: false)
 	static var isDarkMode: Bool
 
-	@UserDefault(key: "serverScheme", defaultValue: "http")
+	@UserDefault(key: "serverScheme", defaultValue: "https")
 	static var serverScheme: String
 
-	@UserDefault(key: "serverHost", defaultValue: "localhost")
+	@UserDefault(key: "serverHost", defaultValue: "api.coffeedevs.fr")
 	static var serverHost: String
 
-	@UserDefault(key: "serverPort", defaultValue: 8080)
-	static var serverPort: Int
+	@UserDefault(key: "serverPort", defaultValue: nil)
+	static var serverPort: Int?
 }

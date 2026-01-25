@@ -77,9 +77,13 @@ class AuthState: ObservableObject {
 
 	func logout() throws {
 		do {
-			try KeychainManager.shared.keychain.deleteItem(
-				forKey: Constants.keychainJWTKey
-			)
+			do {
+				try KeychainManager.shared.keychain.deleteItem(
+					forKey: Constants.keychainJWTKey
+				)
+			} catch {
+				// NOTHING NEEDS TO BE THROW OR RETURN,
+			}
 			do {
 				try KeychainManager.shared.keychain.deleteItem(
 					forKey: Constants.keychainUserIdKey
